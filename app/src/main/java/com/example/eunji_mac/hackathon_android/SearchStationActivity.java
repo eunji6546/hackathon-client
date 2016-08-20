@@ -2,7 +2,6 @@ package com.example.eunji_mac.hackathon_android;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,20 +11,10 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +29,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -154,13 +142,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Permission Checking
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             Toast.makeText(this,"Fine location denied",Toast.LENGTH_LONG).show();
             return;
         }
@@ -173,7 +154,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
     private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
         /* 지역, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
-
         ArrayList<String> mStation;
         ArrayList<LatLng> mPosition = new ArrayList<LatLng>();
 
@@ -183,7 +163,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
             try {
                 mStation = urlconn.GetSupply(strings[0],strings[1],strings[2]);
-                Log.e("%%%%%%%",mStation.toString());
                 for (int i=0;i<mStation.size();i++) {
                     JSONObject jo= new JSONObject(mStation.get(i));
                     String pos = jo.getString("map");
@@ -265,22 +244,15 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // GPS 와 네트워크사용이 가능하지 않을때 소스 구현
-                Log.e("##","2222222");
+
 
             } else {
-                Log.e("##","333333");
-
                 this.isGetLocation = true;
                 // 네트워크 정보로 부터 위치값 가져오기
                 if (isNetworkEnabled) {
-                    Log.e("##","4444444444");
-
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("##","!55555555555");
-
                         return new Location("-1");
                     }
-                    Log.e("##","66666666");
 
                     locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
@@ -288,13 +260,10 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
                     if (locationManager != null) {
-                        Log.e("##","77777777");
 
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            Log.e("##","8888888888");
-
                             // 위도 경도 저장
                             lat = location.getLatitude();
                             lon = location.getLongitude();
@@ -304,18 +273,13 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 }
 
 
-
                 if (isGPSEnabled) {
-                    Log.e("##","00000000000");
-
                     if (location == null) {
-                        Log.e("##","999999999999");
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         if (locationManager != null) {
-                            Log.e("##","aaaaaaaaa");
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
@@ -324,7 +288,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                             }
                         }
                     }
-                    Log.e("##","Not Null");
                 }
             }
 
@@ -332,8 +295,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.e("FINAL",location.toString());
-        Log.e("LAT",String.valueOf(location.getLatitude()));
         return location;
     }
 
@@ -348,20 +309,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         }
     }
 
-    public double getLatitude() {
-        if (location != null) {
-            lat = location.getLatitude();
-        }
-        return lat;
-    }
-
-    public double getLongitude() {
-        if (location != null) {
-            lon = location.getLongitude();
-        }
-        return lon;
-    }
-
     public boolean isGetLocation() {
         return this.isGetLocation;
     }
@@ -373,40 +320,27 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(intent);
-        Toast.makeText(getBaseContext(), "Gps is turned off!! ",
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Gps is turned off!! ",Toast.LENGTH_SHORT).show();
     }
 
     public void onProviderEnabled(String provider) {
 
-        Toast.makeText(getBaseContext(), "Gps is turned on!! ",
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Gps is turned on!! ",Toast.LENGTH_SHORT).show();
     }
 
-
+    /* 위치가 바뀌었을 때 동작하는 함수 */
     @Override
     public void onLocationChanged(Location location) {
 
-        /* 위치가 바뀌었을 때 동작하는 함수 */
-        // TODO Auto-generated method stub
-        //있었던 마커 지워줌
+        //remove current marker
         my.remove();
-
-        Log.e("@@","@##############");
-
-        String msg = "New Latitude: " + location.getLatitude() + "New Longitude: " + location.getLongitude();
 
         my = googleMap.addMarker( new MarkerOptions().title("Me").position(new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
-
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
 
     }
-
-
-
 }
