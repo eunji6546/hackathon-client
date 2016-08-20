@@ -1,6 +1,14 @@
 package com.example.eunji_mac.hackathon_android;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +20,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
@@ -37,6 +49,18 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
     String mStationType;
     Integer mcityPosition;
 
+    // For GoogleMap
+    // Marker titles, 충전소 순서대로 타이틀 붙여야함
+    public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    public GoogleMap googleMap;
+    public List<Marker> markers = new ArrayList<Marker>();
+    public List<Marker> my = new ArrayList<Marker>();
+
+    // For GPS,  참고 http://techlovejump.com/android-gps-location-manager-tutorial/
+    private LocationManager locationManager;
+    public LatLng myLocation;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +71,59 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(SearchStationActivity.this);
+
+
+        // Location Manager 선언
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // Permission Checking
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Toast.makeText(this,"Fine location denied",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+       android.location.LocationListener locationListener = new android.location.LocationListener() {
+           @Override
+           public void onLocationChanged(Location location) {
+               //있었던 마커 지워줌
+               List<Marker> my = new ArrayList<Marker>();
+               Log.e("@@","@##############");
+
+               String msg = "New Latitude: " + location.getLatitude() + "New Longitude: " + location.getLongitude();
+
+               Marker myMarker = googleMap.addMarker( new MarkerOptions().title("Me").position(new LatLng(location.getLatitude(),location.getLongitude())));
+               my.add(myMarker);
+
+               Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG).show();
+
+           }
+
+           @Override
+           public void onStatusChanged(String s, int i, Bundle bundle) {
+
+           }
+
+           @Override
+           public void onProviderEnabled(String s) {
+
+           }
+
+           @Override
+           public void onProviderDisabled(String s) {
+
+           }
+       };
+
+        Log.e("@@","@@@@@@@@@@@@@@");
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1,locationListener);
+        Log.e("@@","@@@@@@@@@@@@@@");
+
 
         ListView mListview ;
         ListViewAdapter mAdapter;
@@ -77,8 +154,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         sdf.setTimeZone(TimeZone.getDefault());
         String currentDateandTime = sdf.format(new Date());
         Log.e("seconds~~~~~~~~~~~~~~~~", currentDateandTime);
-
-
 
         mCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -125,27 +200,8 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             @Override
             public void onClick(View view) {
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        UrlConnection urlconn = new UrlConnection();
-                        try {
-                            ArrayList<String> mStation = urlconn.GetSupply(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
-                            for (int i=0;i<mStation.size();i++) {
-                                JSONObject jo= new JSONObject(mStation.get(i));
-                                Log.e("******************", String.valueOf(i));
-                                Log.e("location",jo.getString("map"));
-                                Log.e("holiday",jo.getString("holiday"));
-                                Log.e("address",jo.getString("address"));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                ShowSearchedStation searchedStation = new ShowSearchedStation();
+                searchedStation.execute(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
             }
         });
 
@@ -157,6 +213,8 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         // 세 번째 아이템 추가.
         mAdapter.addItem("광주",300,30);
     }
+
+
     private class ShowTownSpinner extends AsyncTask<String, Void, ArrayList<String>> {
 
         UrlConnection url = new UrlConnection();
@@ -184,13 +242,68 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         }
     }
 
+    private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
+        ArrayList<String> mStation;
+
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            Log.e("%%%%%%%","++++++++++");
+            UrlConnection urlconn = new UrlConnection();
+            try {
+                mStation = urlconn.GetSupply(strings[0],strings[1],strings[2]);
+                Log.e("%%%%%%%",mStation.toString());
+                for (int i=0;i<mStation.size();i++) {
+                    JSONObject jo= new JSONObject(mStation.get(i));
+                    Log.e("******************", String.valueOf(i));
+                    Log.e("location",jo.getString("map"));
+                    Log.e("holiday",jo.getString("holiday"));
+                    Log.e("address",jo.getString("address"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return mStation;
+        }
+
+        protected void onPostExecute(ArrayList<String> items) {
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap map) {
         // 콜백 함수, 이걸로 map을 handle할 수 있다.
-        //googleMap = map;
+        googleMap = map;
 
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    //    LatLng sydney = new LatLng(-34, 151);
+     //   googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+      //  googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+
+
+    public void onProviderDisabled(String provider) {
+
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+        Toast.makeText(getBaseContext(), "Gps is turned off!! ",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    public void onProviderEnabled(String provider) {
+
+        Toast.makeText(getBaseContext(), "Gps is turned on!! ",
+                Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+
+    }
+
+
 }
