@@ -4,16 +4,25 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MyCashActivity extends AppCompatActivity {
 
@@ -23,6 +32,7 @@ public class MyCashActivity extends AppCompatActivity {
     String mCash;
 
     TextView mText3;
+    EditText cashInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,24 +85,49 @@ public class MyCashActivity extends AppCompatActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            UrlConnection urlconn = new UrlConnection();
-                            String mChargeCash = cashInput.getText().toString();
-                            Double mSum = Double.parseDouble(mChargeCash) + Double.parseDouble(mCash);
-                            String mSumString = Double.toString(mSum);
-
-                            mText3 = (TextView) findViewById(R.id.text3);
-                            mText3.setText("Cash : $" + mSumString);
-
-                            urlconn.Save(mCarNumber, mCarType, mSumString);
-                        } catch(IOException e) {
-                            e.printStackTrace();
-                        }
                         dialog.dismiss();
+                        String[] params = new String[3];
+                        String mChargeCash = cashInput.getText().toString();
+                        Double mSum = Double.parseDouble(mChargeCash) + Double.parseDouble(mCash);
+                        String mSumString = Double.toString(mSum);
+                        params[0] = mCarNumber;
+                        params[1] = mCarType;
+                        params[2] = mSumString;
+                        ShowNewMoney mGetMoney = new ShowNewMoney();
+                        mGetMoney.execute(params);
                     }
                 }).show();
 
     }
+
+    private class ShowNewMoney extends AsyncTask< String[], Void, String> {
+        /* 시 선택에 따른 구, 군 리스트 받아오기 */
+
+        UrlConnection urlconn = new UrlConnection();
+
+
+        @Override
+        protected String doInBackground(String[]... params) {
+            try {
+                Log.v("first element", params[0][0]);
+                Log.v("second element", params[0][1]);
+                Log.v("third element", params[0][2]);
+                urlconn.Save(params[0][0], params[0][1], params[0][2]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return params[0][2];
+
+        }
+
+        protected void onPostExecute(String mSumString) {
+            mText3 = (TextView) findViewById(R.id.text3);
+            mText3.setText("Cash : $" + mSumString);
+        }
+    }
+
+
 
     // pay button click event
     public void mClick1(View view) {
