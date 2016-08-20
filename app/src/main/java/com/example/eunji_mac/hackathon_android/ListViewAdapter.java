@@ -38,17 +38,17 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
-        TextView descTextView = (TextView) convertView.findViewById(R.id.textView2) ;
+        TextView addressTextView = (TextView) convertView.findViewById(R.id.address) ;
+        TextView timeRequiredTextView = (TextView) convertView.findViewById(R.id.timeRequired) ;
+        TextView pathLengthTextView = (TextView) convertView.findViewById(R.id.pathLength) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         StationViewItem listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        iconImageView.setImageDrawable(listViewItem.getIcon());
-        titleTextView.setText(listViewItem.getTitle());
-        descTextView.setText(listViewItem.getDesc());
+        addressTextView.setText(listViewItem.getAddress());
+        timeRequiredTextView.setText(listViewItem.getRequiredTime().toString());
+        pathLengthTextView.setText(listViewItem.getPathLength().toString());
 
         return convertView;
     }
@@ -66,12 +66,12 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(Drawable icon, String title, String desc) {
+    public void addItem(String address, Integer timeRequired, Integer pathLengh) {
         StationViewItem item = new StationViewItem();
 
-        item.setIcon(icon);
-        item.setTitle(title);
-        item.setDesc(desc);
+        item.setAddress(address);
+        item.setTime(timeRequired);
+        item.setPathLength(pathLengh);
 
         listViewItemList.add(item);
     }

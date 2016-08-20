@@ -202,53 +202,18 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             @Override
             public void onClick(View view) {
 
-                // 이미 찍혀져 있던 마커 제거
-                markers = new ArrayList<Marker>();
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        UrlConnection urlconn = new UrlConnection();
-                        try {
-                            //urlconn.GetSupply(mCitySpinner.getSelectedItem().toString(),mTownSpinner.getSelectedItem().toString(),mStationType);
-                            ArrayList<String> mStation = urlconn.GetSupply(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
-                            for (int i=0;i<mStation.size();i++) {
-                                JSONObject jo= new JSONObject(mStation.get(i));
-                                Log.e("******************", String.valueOf(i));
-                                String temp = jo.getString("map");
-                                String[] t = temp.split(",");
-                                LatLng latLng = new LatLng(Double.parseDouble(t[0]),Double.parseDouble(t[1]));
-
-                                Log.e("location",latLng.toString());
-                                Log.e("holiday",jo.getString("holiday"));
-                                Log.e("address",jo.getString("address"));
-                                Marker oneMarker = googleMap.addMarker( new MarkerOptions().position(latLng).title(titles[i]));
-                                markers.add(oneMarker);
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                ShowSearchedStation searchedStation = new ShowSearchedStation();
+                searchedStation.execute(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
             }
         });
 
 
         // 첫 번째 아이템 추가.
-        mAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.hyundai),
-                "Box", "Account Box Black 36dp") ;
+        mAdapter.addItem("서울",100,10);
         // 두 번째 아이템 추가.
-        mAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.hyundai),
-                "Circle", "Account Circle Black 36dp") ;
+        mAdapter.addItem("부산",200,20);
         // 세 번째 아이템 추가.
-        mAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.hyundai),
-                "Ind", "Assignment Ind Black 36dp") ;
+        mAdapter.addItem("광주",300,30);
     }
 
 
@@ -276,6 +241,37 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 town_str.add(items.get(i));
             }
             mTownAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
+        ArrayList<String> mStation;
+
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            Log.e("%%%%%%%","++++++++++");
+            UrlConnection urlconn = new UrlConnection();
+            try {
+                mStation = urlconn.GetSupply(strings[0],strings[1],strings[2]);
+                Log.e("%%%%%%%",mStation.toString());
+                for (int i=0;i<mStation.size();i++) {
+                    JSONObject jo= new JSONObject(mStation.get(i));
+                    Log.e("******************", String.valueOf(i));
+                    Log.e("location",jo.getString("map"));
+                    Log.e("holiday",jo.getString("holiday"));
+                    Log.e("address",jo.getString("address"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return mStation;
+        }
+
+        protected void onPostExecute(ArrayList<String> items) {
         }
     }
 
