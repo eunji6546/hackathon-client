@@ -49,6 +49,9 @@
         <activity android:name=".AccountActivity"></activity>
         <activity android:name=".MyCashActivity" />
         <activity android:name=".AlertActivity"></activity>
+        <activity android:name=".TMapTest"
+            android:label="TMAPTEST"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
