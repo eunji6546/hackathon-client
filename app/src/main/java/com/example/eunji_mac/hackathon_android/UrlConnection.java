@@ -123,6 +123,10 @@ public class UrlConnection {
         return mCarCash;
     }
 
+    public static String GetHosting() throws IOException {
+        return Get("","/get/carsharing");
+    }
+
     public static ArrayList<String> GetTown(String province) throws IOException {
 
         ArrayList<String> Townlist = new ArrayList();

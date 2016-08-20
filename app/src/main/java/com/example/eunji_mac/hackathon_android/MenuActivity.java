@@ -95,6 +95,18 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent5);
     }
 
-    public void mClick6(View view) {}
+    public void mClick6(View view) {
+        Intent intent6 = new Intent(this,CarPoolActivity.class);
+
+        intent6.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent6.putExtra("carnumber", mCarNumber);
+            intent6.putExtra("cartype", mCarType);
+            intent6.putExtra("cash", mCash);
+        }
+
+        startActivity(intent6);
+    }
 
 }
