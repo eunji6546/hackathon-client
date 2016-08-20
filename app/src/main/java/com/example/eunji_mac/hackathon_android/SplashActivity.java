@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class SplashActivity extends AppCompatActivity {
 
     // 인트로 화면 대기시간
-    private static final int SPLASH_TIMEOUT = 3000;
+    private static final int SPLASH_TIMEOUT = 2000;
     protected TextView mFrontText;
 
     @Override
@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashActivity.this, MenuActivity.class);
+                Intent i = new Intent(SplashActivity.this, AccountActivity.class);
                 startActivity(i);
                 finish();
             }
