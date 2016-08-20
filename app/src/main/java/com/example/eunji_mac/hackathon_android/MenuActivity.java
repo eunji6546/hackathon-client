@@ -81,7 +81,7 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent3);
     }
     public void mClick4(View view) {
-        Intent intent4 = new Intent(this,MainActivity.class);
+        Intent intent4 = new Intent(this,EVActivity.class);
 
         intent4.putExtra("usertype", mUserType);
 
