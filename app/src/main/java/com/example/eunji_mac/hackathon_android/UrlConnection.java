@@ -19,8 +19,7 @@ public class UrlConnection {
 
     private static String serverURL = "http://project3-jisu0123.c9users.io";
 
-    public static void Post(String str) throws IOException {
-        String addedURL = "/post";
+    public static void Post(String str, String addedURL) throws IOException {
         URL url = new URL(serverURL + addedURL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setReadTimeout(100000);
@@ -77,8 +76,8 @@ public class UrlConnection {
 
     }
 
-    static public void Register(String name, String password) throws IOException {
-        Post("{\"name\" : \"" + name + "\", \"password\" : \"" + password + "\"" + "}");
+    static public void Save(String name, String password) throws IOException {
+        Post("{\"carnumber\" : \"" + name + "\", \"cartype\" : \"" + password + "\"" + "}", "/add/info");
     }
 
     public static ArrayList<String> GetTown(String province) throws IOException {

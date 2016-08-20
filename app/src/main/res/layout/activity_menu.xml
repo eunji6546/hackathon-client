@@ -10,22 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/toolbar"
-            />
-
-        <Button
-            android:id="@+id/user"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="left"
-            android:layout_marginLeft="10dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background= "@drawable/user"
-            />
-
         <TextView
             android:id="@+id/title"
             android:layout_marginTop="15dp"
@@ -69,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="My Favorite"
+                    android:text="My Account"
                     android:textColor="#ffffff"
                     android:textSize="16sp"
                     android:layout_below="@+id/image1"

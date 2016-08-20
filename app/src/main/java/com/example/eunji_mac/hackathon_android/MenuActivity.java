@@ -36,11 +36,14 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void mClick1(View view) {
+        Intent intent1 = new Intent(this,AccountActivity.class);
+        startActivity(intent1);
     }
     public void mClick2(View view) {}
     public void mClick3(View view) {
         Intent intent3 = new Intent(this,MyCashActivity.class);
-        startActivity(intent3);}
+        startActivity(intent3);
+    }
     public void mClick4(View view) {
         Intent intent4 = new Intent(this,MainActivity.class);
         startActivity(intent4);

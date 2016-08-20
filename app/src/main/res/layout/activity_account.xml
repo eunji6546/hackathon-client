@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1E2D72">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="HYUNDAI BOT"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="#ffffff"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp">
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/heart"/>
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manage Your Account"
+            android:textSize="20dp"
+            android:textColor="#EA8676"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="1. Enter Your Car Number"
+        android:textSize="20dp"
+        android:textColor="#EA8676"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/carnumber"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="12가3456"/>
+
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2. Choose Your Car"
+        android:textSize="20dp"
+        android:textColor="#EA8676"
+        android:layout_gravity="center" />
+
+
+    <Spinner
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/vehicle">
+    </Spinner>
+
+    <TextView
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:onClick="mClick1"
+        android:id="@+id/text4"
+        android:background="#ffffff"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#1E2D72"
+        android:text="CONFIRM"/>
+
+
+
+</LinearLayout>
