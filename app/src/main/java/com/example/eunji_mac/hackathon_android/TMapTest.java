@@ -198,6 +198,7 @@ public class TMapTest extends Activity {
 
         }
 
+
         TMapData tmapdata = new TMapData();
         tmapdata.findAllPOI("SKT타워", 100, new TMapData.FindAllPOIListenerCallback() {
             @Override
@@ -210,6 +211,7 @@ public class TMapTest extends Activity {
                 }
             }
         });
+        Log.e("F","FINISH");
 
 
     }

@@ -61,10 +61,10 @@ public class SearchNearStationActivity extends FragmentActivity implements OnMap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_near_station);
-
+Log.e("QQQQQQ","QQQQQQQQQ");
         Intent intent = new Intent(SearchNearStationActivity.this, TMapTest.class);
         startActivity(intent);
-
+Log.e("RRRR","RRRRRRRRRRRRR");
         // 지도 객체 가져옴 (fragment로)
         //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         //mapFragment.getMapAsync(SearchNearStationActivity.this);
@@ -75,7 +75,6 @@ public class SearchNearStationActivity extends FragmentActivity implements OnMap
     public void onLocationChanged(Location location) {
 
         /* 위치가 바뀌었을 때 동작하는 함수 */
-        // TODO Auto-generated method stub
         //있었던 마커 지워줌
         my.remove();
 
@@ -128,7 +127,6 @@ public class SearchNearStationActivity extends FragmentActivity implements OnMap
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Permission Checking
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
