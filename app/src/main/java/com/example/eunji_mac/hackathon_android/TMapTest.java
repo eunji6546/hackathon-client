@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.skp.Tmap.TMapGpsManager;
+import com.skp.Tmap.TMapPOIItem;
 import com.skp.Tmap.TMapView;
 
 import org.json.JSONException;
@@ -196,6 +197,19 @@ public class TMapTest extends Activity {
             Log.e("ISSI","NONONONONO");
 
         }
+
+        TMapData tmapdata = new TMapData();
+        tmapdata.findAllPOI("SKT타워", 100, new TMapData.FindAllPOIListenerCallback() {
+            @Override
+            public void onFindAllPOI(ArrayList<TMapPOIItem> arrayList) {
+                for(int i=0; i<arrayList.size(); i++){
+                    TMapPOIItem item = arrayList.get(i);
+                    Log.e("FUNCK","POI NAMe: "+ item.getPOIName().toString()+","+
+                    "ADDR : "+ item.getPOIAddress().replace("null","")+"," +
+                    "Point : "+ item.getPOIPoint().toString());
+                }
+            }
+        });
 
 
     }
