@@ -124,28 +124,8 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         mStationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        UrlConnection urlconn = new UrlConnection();
-                        try {
-                            ArrayList<String> mStation = urlconn.GetSupply(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
-                            for (int i=0;i<mStation.size();i++) {
-                                JSONObject jo= new JSONObject(mStation.get(i));
-                                Log.e("******************", String.valueOf(i));
-                                Log.e("location",jo.getString("map"));
-                                Log.e("holiday",jo.getString("holiday"));
-                                Log.e("address",jo.getString("address"));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                ShowSearchedStation searchedStation = new ShowSearchedStation();
+                searchedStation.execute(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
             }
         });
 
@@ -181,6 +161,37 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 town_str.add(items.get(i));
             }
             mTownAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
+        ArrayList<String> mStation;
+
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            Log.e("%%%%%%%","++++++++++");
+            UrlConnection urlconn = new UrlConnection();
+            try {
+                mStation = urlconn.GetSupply(strings[0],strings[1],strings[2]);
+                Log.e("%%%%%%%",mStation.toString());
+                for (int i=0;i<mStation.size();i++) {
+                    JSONObject jo= new JSONObject(mStation.get(i));
+                    Log.e("******************", String.valueOf(i));
+                    Log.e("location",jo.getString("map"));
+                    Log.e("holiday",jo.getString("holiday"));
+                    Log.e("address",jo.getString("address"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return mStation;
+        }
+
+        protected void onPostExecute(ArrayList<String> items) {
         }
     }
 
