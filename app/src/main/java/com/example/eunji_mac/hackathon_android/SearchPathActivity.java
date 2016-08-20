@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -34,12 +35,13 @@ public class SearchPathActivity extends AppCompatActivity {
     private PlacesAutoCompleteAdapter mPlacesAdapter;
 
     //출발지 관련 변수
-    private AutoCompleteTextView myStartLocation; //입력창
+    private TextView myStartLocation; //입력창
     private LatLng mStartLatLag; //위도, 경도
     private static final int PLACE_PICKER_START_FLAG = 1;
 
+
     //도착지 관련 변수
-    private AutoCompleteTextView myGoalLocation; //입력창
+    private TextView myGoalLocation; //입력창
     private LatLng mGoalLatLag; //위도, 경도
     private static final int PLACE_PICKER_GOAL_FLAG = 2;
 
@@ -67,17 +69,17 @@ public class SearchPathActivity extends AppCompatActivity {
                 .build();
 
         builder = new PlacePicker.IntentBuilder();
-        myStartLocation = (AutoCompleteTextView) findViewById(R.id.myStartLocation);
-        myGoalLocation = (AutoCompleteTextView) findViewById(R.id.myGoalLocation);
+        myStartLocation = (TextView) findViewById(R.id.myStartLocation);
+        myGoalLocation = (TextView) findViewById(R.id.myGoalLocation);
         mPlacesAdapter = new PlacesAutoCompleteAdapter(this, android.R.layout.simple_list_item_1,mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
 
         /*
             출발지 입력 설정
         */
-        myStartLocation.setOnItemClickListener(mAutocompleteClickListener);
-        myStartLocation.setAdapter(mPlacesAdapter);
-
-        myStartLocation.setOnClickListener(new View.OnClickListener() {
+        //myStartLocation.setOnItemClickListener(mAutocompleteClickListener);
+        //myStartLocation.setAdapter(mPlacesAdapter);
+        Button myStartLocationBtn = (Button)findViewById(R.id.myStartLocationBtn);
+        myStartLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -97,10 +99,10 @@ public class SearchPathActivity extends AppCompatActivity {
         /*
             도착지 입력 설정
         */
-        myGoalLocation.setOnItemClickListener(mAutocompleteClickListener);
-        myGoalLocation.setAdapter(mPlacesAdapter);
-
-        myGoalLocation.setOnClickListener(new View.OnClickListener() {
+       // myGoalLocation.setOnItemClickListener(mAutocompleteClickListener);
+        //myGoalLocation.setAdapter(mPlacesAdapter);
+        Button myGoalLocationBtn = (Button)findViewById(R.id.myGoalLocationBtn);
+        myGoalLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
