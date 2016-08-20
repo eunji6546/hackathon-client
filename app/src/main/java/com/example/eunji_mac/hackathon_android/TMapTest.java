@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -37,45 +38,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
-import com.skp.Tmap.BizCategory;
-import com.skp.Tmap.TMapCircle;
 import com.skp.Tmap.TMapData;
-import com.skp.Tmap.TMapData.BizCategoryListenerCallback;
-import com.skp.Tmap.TMapData.ConvertGPSToAddressListenerCallback;
-import com.skp.Tmap.TMapData.FindAllPOIListenerCallback;
-import com.skp.Tmap.TMapData.FindAroundNamePOIListenerCallback;
-import com.skp.Tmap.TMapData.FindPathDataAllListenerCallback;
-import com.skp.Tmap.TMapData.FindPathDataListenerCallback;
-import com.skp.Tmap.TMapData.TMapPathType;
-import com.skp.Tmap.TMapGpsManager;
-import com.skp.Tmap.TMapGpsManager.onLocationChangedCallback;
-import com.skp.Tmap.TMapInfo;
-import com.skp.Tmap.TMapLabelInfo;
-import com.skp.Tmap.TMapMarkerItem;
-import com.skp.Tmap.TMapMarkerItem2;
-import com.skp.Tmap.TMapPOIItem;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapPolyLine;
-import com.skp.Tmap.TMapPolygon;
+
 import com.skp.Tmap.TMapTapi;
-import com.skp.Tmap.TMapView;
-import com.skp.Tmap.TMapView.MapCaptureImageListenerCallback;
-import com.skp.Tmap.TMapView.TMapLogoPositon;
-import com.example.eunji_mac.hackathon_android.LogManager;
-import com.example.eunji_mac.hackathon_android.R;
 
 public class TMapTest extends Activity {
 /*
@@ -96,61 +65,7 @@ public class TMapTest extends Activity {
 
     public static String mApiKey; // 발급받은 appKey
     public static String mBizAppID; // 발급받은 BizAppID (TMapTapi로 TMap앱 연동을 할 때 BizAppID 꼭 필요)
-    /*
-        private static final int[] mArrayMapButton = {
-                R.id.btnOverlay,
-                R.id.btnAnimateTo,
-                R.id.btnZoomIn,
-                R.id.btnZoomOut,
-                R.id.btnGetZoomLevel,
-                R.id.btnSetZoomLevel,
-                R.id.btnSetMapType,
-                R.id.btnGetLocationPoint,
-                R.id.btnSetLocationPoint,
-                R.id.btnSetIcon,
-                R.id.btnSetCompassMode,
-                R.id.btnGetIsCompass,
-                R.id.btnSetTrafficInfo,
-                R.id.btnGetIsTrafficeInfo,
-                R.id.btnSetSightVisible,
-                R.id.btnSetTrackIngMode,
-                R.id.btnGetIsTracking,
-                R.id.btnAddTMapCircle,
-                R.id.btnRemoveTMapCircle,
-                R.id.btnMarkerPoint,
-                R.id.btnRemoveMarker,
-                R.id.btnMoveFrontMarker,
-                R.id.btnMoveBackMarker,
-                R.id.btnDrawPolyLine,
-                R.id.btnErasePolyLine,
-                R.id.btnDrawPolygon,
-                R.id.btnErasePolygon,
-                R.id.btnBicycle,
-                R.id.btnBicycleFacility,
-                R.id.btnMapPath,
-                R.id.btnRemoveMapPath,
-                R.id.btnDisplayMapInfo,
-                R.id.btnNaviGuide,
-                R.id.btnCarPath,
-                R.id.btnPedestrian_Path,
-                R.id.btnBicycle_Path,
-                R.id.btnGetCenterPoint,
-                R.id.btnFindAllPoi,
-                R.id.btnConvertToAddress,
-                R.id.btnGetBizCategory,
-                R.id.btnGetAroundBizPoi,
-                R.id.btnTileType,
-                R.id.btnCapture,
-                R.id.btnDisalbeZoom,
-                R.id.btnInvokeRoute,
-                R.id.btnInvokeSetLocation,
-                R.id.btnInvokeSearchPortal,
-                R.id.btnTimeMachine,
-                R.id.btnTMapInstall,
-                R.id.btnMarkerPoint2,
-        };
 
-    */
     private int m_nCurrentZoomLevel = 0;
     private double m_Latitude = 0;
     private double m_Longitude = 0;
@@ -211,6 +126,78 @@ public class TMapTest extends Activity {
 
 
 
+        /*
+        마커 추가하는 법
+
+        TMapMarkerItem mapMarkerItem = new TMapMarkerItem();
+        mMapView.addMarkerItem("마커아이디",mapMarkerItem);
+
+        해당 마커 제거
+        mMapView.removeMarkerItem("마커아이디");
+
+        마커 전부 제거
+        mMapView.removeAllMarkerItem();
+
+         */
+
+        TMapPolyLine tMapPolyLine = new TMapPolyLine();
+        mMapView.addTMapPath(tMapPolyLine);
+        // mMapView.removeTMapPath
+
+        Bitmap start = BitmapFactory.decodeResource(this.getResources(),R.drawable.poi_star);
+        Bitmap end = BitmapFactory.decodeResource(this.getResources(),R.drawable.poi_star);
+        mMapView.setTMapPathIcon(start,end);
+        mMapView.setMarkerRotate(true);
+        mMapView.setPathRotate(true);
+
+        mMapView.setMapType(TMapView.POSITION_DEFAULT);//or NAVI
+
+        // 마커들을 다 보이게하기 : 4.1.65
+
+        TMapData tMapData = new TMapData();
+        TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
+        TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
+
+
+         final String NODE_ROOT = "kml";
+        final String NODE_DISTANCE = "tmap:totalDistance";
+         final String NODE_TIME = "tmap:totalTime";
+        final String NODE_FARE = "tmap:totalFare";
+        final String NODE_TAXIFARE = "tmap:taxiFare";
+
+            tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
+                @Override
+                public void onFindPathDataAll(Document document) {
+
+                    XMLDOMParser parser = new XMLDOMParser();
+                    Document doc = document;
+                        // Get elements by name employee
+                        NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+
+                        for (int i = 0; i < nodeList.getLength(); i++) {
+                            Element e = (Element) nodeList.item(i);
+                            Log.e("AAAAA",parser.getValue(e, NODE_DISTANCE));
+                            Log.e("BBBB",parser.getValue(e, NODE_TIME));
+                            Log.e("CCCC",parser.getValue(e, NODE_FARE));
+                            Log.e("BBBB",parser.getValue(e, NODE_TAXIFARE));
+
+                        }
+
+                }
+            });
+
+           // Log.e("DOCUMENT",doc.toString());
+
+        TMapTapi tMapTapi = new TMapTapi(this);
+
+        if (tMapTapi.isTmapApplicationInstalled()){
+            Log.e("ISSI","INSTALLED");
+        }else {
+            Log.e("ISSI","NONONONONO");
+
+        }
+
 
     }
+
 }
