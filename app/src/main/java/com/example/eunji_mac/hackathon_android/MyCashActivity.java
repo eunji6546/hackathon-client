@@ -32,7 +32,6 @@ public class MyCashActivity extends AppCompatActivity {
     String mCash;
 
     TextView mText3;
-    EditText cashInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,6 @@ public class MyCashActivity extends AppCompatActivity {
             mText2.setText("Car Number : " + mCarNumber);
             mText3.setText("Cash : $" + mCash);
         }
-
 
     }
 
@@ -101,7 +99,6 @@ public class MyCashActivity extends AppCompatActivity {
     }
 
     private class ShowNewMoney extends AsyncTask< String[], Void, String> {
-        /* 시 선택에 따른 구, 군 리스트 받아오기 */
 
         UrlConnection urlconn = new UrlConnection();
 
