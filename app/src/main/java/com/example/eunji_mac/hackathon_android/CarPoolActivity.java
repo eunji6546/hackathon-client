@@ -53,12 +53,14 @@ public class CarPoolActivity extends AppCompatActivity {
                         String mId = jsonObject.getString("_id");
                         String mDeparture = jsonObject.getString("departure");
                         String mDest = jsonObject.getString("dest");
+                        String mDate = jsonObject.getString("time");
                         String mFee = jsonObject.getString("fee");
                         String mPeople = jsonObject.getString("people");
                         String mFull = jsonObject.getString("full");
                         String item = "No." + Integer.toString(i+1) +
-                                "\n From. " + mDeparture + "      To. " + mDest +
-                                "\n Fare. $" + mFee +
+                                "\n Departure. " + mDeparture + " (" + mDate + ")" +
+                                "\n Arrival. " + mDest +
+                                "\n Fare. " + mFee + " won" +
                                 "\n Available. "+"[" + mPeople + "/" + mFull +"] + "
                                 + mId;
                         items.add(item);
