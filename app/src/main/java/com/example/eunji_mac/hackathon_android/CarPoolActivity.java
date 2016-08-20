@@ -50,15 +50,17 @@ public class CarPoolActivity extends AppCompatActivity {
                     Log.v("Number Of Hosts", String.valueOf(length));
                     for (int i = 0; i < length; i++) {
                         JSONObject jsonObject = mList.getJSONObject(i);
+                        String mId = jsonObject.getString("_id");
                         String mDeparture = jsonObject.getString("departure");
                         String mDest = jsonObject.getString("dest");
-                        String mCarNumber = jsonObject.getString("carnumber");
+                        String mFee = jsonObject.getString("fee");
                         String mPeople = jsonObject.getString("people");
                         String mFull = jsonObject.getString("full");
-                        String item = "No." + String.valueOf(i+1) +
-                                "\n From. " + mDeparture +
-                                "\n To. " + mDest +
-                                "\n Available. "+"[" + mPeople + "/" + mFull +"]";
+                        String item = "No." + Integer.toString(i+1) +
+                                "\n From. " + mDeparture + "      To. " + mDest +
+                                "\n Fare. $" + mFee +
+                                "\n Available. "+"[" + mPeople + "/" + mFull +"] + "
+                                + mId;
                         items.add(item);
                     }
                 } catch (JSONException e) {

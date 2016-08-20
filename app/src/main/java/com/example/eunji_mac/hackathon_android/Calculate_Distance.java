@@ -1,20 +1,12 @@
 package com.example.eunji_mac.hackathon_android;
 
 /**
- * referenced http://www.geodatasource.com/developers/java
+ * http://www.geodatasource.com/developers/java 참고
  */
-import java.util.*;
+
 import java.lang.*;
-import java.io.*;
 
-class Calculate_Distance {
-    public static void main (String[] args) throws java.lang.Exception
-    {
-        System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, "M") + " Miles\n");
-        System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, "K") + " Kilometers\n");
-        System.out.println(distance(32.9697, -96.80322, 29.46786, -98.53506, "N") + " Nautical Miles\n");
-    }
-
+public class Calculate_Distance {
     /**
           * 두 지점간의 거리 계산
           *
@@ -25,7 +17,7 @@ class Calculate_Distance {
           * @param unit 거리 표출단위
           * @return
           */
-    private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+    public double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
@@ -33,8 +25,8 @@ class Calculate_Distance {
         dist = dist * 60 * 1.1515;
         if (unit == "K") {
             dist = dist * 1.609344;
-        } else if (unit == "N") {
-            dist = dist * 0.8684;
+        } else if (unit == "M") {
+            dist = dist * 1609.34;
         }
 
         return (dist);

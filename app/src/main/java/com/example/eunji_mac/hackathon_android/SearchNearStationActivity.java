@@ -66,9 +66,8 @@ public class SearchNearStationActivity extends FragmentActivity implements OnMap
         startActivity(intent);
 
         // 지도 객체 가져옴 (fragment로)
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(SearchNearStationActivity.this);
+        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        //mapFragment.getMapAsync(SearchNearStationActivity.this);
 
     }
 

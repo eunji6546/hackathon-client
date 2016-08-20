@@ -10,63 +10,27 @@
     android:orientation="vertical"
     tools:context="com.example.eunji_mac.hackathon_android.SearchStationActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="지역 선택"/>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Spinner
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/city"></Spinner>
+        android:layout_height="0dp"
+        android:layout_weight="0.3">
 
-        <Spinner
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/town"></Spinner>
-    </LinearLayout>
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            tools:context=".MainActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="차종 선택"/>
-
-        <Spinner
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/vehical">
-        </Spinner>
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/searchstation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="주요소 검색하기"/>
-
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_margin="50dp"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/map"
-        tools:context=".MainActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/stationlistview1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:layout_marginTop="10dp"
+        android:background="#F2F2F2"></ListView>
 
 </LinearLayout>

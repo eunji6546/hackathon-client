@@ -2,6 +2,7 @@ package com.example.eunji_mac.hackathon_android;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by youngjisu on 2016. 8. 20..
+ * Created by Jisoo Lee (jisu0123@kaist.ac.kr)
  */
 public class CarSharingAdapter extends ArrayAdapter {
 
@@ -32,12 +33,15 @@ public class CarSharingAdapter extends ArrayAdapter {
             v = vi.inflate(R.layout.items, null);
         }
 
-        TextView textView = (TextView) v.findViewById(R.id.itemtext);
-        textView.setText(items.get(position));
+        TextView mText1 = (TextView) v.findViewById(R.id.itemtext);
+        TextView mText2 = (TextView) v.findViewById(R.id.idtext);
+        mText1.setText(items.get(position).split("\\+")[0]);
+        mText2.setText(items.get(position).split("\\+")[1]);
 
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/Stark.OTF");
 
-        textView.setTypeface(tf);
+        mText1.setTypeface(tf);
+        Log.v("ID : ", mText2.getText().toString());
         return v;
     }
 }
