@@ -29,14 +29,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btn = (Button)findViewById(R.id.btn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,googlemap_activity.class);
-                startActivity(intent);
-            }
-        });
 
         Button btn1 = (Button)findViewById(R.id.btn1);
         btn1.setOnClickListener(new View.OnClickListener() {

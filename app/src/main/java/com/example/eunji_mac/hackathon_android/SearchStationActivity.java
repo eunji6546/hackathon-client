@@ -131,7 +131,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
                         UrlConnection urlconn = new UrlConnection();
                         try {
-                            //urlconn.GetSupply(mCitySpinner.getSelectedItem().toString(),mTownSpinner.getSelectedItem().toString(),mStationType);
                             ArrayList<String> mStation = urlconn.GetSupply(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
                             for (int i=0;i<mStation.size();i++) {
                                 JSONObject jo= new JSONObject(mStation.get(i));
@@ -152,14 +151,11 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
 
         // 첫 번째 아이템 추가.
-        mAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.hyundai),
-                "Box", "Account Box Black 36dp") ;
+        mAdapter.addItem("서울",100,10);
         // 두 번째 아이템 추가.
-        mAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.hyundai),
-                "Circle", "Account Circle Black 36dp") ;
+        mAdapter.addItem("부산",200,20);
         // 세 번째 아이템 추가.
-        mAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.hyundai),
-                "Ind", "Assignment Ind Black 36dp") ;
+        mAdapter.addItem("광주",300,30);
     }
     private class ShowTownSpinner extends AsyncTask<String, Void, ArrayList<String>> {
 

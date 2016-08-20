@@ -5,28 +5,29 @@ import android.graphics.drawable.Drawable;
  * Created by juhee on 2016. 8. 20..
  */
 public class StationViewItem {
-    private Drawable iconDrawable ;
-    private String titleStr ;
-    private String descStr ;
+    private String addressStr ;
+    private Integer requiredTimeStr ;
+    private Integer pathlengthStr;
 
-    public void setIcon(Drawable icon) {
-        iconDrawable = icon ;
+    public void setAddress(String title) {
+        addressStr = title ;
     }
-    public void setTitle(String title) {
-        titleStr = title ;
-    }
-    public void setDesc(String desc) {
-        descStr = desc ;
+    public void setTime(Integer time) {
+        requiredTimeStr = time ;
     }
 
-    public Drawable getIcon() {
-        return this.iconDrawable ;
+    public void setPathLength(Integer length) {
+        pathlengthStr = length ;
     }
-    public String getTitle() {
-        return this.titleStr ;
+
+    public String getAddress() {
+        return this.addressStr ;
     }
-    public String getDesc() {
-        return this.descStr ;
+    public Integer getRequiredTime() {
+        return this.requiredTimeStr ;
+    }
+    public Integer getPathLength () {
+        return this.pathlengthStr;
     }
 }
 
