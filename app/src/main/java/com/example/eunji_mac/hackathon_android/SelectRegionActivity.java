@@ -1,6 +1,7 @@
 package com.example.eunji_mac.hackathon_android;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -30,9 +32,14 @@ public class SelectRegionActivity extends AppCompatActivity {
 
     //Get userinfo by intent
     String mUserType; // 1 for driver, 0 for walker
-    String mCarType;
-    String mCarNumber;
-    String mCash;
+    String mCarType, mCarNumber, mCash;
+
+    Spinner mCitySpinner, mTownSpinner;
+
+    final List<String> cityList =
+            new ArrayList<String>(Arrays.asList("강원", "경기", "경남", "경북", "광주",
+                    "대구", "대전", "부산", "서울", "울산", "인천", "전남", "전북", "제주", "충남", "충북"));
+
 
     //For searching location of station
     ArrayAdapter<String> mTownAdapter = null;
@@ -45,6 +52,18 @@ public class SelectRegionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_region);
 
+        TextView mTitle = (TextView) findViewById(R.id.title);
+        TextView mText1 = (TextView) findViewById(R.id.text1);
+        TextView mText2 = (TextView) findViewById(R.id.text2);
+        TextView mText3 = (TextView) findViewById(R.id.text3);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
+
+        mTitle.setTypeface(tf);
+        mText1.setTypeface(tf);
+        mText2.setTypeface(tf);
+        mText3.setTypeface(tf);
+
         // userinfo 받기
         Intent intent = getIntent();
         mUserType = intent.getExtras().getString("usertype");
@@ -55,7 +74,6 @@ public class SelectRegionActivity extends AppCompatActivity {
             mCash = intent.getExtras().getString("cash");
         }
 
-        final List<String> cityList = new ArrayList<String>(Arrays.asList("강원", "경기", "경남", "경북", "광주", "대구", "대전", "부산", "서울", "울산", "인천", "전남", "전북", "제주", "충남", "충북"));
         String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
         String[] city_str = getResources().getStringArray(R.array.citySpinnerArray);
         town_str = new ArrayList<String>(Arrays.asList("---구,군 선택---"));
@@ -64,10 +82,9 @@ public class SelectRegionActivity extends AppCompatActivity {
         final ArrayAdapter<String> mCityAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, city_str);
         mTownAdapter = new ArrayAdapter<String>(SelectRegionActivity.this, android.R.layout.simple_spinner_dropdown_item, town_str);
 
-        Spinner mCarSpinner = (Spinner) findViewById(R.id.vehical);
-        final Spinner mCitySpinner = (Spinner) findViewById(R.id.city);
-        final Spinner mTownSpinner = (Spinner) findViewById(R.id.town);
-        final Button mStationBtn = (Button) findViewById(R.id.searchstation);
+        Spinner mCarSpinner = (Spinner) findViewById(R.id.vehicle);
+        Spinner mCitySpinner = (Spinner) findViewById(R.id.city);
+        Spinner mTownSpinner = (Spinner) findViewById(R.id.town);
 
         mCarSpinner.setAdapter(mCarAdapter);
         mCitySpinner.setAdapter(mCityAdapter);
@@ -120,38 +137,33 @@ public class SelectRegionActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        //충전소 검색 버큰 클릭 이벤트
-        mStationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    public void mClick1(View v) {
+        mTownSpinner = (Spinner) findViewById(R.id.town);
+        Intent intent = new Intent(SelectRegionActivity.this, SearchStationActivity.class);
 
-                Intent intent = new Intent(SelectRegionActivity.this, SearchStationActivity.class);
+        if ((mcityPosition==0)||(mTownSpinner.getSelectedItem().toString().equals("---구,군 선택---"))) {
+            Toast.makeText(SelectRegionActivity.this,"지역을 선택해 주세요.",Toast.LENGTH_SHORT).show();
+        }
 
-                if ((mcityPosition==0)||(mTownSpinner.getSelectedItem().toString().equals("---구,군 선택---"))) {
-                    Toast.makeText(SelectRegionActivity.this,"지역을 선택해 주세요.",Toast.LENGTH_SHORT).show();
-                }
+        else if (mStationType.equals("선택안함")) {
+            Toast.makeText(SelectRegionActivity.this,"차량을 선택헤 주세요.",Toast.LENGTH_SHORT).show();
+        }
 
-                else if (mStationType.equals("선택안함")) {
-                    Toast.makeText(SelectRegionActivity.this,"차량을 선택헤 주세요.",Toast.LENGTH_SHORT).show();
-                }
+        else {
+            intent.putExtra("CITY", cityList.get(mcityPosition - 1));
+            intent.putExtra("TOWN", mTownSpinner.getSelectedItem().toString());
+            intent.putExtra("STATION_TYPE", mStationType);
+            intent.putExtra("usertype", mUserType);
 
-                else {
-                    intent.putExtra("CITY", cityList.get(mcityPosition - 1));
-                    intent.putExtra("TOWN", mTownSpinner.getSelectedItem().toString());
-                    intent.putExtra("STATION_TYPE", mStationType);
-                    intent.putExtra("usertype", mUserType);
-
-                    if (mUserType.equals("1")) { // for driver
-                        intent.putExtra("carnumber", mCarNumber);
-                        intent.putExtra("cartype", mCarType);
-                        intent.putExtra("cash", mCash);
-                    }
-                    startActivity(intent);
-                }
+            if (mUserType.equals("1")) { // for driver
+                intent.putExtra("carnumber", mCarNumber);
+                intent.putExtra("cartype", mCarType);
+                intent.putExtra("cash", mCash);
             }
-        });
-
+            startActivity(intent);
+        }
     }
 
 
@@ -182,4 +194,6 @@ public class SelectRegionActivity extends AppCompatActivity {
             mTownAdapter.notifyDataSetChanged();
         }
     }
+
+
 }

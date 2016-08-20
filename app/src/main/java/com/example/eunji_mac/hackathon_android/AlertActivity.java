@@ -45,7 +45,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
-         mText2 = (TextView) findViewById(R.id.text2);
+        TextView mText2 = (TextView) findViewById(R.id.text2);
         TextView mText3 = (TextView) findViewById(R.id.text3);
         TextView mText4 = (TextView) findViewById(R.id.text4);
         TextView mText5 = (TextView) findViewById(R.id.text5);
@@ -152,6 +152,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Log.e("FINAL",location.toString());
 
 
