@@ -45,6 +45,7 @@ import java.util.TimeZone;
 
 public class SearchStationActivity extends FragmentActivity implements OnMapReadyCallback {
     ArrayAdapter<String> mTownAdapter = null;
+    ListViewAdapter mAdapter;
     ArrayList<String> town_str = null;
     String mStationType;
     Integer mcityPosition;
@@ -120,13 +121,10 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
            }
        };
 
-        Log.e("@@","@@@@@@@@@@@@@@");
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1,locationListener);
-        Log.e("@@","@@@@@@@@@@@@@@");
-
 
         ListView mListview ;
-        ListViewAdapter mAdapter;
+
 
         mAdapter = new ListViewAdapter() ;
 
@@ -150,11 +148,13 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         mCarSpinner.setAdapter(mCarAdapter);
         mCitySpinner.setAdapter(mCityAdapter);
         mTownSpinner.setAdapter(mTownAdapter);
+
+        //현재 시간 및 날짜 받아오기
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         sdf.setTimeZone(TimeZone.getDefault());
         String currentDateandTime = sdf.format(new Date());
-        Log.e("seconds~~~~~~~~~~~~~~~~", currentDateandTime);
 
+        //도시 선택시 이벤트
         mCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
@@ -176,6 +176,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             }
         });
 
+        //차 종류 선택시 이벤트 (충전소 종류 식별자)
         mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -196,22 +197,14 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             }
         });
 
+        //충전소 검색 버큰 클릭 이벤트
         mStationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 ShowSearchedStation searchedStation = new ShowSearchedStation();
                 searchedStation.execute(cityList.get(mcityPosition-1),mTownSpinner.getSelectedItem().toString(),mStationType);
             }
         });
-
-
-        // 첫 번째 아이템 추가.
-        mAdapter.addItem("서울",100,10);
-        // 두 번째 아이템 추가.
-        mAdapter.addItem("부산",200,20);
-        // 세 번째 아이템 추가.
-        mAdapter.addItem("광주",300,30);
     }
 
 
@@ -269,7 +262,26 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             return mStation;
         }
 
+        /*
+            주유소 정보 listview에 띄우기
+         */
         protected void onPostExecute(ArrayList<String> items) {
+            mAdapter = new ListViewAdapter();
+            try {
+            for (int i=0;i<items.size();i++) {
+                JSONObject jo = new JSONObject(items.get(i));
+                mAdapter.addItem(jo.getString("address"),100,10);
+
+
+                Log.e("******************", String.valueOf(i));
+                Log.e("location",jo.getString("map"));
+                Log.e("holiday",jo.getString("holiday"));
+                Log.e("address",jo.getString("address"));
+
+            }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
