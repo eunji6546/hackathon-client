@@ -38,12 +38,16 @@ public class MenuActivity extends AppCompatActivity {
     public void mClick1(View view) {
     }
     public void mClick2(View view) {}
-    public void mClick3(View view) {}
+    public void mClick3(View view) {
+        Intent intent3 = new Intent(this,MyCashActivity.class);
+        startActivity(intent3);}
     public void mClick4(View view) {
         Intent intent4 = new Intent(this,MainActivity.class);
         startActivity(intent4);
     }
-    public void mClick5(View view) {}
+    public void mClick5(View view){
+        Intent intent5 = new Intent(this,AlertActivity.class);
+        startActivity(intent5);}
     public void mClick6(View view) {}
 
 }

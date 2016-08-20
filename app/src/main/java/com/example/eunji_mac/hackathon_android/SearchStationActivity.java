@@ -78,8 +78,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         String currentDateandTime = sdf.format(new Date());
         Log.e("seconds~~~~~~~~~~~~~~~~", currentDateandTime);
 
-
-
         mCitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
