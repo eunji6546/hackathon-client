@@ -42,7 +42,7 @@
         android:id="@+id/text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="1. Enter Your Car Number"
         android:textSize="20dp"
         android:textColor="#EA8676"
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/text3"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2. Choose Your Car"
@@ -89,6 +89,36 @@
         android:textColor="#1E2D72"
         android:text="CONFIRM"/>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        >
 
+        <TextView
+            android:id="@+id/text5"
+            android:layout_marginRight="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I Don't Have A Car"
+            android:textSize="20dp"
+            android:textColor="#EA8676"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:onClick="mClick2"
+            android:id="@+id/text6"
+            android:background="#ffffff"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1E2D72"
+            android:text="SKIP"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>

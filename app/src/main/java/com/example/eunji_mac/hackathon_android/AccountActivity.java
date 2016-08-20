@@ -35,6 +35,8 @@ public class AccountActivity extends AppCompatActivity {
         TextView mText2 = (TextView) findViewById(R.id.text2);
         TextView mText3 = (TextView) findViewById(R.id.text3);
         TextView mText4 = (TextView) findViewById(R.id.text4);
+        TextView mText5 = (TextView) findViewById(R.id.text5);
+        TextView mText6 = (TextView) findViewById(R.id.text6);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
 
         mTitle.setTypeface(tf);
@@ -42,6 +44,8 @@ public class AccountActivity extends AppCompatActivity {
         mText2.setTypeface(tf);
         mText3.setTypeface(tf);
         mText4.setTypeface(tf);
+        mText5.setTypeface(tf);
+        mText6.setTypeface(tf);
 
         String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
 
@@ -79,16 +83,28 @@ public class AccountActivity extends AppCompatActivity {
             public void run() {
                 try {
                     UrlConnection urlconn = new UrlConnection();
-                    urlconn.Save(mCarNum.getText().toString(), mStationType);
+                    String mCash =
+                            urlconn.Save(mCarNum.getText().toString(), mStationType, Double.toString(0.0));
+
                     Intent intent = new Intent(AccountActivity.this, MenuActivity.class);
+                    intent.putExtra("usertype", "1"); // for driver
                     intent.putExtra("carnumber", mCarNum.getText().toString());
-                    intent.putExtra("stationtype", mStationType);
+                    intent.putExtra("cartype", mStationType);
+                    intent.putExtra("cash", mCash); // for car driver
+
                     startActivity(intent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    // no car
+    public void mClick2(View view) { //
+        Intent intent = new Intent(AccountActivity.this, MenuActivity.class);
+        intent.putExtra("usertype", "0"); // for walker
+        startActivity(intent);
     }
 
 

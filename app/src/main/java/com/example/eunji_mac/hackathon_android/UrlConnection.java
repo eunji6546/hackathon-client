@@ -43,6 +43,38 @@ public class UrlConnection {
         conn.disconnect();
     }
 
+    static public String Put(String str, String addedURL) throws IOException {
+
+        String ret = "";
+        URL url = new URL(serverURL + addedURL + URLEncoder.encode(str, "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        Log.v("sent URL(GET)", serverURL + addedURL + str);
+
+        if (conn != null) {
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(0);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("PUT");
+            int resCode = conn.getResponseCode();
+            if (resCode == HttpURLConnection.HTTP_OK) {
+                InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+                BufferedReader br = new BufferedReader(isr);
+                for (; ; ) {
+                    String line = br.readLine();
+                    if (line == null) break;
+                    ret += line;
+                }
+                br.close();
+            } else
+                Log.i("UrlConnection", "else");
+            Log.v("Server Response(GET)", conn.getResponseMessage());
+        }
+        conn.disconnect();
+
+        return ret;
+    }
+
     static public String Get(String str, String addedURL) throws IOException {
 
         String ret = "";
@@ -73,11 +105,22 @@ public class UrlConnection {
         conn.disconnect();
 
         return ret;
-
     }
 
-    static public void Save(String name, String password) throws IOException {
-        Post("{\"carnumber\" : \"" + name + "\", \"cartype\" : \"" + password + "\"" + "}", "/add/info");
+    public static String Save(String carnumber, String cartype, String cash) throws IOException {
+
+        String mCarCash = "";
+
+        try {
+            String ret = Put(carnumber + "+" + cartype + "+" + cash, "/update/user/");
+            JSONObject jsonObject = new JSONObject(ret);
+            mCarCash = jsonObject.getString("carcash");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return mCarCash;
     }
 
     public static ArrayList<String> GetTown(String province) throws IOException {

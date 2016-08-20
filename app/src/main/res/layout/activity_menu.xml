@@ -42,8 +42,8 @@
 
                 <ImageView
                     android:id="@+id/image1"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/heart"
                     android:layout_centerInParent="true"
                     />
@@ -53,8 +53,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="My Account"
+                    android:text="My Account\nNon-Driver"
                     android:textColor="#ffffff"
+                    android:textAlignment="center"
                     android:textSize="16sp"
                     android:layout_below="@+id/image1"
                     android:layout_centerHorizontal="true" />

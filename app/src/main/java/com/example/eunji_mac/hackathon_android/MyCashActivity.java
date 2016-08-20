@@ -2,6 +2,8 @@ package com.example.eunji_mac.hackathon_android;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,61 +13,93 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+
 public class MyCashActivity extends AppCompatActivity {
+
+    String mUserType;
+    String mCarType;
+    String mCarNumber;
+    String mCash;
+
+    TextView mText3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cash);
 
-        TextView mCash = (TextView)findViewById(R.id.cashText);
-        Button chargeBtn = (Button)findViewById(R.id.chargeBtn);
-        Button settlementBtn = (Button)findViewById(R.id.settlementBtn);
+        TextView mTitle = (TextView) findViewById(R.id.title);
+        TextView mText1 = (TextView) findViewById(R.id.text1);
+        TextView mText2 = (TextView) findViewById(R.id.text2);
+        TextView mText3 = (TextView) findViewById(R.id.text3);
+        TextView mText4 = (TextView) findViewById(R.id.text4);
+        TextView mText5 = (TextView) findViewById(R.id.text5);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
 
-        /*
-            mCash server에서 받아오기~~!!
+        mTitle.setTypeface(tf);
+        mText1.setTypeface(tf);
+        mText2.setTypeface(tf);
+        mText3.setTypeface(tf);
+        mText4.setTypeface(tf);
+        mText5.setTypeface(tf);
 
-            ~~~~~~
-         */
+        Intent intent = getIntent();
+        mUserType = intent.getExtras().getString("usertype");
 
-
-        chargeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText cashInput = new EditText(MyCashActivity.this);
-                AlertDialog alert = new AlertDialog.Builder(MyCashActivity.this)
-                        //.setIcon(R.drawable.money)
-                        .setTitle("주유 캐시 충전하기")
-                        .setMessage("충전할 캐시를 입력하세요")
-                        .setView(cashInput)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                /*
-                                    서버에 충전한 금액 보내고, 디비 업데이트
-                                 */
+        if (mUserType.equals("1")) {// for driver
+            mCarType = intent.getExtras().getString("cartype");
+            mCarNumber = intent.getExtras().getString("carnumber");
+            mCash = intent.getExtras().getString("cash");
+            mText2.setText("Car Number : " + mCarNumber);
+            mText3.setText("Cash : $" + mCash);
+        }
 
 
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-            }
-        });
-
-        settlementBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                    결제 버튼 클릭 이벤트~~!!
-                 */
-
-            }
-        });
     }
+
+    // charge button click event
+    public void mClick2(View view) {
+        final EditText cashInput = new EditText(MyCashActivity.this);
+        cashInput.setHint("$10.0");
+        AlertDialog alert = new AlertDialog.Builder(MyCashActivity.this)
+                .setTitle("CHARGE CASH")
+                .setMessage("충전할 캐시를 입력하세요")
+                .setView(cashInput)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            UrlConnection urlconn = new UrlConnection();
+                            String mChargeCash = cashInput.getText().toString();
+                            Double mSum = Double.parseDouble(mChargeCash) + Double.parseDouble(mCash);
+                            String mSumString = Double.toString(mSum);
+
+                            mText3 = (TextView) findViewById(R.id.text3);
+                            mText3.setText("Cash : $" + mSumString);
+
+                            urlconn.Save(mCarNumber, mCarType, mSumString);
+                        } catch(IOException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                }).show();
+
+    }
+
+    // pay button click event
+    public void mClick1(View view) {
+    }
+
+    public void mClickHome(View view) {
+
+    }
+
 }

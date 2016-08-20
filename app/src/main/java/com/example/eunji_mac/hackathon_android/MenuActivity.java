@@ -10,6 +10,11 @@ import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity {
 
+    String mUserType; // 1 for driver, 0 for walker
+    String mCarType;
+    String mCarNumber;
+    String mCash;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,16 @@ public class MenuActivity extends AppCompatActivity {
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
 
+        Intent intent = getIntent();
+        mUserType = intent.getExtras().getString("usertype");
+
+        if (mUserType.equals("1")) { // for driver
+            mCarType = intent.getExtras().getString("cartype");
+            mCarNumber = intent.getExtras().getString("carnumber");
+            mCash = intent.getExtras().getString("cash");
+            mText3.setText("Cash : $" + mCash);
+            mText1.setText("My Account \n" + mCarNumber);
+        }
 
     }
 
@@ -42,15 +57,44 @@ public class MenuActivity extends AppCompatActivity {
     public void mClick2(View view) {}
     public void mClick3(View view) {
         Intent intent3 = new Intent(this,MyCashActivity.class);
+        intent3.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent3.putExtra("carnumber", mCarNumber);
+            intent3.putExtra("cartype", mCarType);
+            intent3.putExtra("cash", mCash);
+        }
+
         startActivity(intent3);
     }
     public void mClick4(View view) {
         Intent intent4 = new Intent(this,MainActivity.class);
+
+        intent4.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent4.putExtra("carnumber", mCarNumber);
+            intent4.putExtra("cartype", mCarType);
+            intent4.putExtra("cash", mCash);
+        }
+
         startActivity(intent4);
     }
+
     public void mClick5(View view){
         Intent intent5 = new Intent(this,AlertActivity.class);
-        startActivity(intent5);}
+
+        intent5.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent5.putExtra("carnumber", mCarNumber);
+            intent5.putExtra("cartype", mCarType);
+            intent5.putExtra("cash", mCash);
+        }
+
+        startActivity(intent5);
+    }
+
     public void mClick6(View view) {}
 
 }
