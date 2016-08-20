@@ -11,5 +11,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.eunji_mac.hackathon_android.TMapTest"
     tools:showIn="@layout/activity_tmap_test">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mainView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
+        <RelativeLayout
+            android:id="@+id/mainRelativeLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@android:color/white"
+            android:layout_weight="1" >
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
 </RelativeLayout>

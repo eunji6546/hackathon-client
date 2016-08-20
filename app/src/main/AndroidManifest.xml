@@ -50,6 +50,9 @@
         <activity android:name=".AlertActivity" />
         <activity android:name=".SearchPathActivity" />
         <activity android:name=".SelectRegionActivity"></activity>
+        <activity android:name=".TMapTest"
+            android:label="TMAPTEST"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

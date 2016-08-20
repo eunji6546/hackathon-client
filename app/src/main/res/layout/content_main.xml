@@ -31,4 +31,6 @@
         android:id="@+id/btn2"
         android:text="지역 충전소 검색"/>
 
+
+
 </LinearLayout>
