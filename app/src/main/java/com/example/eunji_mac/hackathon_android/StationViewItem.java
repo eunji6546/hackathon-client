@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 public class StationViewItem {
     private String addressStr ;
     private Integer requiredTimeStr ;
-    private Integer pathlengthStr;
+    private double pathlengthStr;
 
     public void setAddress(String title) {
         addressStr = title ;
@@ -16,7 +16,7 @@ public class StationViewItem {
         requiredTimeStr = time ;
     }
 
-    public void setPathLength(Integer length) {
+    public void setPathLength(double length) {
         pathlengthStr = length ;
     }
 
@@ -26,7 +26,7 @@ public class StationViewItem {
     public Integer getRequiredTime() {
         return this.requiredTimeStr ;
     }
-    public Integer getPathLength () {
+    public double getPathLength () {
         return this.pathlengthStr;
     }
 }

@@ -54,7 +54,20 @@ public class MenuActivity extends AppCompatActivity {
         Intent intent1 = new Intent(this,AccountActivity.class);
         startActivity(intent1);
     }
-    public void mClick2(View view) {}
+    public void mClick2(View view) {
+
+        Intent intent2 = new Intent(this,SearchPathActivity.class);
+        intent2.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent2.putExtra("carnumber", mCarNumber);
+            intent2.putExtra("cartype", mCarType);
+            intent2.putExtra("cash", mCash);
+        }
+
+        startActivity(intent2);
+
+    }
     public void mClick3(View view) {
         Intent intent3 = new Intent(this,MyCashActivity.class);
         intent3.putExtra("usertype", mUserType);
@@ -95,6 +108,8 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent5);
     }
 
-    public void mClick6(View view) {}
+    public void mClick6(View view) {
+
+    }
 
 }
