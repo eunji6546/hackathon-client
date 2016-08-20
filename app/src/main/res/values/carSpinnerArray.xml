@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="carSpinnerArray">
+        <item>---차종 선택---</item>
+        <item>블루온(현대)</item>
+        <item>i3(BMW)</item>
+        <item>RAY(기아)</item>
+        <item>SM3(르노삼성)</item>
+        <item>SOUL(기아)</item>
+        <item>SPARK(대우)</item>
+    </string-array>
+</resources>
