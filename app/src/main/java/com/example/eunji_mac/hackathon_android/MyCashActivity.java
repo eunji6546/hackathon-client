@@ -61,7 +61,7 @@ public class MyCashActivity extends AppCompatActivity {
             mCarNumber = intent.getExtras().getString("carnumber");
             mCash = intent.getExtras().getString("cash");
             mText2.setText("Car Number : " + mCarNumber);
-            mText3.setText("Cash : $" + mCash);
+            mText3.setText("Cash : " + mCash + " won");
         }
 
     }
@@ -69,7 +69,7 @@ public class MyCashActivity extends AppCompatActivity {
     // charge button click event
     public void mClick2(View view) {
         final EditText cashInput = new EditText(MyCashActivity.this);
-        cashInput.setHint("$10.0");
+        cashInput.setHint("10000 (숫자만 입력하세요)");
         AlertDialog alert = new AlertDialog.Builder(MyCashActivity.this)
                 .setTitle("CHARGE CASH")
                 .setMessage("충전할 캐시를 입력하세요")
@@ -120,7 +120,7 @@ public class MyCashActivity extends AppCompatActivity {
 
         protected void onPostExecute(String mSumString) {
             mText3 = (TextView) findViewById(R.id.text3);
-            mText3.setText("Cash : $" + mSumString);
+            mText3.setText("Cash : " + mSumString + " won");
         }
     }
 

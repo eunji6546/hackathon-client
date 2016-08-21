@@ -90,7 +90,7 @@ public class AccountActivity extends AppCompatActivity {
                 try {
                     UrlConnection urlconn = new UrlConnection();
                     String mCash =
-                            urlconn.Save(mCarNumString, mStationType, Double.toString(0.0));
+                            urlconn.Save(mCarNumString, mStationType, "0");
 
                     Intent intent = new Intent(AccountActivity.this, MenuActivity.class);
                     intent.putExtra("usertype", "1"); // for driver

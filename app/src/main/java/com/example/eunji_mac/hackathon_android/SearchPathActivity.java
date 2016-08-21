@@ -62,11 +62,10 @@ public class SearchPathActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_path);
 
+        // 폰트 변경
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
-
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
-
         mTitle.setTypeface(tf);
         mText1.setTypeface(tf);
 
@@ -215,13 +214,13 @@ public class SearchPathActivity extends AppCompatActivity {
             switch (requestCode) {
                 case PLACE_PICKER_START_FLAG:
                     Place place1 = PlacePicker.getPlace(data, this);
-                    myStartLocation.setText(place1.getName() + ", " + place1.getAddress());
+                    myStartLocation.setText(place1.getName() + "\n" + place1.getAddress());
                     mStartLatLag = place1.getLatLng();
                     selectStartBool = true;
                     break;
                 case PLACE_PICKER_GOAL_FLAG:
                     Place place2 = PlacePicker.getPlace(data, this);
-                    myGoalLocation.setText(place2.getName() + ", " + place2.getAddress());
+                    myGoalLocation.setText(place2.getName() + "\n" + place2.getAddress());
                     mGoalLatLag = place2.getLatLng();
                     selectGoalBool = true;
                     break;
