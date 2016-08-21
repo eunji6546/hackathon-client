@@ -3,7 +3,6 @@ package com.example.eunji_mac.hackathon_android;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,19 +27,12 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 public class SearchPathActivity extends AppCompatActivity {
     String mUserType; // 1 for driver, 0 for walker
     String mCarType;
     String mCarNumber;
     String mCash;
     int mFlags = 0;
-
 
     private PlacePicker.IntentBuilder builder;
     private PlacesAutoCompleteAdapter mPlacesAdapter;
@@ -212,18 +204,39 @@ public class SearchPathActivity extends AppCompatActivity {
                                         }
                                     }
                                 }).show();
+
+                        /*Intent intent2 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
+
+                        intent2.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
+                        intent2.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
+                        intent2.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
+                        intent2.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
+
+                        startActivity(intent2);*/
                     }
 
-                    /*
-                        차량 정보 및 출발지점, 목적지가 바르게 입력된 경우
-                    */
                     else {
-                        // 서버에 위도&경도범위&충전소type 보내고, 충전소 정보 받아오기
-                        // 리스트뷰에 도착지까지 소요시간 & 충전소까지 걸리는 시간 입력
-                        // 리스트뷰 클릭시 해당 경로 안내해주는 기능~!!
+                        Log.e("~~~~~~~~~~~~","222222222222");
+                        Intent intent2 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
 
+                        intent2.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
+                        intent2.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
+                        intent2.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
+                        intent2.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
 
+                        startActivity(intent2);
                     }
+
+                }
+                else {
+                    Intent intent3 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
+
+                    intent3.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
+                    intent3.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
+                    intent3.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
+                    intent3.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
+
+                    startActivity(intent3);
                 }
             }
         });
@@ -284,61 +297,4 @@ public class SearchPathActivity extends AppCompatActivity {
             final Place place = places.get(0);
         }
     };
-
-    private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
-        /* 위도&경도 범위, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
-        ArrayList<String> mStation;
-        ArrayList<LatLng> mPosition = new ArrayList<LatLng>();
-
-        @Override
-        protected ArrayList<String> doInBackground(String... strings) {
-            UrlConnection urlconn = new UrlConnection();
-
-            try {
-                mStation = urlconn.GetDropByStation(strings[0], strings[1], strings[2], strings[3], strings[4]);
-                for (int i = 0; i < mStation.size(); i++) {
-                    JSONObject jo = new JSONObject(mStation.get(i));
-                    String pos = jo.getString("map");
-                    String[] poss = pos.split(",");
-                    LatLng latLng = new LatLng(Double.parseDouble(poss[0]), Double.parseDouble(poss[1]));
-                    mPosition.add(latLng);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return mStation;
-        }
-
-        /*
-             주유소 정보 listview에 띄우기
-        */
-        protected void onPostExecute(ArrayList<String> items) {
-            // 주유소 리스트뷰 갱신
-            /*mAdapter.clear();
-            try {
-                for (int i=0;i<items.size();i++) {
-                    JSONObject jo = new JSONObject(items.get(i));
-                    location = getLocation();
-
-                    //distance between station and my location[Km]
-                    Calculate_Distance mDistance = new Calculate_Distance();
-                    double distance =
-                            mDistance.distance(
-                                    location.getLatitude(),
-                                    location.getLongitude(),
-                                    Double.parseDouble(jo.getString("map").split(",")[0]),
-                                    Double.parseDouble(jo.getString("map").split(",")[1]),"K");
-
-                    mAdapter.addItem(jo.getString("address"),100,distance);
-
-                }
-                mAdapter.notifyDataSetChanged();
-                e.printStackTrace();
-            }*/
-
-        }
-    }
-
 }
