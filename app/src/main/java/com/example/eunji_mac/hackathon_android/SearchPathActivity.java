@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -24,7 +28,6 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-
 
 public class SearchPathActivity extends AppCompatActivity {
     String mUserType; // 1 for driver, 0 for walker
@@ -50,7 +53,8 @@ public class SearchPathActivity extends AppCompatActivity {
     private Button directPathBtn;
     private Button dropByStationBtn;
 
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+    private static final LatLngBounds BOUNDS_GREATER_SYDNEY =
+            new LatLngBounds(new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
     protected GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -87,7 +91,7 @@ public class SearchPathActivity extends AppCompatActivity {
 
 
         /*
-            최단시간 결로 검색학기 버튼 클릭 이벤트
+            최단시간 경로
          */
         directPathBtn = (Button) findViewById(R.id.directPathBtn);
         directPathBtn.setOnClickListener(new View.OnClickListener() {
@@ -259,4 +263,34 @@ public class SearchPathActivity extends AppCompatActivity {
             final Place place = places.get(0);
         }
     };
+
+    // 출발지 찾기 클릭
+    public void mClick1(View v) {
+        try {
+            builder = new PlacePicker.IntentBuilder();
+            Intent intent = builder.build(SearchPathActivity.this);
+            // Start the Intent by requesting a result, identified by a request code.
+            startActivityForResult(intent, PLACE_PICKER_START_FLAG);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // 도착지 찾기 클릭
+    public void mClick2(View v) {
+        try {
+            builder = new PlacePicker.IntentBuilder();
+            Intent intent = builder.build(SearchPathActivity.this);
+            // Start the Intent by requesting a result, identified by a request code.
+            startActivityForResult(intent, PLACE_PICKER_GOAL_FLAG);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
+        }
+    }
 }

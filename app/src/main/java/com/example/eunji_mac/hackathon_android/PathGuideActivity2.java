@@ -6,37 +6,22 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapMarkerItem;
-import com.skp.Tmap.TMapPOIItem;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapPolyLine;
-import com.skp.Tmap.TMapTapi;
 import com.skp.Tmap.TMapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.ParserConfigurationException;
 
 public class PathGuideActivity2 extends AppCompatActivity {
 
@@ -132,9 +117,6 @@ public class PathGuideActivity2 extends AppCompatActivity {
     private class ShowStationPathOn extends AsyncTask<String, Void, ArrayList<String>> {
         /* 지역, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
         ArrayList<String> mStation;
-        ArrayList<LatLng> mPosition = new ArrayList<LatLng>();
-        ArrayList<String> mItems = new ArrayList<String>();
-
         @Override
         protected ArrayList<String> doInBackground(String... strings) {
             UrlConnection urlconn = new UrlConnection();
@@ -144,40 +126,31 @@ public class PathGuideActivity2 extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.e("%%%%%%%%",mStation.toString());
             return mStation;
         }
 
         protected void onPostExecute(ArrayList<String> items) {
 
             /* gps 마커 추가 */
-            /*for (int i=0;i<items.size();i++) {
+            for (int i=0;i<items.size();i++) {
                 JSONObject jo= null;
                 try {
-                    jo = new JSONObject(items.get(i));String pos = jo.getString("map");
-                    String[] poss = pos.split(",");
-                    LatLng latLng = new LatLng(Double.parseDouble(poss[0]),Double.parseDouble(poss[1]));
-                    mPosition.add(latLng);
+                    jo = new JSONObject(items.get(i));
+                    double lon = (double) jo.get("lon");
+                    double lat = (double) jo.get("lat");
+
+                    TMapMarkerItem tourMarkerItem = new TMapMarkerItem();
+                    TMapPoint tpoint = new TMapPoint(lat,lon);
+                    tourMarkerItem.setTMapPoint(tpoint);
+                    tourMarkerItem.setIcon(bitmap);
+                    tourMarkerItem.setVisible(TMapMarkerItem.VISIBLE);
+
+                    mMapView.addMarkerItem(String.valueOf(i),tourMarkerItem);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            TMapMarkerItem mapMarkerItem = new TMapMarkerItem();
-            mMapView.addMarkerItem("마커아이디",mapMarkerItem);*/
-
-
-            TMapMarkerItem tourMarkerItem = new TMapMarkerItem();
-            TMapPoint tpoint = new TMapPoint(35.795538,128.485107);
-            TMapPoint tpoint2 = new TMapPoint( 37.530421,127.229919 );
-            TMapPoint tpoint3 = new TMapPoint( 36.530421,127.229919 );
-            tourMarkerItem.setTMapPoint(tpoint);
-            tourMarkerItem.setTMapPoint(tpoint2);
-            tourMarkerItem.setTMapPoint(tpoint3);
-            tourMarkerItem.setIcon(bitmap);
-            tourMarkerItem.setVisible(TMapMarkerItem.VISIBLE);
-            //mMapView.setCenterPoint(37.566474,126.985022,false);
-            mMapView.addMarkerItem("111",tourMarkerItem);
-
         }
     }
 }
