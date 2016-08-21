@@ -4,34 +4,66 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.skp.Tmap.TMapData;
+import com.skp.Tmap.TMapMarkerItem;
+import com.skp.Tmap.TMapPoint;
+import com.skp.Tmap.TMapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
-public class SearchNearStationActivity extends FragmentActivity implements OnMapReadyCallback,android.location.LocationListener {
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
+public class SearchNearStationActivity extends FragmentActivity implements
+        OnMapReadyCallback,android.location.LocationListener {
+
+    //Get userinfo by intent
+    String mUserType; // 1 for driver, 0 for walker
+    String mCarType, mCarNumber, mCash;
+
+    // For GoogleMap
+    // Marker titles, 충전소 순서대로 타이틀 붙여야함
+    public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public GoogleMap googleMap;
+    public List<Marker> markers = new ArrayList<Marker>();
 
     // For GPS,  참고 http://techlovejump.com/android-gps-location-manager-tutorial/
     private LocationManager locationManager;
@@ -48,8 +80,7 @@ public class SearchNearStationActivity extends FragmentActivity implements OnMap
     boolean isGetLocation = false;
 
     Location location;
-    double lat; // 위도
-    double lon; // 경도
+    double lat, lon; // 위도 & 경도
     int i = 0;
 
     // 최소 GPS 정보 업데이트 거리 10미터
@@ -57,50 +88,33 @@ public class SearchNearStationActivity extends FragmentActivity implements OnMap
 
     // 최소 GPS 정보 업데이트 시간 밀리세컨이므로 5초
     private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_search_near_station);
-Log.e("QQQQQQ","QQQQQQQQQ");
-        Intent intent = new Intent(SearchNearStationActivity.this, TMapTest.class);
-        startActivity(intent);
-Log.e("RRRR","RRRRRRRRRRRRR");
+
         // 지도 객체 가져옴 (fragment로)
-        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        //mapFragment.getMapAsync(SearchNearStationActivity.this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
+        mapFragment.getMapAsync(SearchNearStationActivity.this);
 
-    }
+        // userinfo 받기
+        Intent intent = getIntent();
+        mUserType = intent.getExtras().getString("usertype");
+        mCarType = intent.getStringExtra("cartype");
 
-    @Override
-    public void onLocationChanged(Location location) {
+        if (mUserType.equals("1")) { // for driver
+            mCarType = intent.getStringExtra("cartype");
+            mCarNumber = intent.getStringExtra("carnumber");
+            mCash = intent.getStringExtra("cash");
+        }
 
-        /* 위치가 바뀌었을 때 동작하는 함수 */
-        //있었던 마커 지워줌
-        my.remove();
+        location = getLocation();
 
-        Log.e("@@","@##############");
-
-        String msg = "New Latitude: " + location.getLatitude() + "New Longitude: " + location.getLongitude();
-
-        my = googleMap.addMarker( new MarkerOptions().title("Me").position(new LatLng(location.getLatitude(),location.getLongitude())));
-        my.showInfoWindow();
-
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
+        ShowNearStation nearStation = new ShowNearStation();
+        nearStation.execute(Double.toString(lat-0.08),Double.toString(lat+0.08),Double.toString(lon-0.08),Double.toString(lon+0.08),mCarType);
 
     }
 
@@ -108,9 +122,7 @@ Log.e("RRRR","RRRRRRRRRRRRR");
     public void onMapReady(GoogleMap map) {
         /* 콜백 함수, 이걸로 map을 handle할 수 있다. */
         googleMap = map;
-
         pickMyLocation(googleMap);
-
 
     }
 
@@ -118,30 +130,74 @@ Log.e("RRRR","RRRRRRRRRRRRR");
 
         // 현재 위치 받아오기
         location = getLocation();
-        my = googleMap.addMarker(new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
+        my = googleMap.addMarker(new MarkerOptions().title("ME").
+                position(new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),10));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
+                (new LatLng(location.getLatitude(),location.getLongitude()),10));
 
 
         // Location Manager 선언
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         // Permission Checking
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this,"Fine location denied",Toast.LENGTH_LONG).show();
             return;
         }
 
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2, 1,this);
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
 
     }
+
+    private class ShowNearStation extends AsyncTask<String, Void, ArrayList<String>> {
+        /* 지역, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
+        ArrayList<String> mStation;
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            UrlConnection urlconn = new UrlConnection();
+
+            try {
+                mStation = urlconn.GetDropByStation(strings[0],strings[1],strings[2],strings[3],strings[4]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.e("mStation",mStation.toString());
+            return mStation;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> items) {
+
+            // 찍혀져있던 마커 지우기
+            for (int i=0;i<markers.size();i++){
+                markers.get(i).remove();
+            }
+            // 새로운 검색 결과에 대한 마커 찍기
+            for (int i=0;i<items.size();i++) {
+                JSONObject jo= null;
+                try {
+                    jo = new JSONObject(items.get(i));
+                    double lon = (double) jo.get("lon");
+                    double lat = (double) jo.get("lat");
+                    LatLng mLatlng = new LatLng(lat,lon);
+                    Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng));
+
+                    oneMarker.showInfoWindow();
+
+                    markers.add(oneMarker);
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
     public Location getLocation() {
         /* 현재 위치를 받아오는 함수 */
 
@@ -156,57 +212,41 @@ Log.e("RRRR","RRRRRRRRRRRRR");
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // GPS 와 네트워크사용이 가능하지 않을때 소스 구현
-                Log.e("##","2222222");
+
 
             } else {
-                Log.e("##","333333");
-
                 this.isGetLocation = true;
                 // 네트워크 정보로 부터 위치값 가져오기
                 if (isNetworkEnabled) {
-                    Log.e("##","4444444444");
-
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        Log.e("##","!55555555555");
-
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         return new Location("-1");
                     }
-                    Log.e("##","66666666");
 
                     locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                            LocationManager.NETWORK_PROVIDER,MIN_TIME_BW_UPDATES,MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
                     if (locationManager != null) {
-                        Log.e("##","77777777");
 
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
-                            Log.e("##","8888888888");
-
                             // 위도 경도 저장
                             lat = location.getLatitude();
                             lon = location.getLongitude();
-
                         }
                     }
                 }
 
 
-
                 if (isGPSEnabled) {
-                    Log.e("##","00000000000");
-
                     if (location == null) {
-                        Log.e("##","999999999999");
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         if (locationManager != null) {
-                            Log.e("##","aaaaaaaaa");
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
@@ -215,7 +255,6 @@ Log.e("RRRR","RRRRRRRRRRRRR");
                             }
                         }
                     }
-                    Log.e("##","Not Null");
                 }
             }
 
@@ -223,9 +262,51 @@ Log.e("RRRR","RRRRRRRRRRRRR");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.e("FINAL",location.toString());
-        Log.e("LAT",String.valueOf(location.getLatitude()));
         return location;
     }
+
+    public void stopUsingGPS() {
+        /* GPS 종료 */
+        if (locationManager != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return ;
+            }
+            locationManager.removeUpdates(this);
+        }
+    }
+
+    public boolean isGetLocation() {
+        return this.isGetLocation;
+    }
+
+
+
+
+    public void onProviderDisabled(String provider) {
+
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+        Toast.makeText(getBaseContext(), "Gps is turned off!! ",Toast.LENGTH_SHORT).show();
+    }
+
+    public void onProviderEnabled(String provider) {
+
+        Toast.makeText(getBaseContext(), "Gps is turned on!! ",Toast.LENGTH_SHORT).show();
+    }
+
+    /* 위치가 바뀌었을 때 동작하는 함수 */
+    @Override
+    public void onLocationChanged(Location location) {
+        //remove current marker
+        my.remove();
+
+        my = googleMap.addMarker( new MarkerOptions().title("ME").position(
+                new LatLng(location.getLatitude(),location.getLongitude())));
+        my.showInfoWindow();
+    }
+
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
 }

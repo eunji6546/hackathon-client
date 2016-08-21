@@ -40,7 +40,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".SearchStationActivity" />
         <activity android:name=".SearchNearStationActivity" />
@@ -54,19 +53,14 @@
         <activity
             android:name=".TMapTest"
             android:label="TMAPTEST"
-            android:theme="@style/AppTheme" >
-
-
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity android:name=".EVActivity" />
         <activity android:name=".PathGuideActivity" />
-        <activity android:name=".PathGuideActivity2"></activity>
+        <activity android:name=".PathGuideActivity2" />
         <activity
             android:name=".JustTest"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".PayActivity"></activity>
     </application>
 
 </manifest>

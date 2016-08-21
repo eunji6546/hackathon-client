@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.icu.util.MeasureUnit;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class MenuActivity extends AppCompatActivity {
         TextView mText4 = (TextView) findViewById(R.id.text4);
         TextView mText5 = (TextView) findViewById(R.id.text5);
         TextView mText6 = (TextView) findViewById(R.id.text6);
+        TextView mText7 = (TextView) findViewById(R.id.text7);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
 
         mTitle.setTypeface(tf);
@@ -38,6 +40,7 @@ public class MenuActivity extends AppCompatActivity {
         mText4.setTypeface(tf);
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
+        mText7.setTypeface(tf);
 
         Intent intent = getIntent();
         mUserType = intent.getExtras().getString("usertype");
@@ -45,9 +48,10 @@ public class MenuActivity extends AppCompatActivity {
         if (mUserType.equals("1")) { // for driver
             mCarType = intent.getExtras().getString("cartype");
             mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = intent.getExtras().getString("cash");
-            mText3.setText("Cash : $" + mCash);
-            mText1.setText("My Account \n" + mCarNumber);
+            mCash = (intent.getExtras()).getString("cash");
+            mText3.setText("Cash : " + mCash + " won");
+            Log.v("mCash", mCash);
+            mText7.setText(mCarNumber);
         }
 
     }

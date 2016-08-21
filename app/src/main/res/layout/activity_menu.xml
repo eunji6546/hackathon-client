@@ -53,10 +53,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="My Account\nNon-Driver"
+                    android:text="My Account"
                     android:textColor="#ffffff"
                     android:textAlignment="center"
                     android:textSize="16sp"
+                    android:layout_below="@+id/image1"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/text7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="Non-Driver"
+                    android:textColor="#EA8676"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
                     android:layout_below="@+id/image1"
                     android:layout_centerHorizontal="true" />
             </RelativeLayout>
@@ -115,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Cash  $0.0"
+                    android:text="Cash : 0 won"
                     android:textColor="#ffffff"
                     android:textSize="16sp"
                     android:layout_below="@+id/image3"
