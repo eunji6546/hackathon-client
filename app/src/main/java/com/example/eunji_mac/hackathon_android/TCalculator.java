@@ -30,9 +30,9 @@ public class TCalculator {
 //        return array;
 //    }
 
-    public static String calculate(TMapPoint startpoint, TMapPoint endpoint){
-        Log.e("Cal","START CALCULATING");
-        final String result = null;
+    public static void calculate(TMapPoint startpoint, TMapPoint endpoint) {
+        Log.e("Cal", "START CALCULATING");
+        String result;
         TMapData tMapData = new TMapData();
         final String NODE_ROOT = "kml";
         final String NODE_DISTANCE = "tmap:totalDistance";
@@ -40,28 +40,27 @@ public class TCalculator {
         final String NODE_FARE = "tmap:totalFare";
         final String NODE_TAXIFARE = "tmap:taxiFare";
 
-        Log.e("Cal","before CALCULATING");
+        Log.e("Cal", "before CALCULATING");
 
         tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
             @Override
             public void onFindPathDataAll(Document document) {
-                Log.e("Cal","CALCULATING");
-                String result = "";
+                Log.e("Cal", "CALCULATING");
                 XMLDOMParser parser = new XMLDOMParser();
                 Document doc = document;
                 // Get elements by name employee
                 NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
 
-
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     Element e = (Element) nodeList.item(i);
-                    result += parser.getValue(e, NODE_DISTANCE);
-                    result += "&" + parser.getValue(e, NODE_TIME);
+                    Log.v("node_distance", parser.getValue(e, NODE_DISTANCE));
+                    Log.v("node_time", parser.getValue(e, NODE_TIME));
+//                    result += parser.getValue(e, NODE_DISTANCE);
+//                    result += "&" + parser.getValue(e, NODE_TIME);
 
                 }
+            }
         });
-        return result;
     }
-
 
 }

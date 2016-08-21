@@ -2,11 +2,13 @@ package com.example.eunji_mac.hackathon_android;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.icu.util.MeasureUnit;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -71,14 +73,14 @@ public class MenuActivity extends AppCompatActivity {
     public void mClick3(View view) {
         Intent intent3 = new Intent(this,MyCashActivity.class);
         intent3.putExtra("usertype", mUserType);
-
-        if (mUserType.equals("1")) { // for driver
+        if (mUserType.equals("0")) // for non-driver
+            Toast.makeText(MenuActivity.this,"차량등록 후 이용가능합니다", Toast.LENGTH_SHORT).show();
+        else { // for driver
             intent3.putExtra("carnumber", mCarNumber);
             intent3.putExtra("cartype", mCarType);
             intent3.putExtra("cash", mCash);
+            startActivity(intent3);
         }
-
-        startActivity(intent3);
     }
     public void mClick4(View view) {
         Intent intent4 = new Intent(this,EVActivity.class);
