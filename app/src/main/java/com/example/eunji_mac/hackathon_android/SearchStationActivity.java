@@ -283,7 +283,10 @@ public class SearchStationActivity extends FragmentActivity implements
                                     location.getLongitude(),
                                     Double.parseDouble(jo.getString("map").split(",")[0]),
                                     Double.parseDouble(jo.getString("map").split(",")[1]),"K");
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                     */
 
                     TMapData tMapData = new TMapData();

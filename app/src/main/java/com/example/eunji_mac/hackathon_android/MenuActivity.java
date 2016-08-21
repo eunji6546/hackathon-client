@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.icu.util.MeasureUnit;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -47,8 +48,9 @@ public class MenuActivity extends AppCompatActivity {
         if (mUserType.equals("1")) { // for driver
             mCarType = intent.getExtras().getString("cartype");
             mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = intent.getExtras().getString("cash");
+            mCash = (intent.getExtras()).getString("cash");
             mText3.setText("Cash : " + mCash + " won");
+            Log.v("mCash", mCash);
             mText7.setText(mCarNumber);
         }
 

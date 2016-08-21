@@ -132,6 +132,13 @@ public class MyCashActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    // pay button click event
+    public void mClick1(View view) {
+    }
+
+>>>>>>> Stashed changes
     public void mClickHome(View view) {
 
     }
