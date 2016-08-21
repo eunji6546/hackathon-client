@@ -1,13 +1,22 @@
 package com.example.eunji_mac.hackathon_android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import static android.view.View.*;
 
 public class EVActivity extends AppCompatActivity {
 
@@ -56,17 +65,57 @@ public class EVActivity extends AppCompatActivity {
         option1 = (RadioButton) findViewById(R.id.text2);
         option2 = (RadioButton) findViewById(R.id.text3);
 
+        // 내 위치로 검색하기
         if (option1.isChecked()) {
-            Intent intent1 = new Intent(EVActivity.this, SearchNearStationActivity.class);
+            final Intent intent1 = new Intent(EVActivity.this, SearchNearStationActivity.class);
             intent1.putExtra("usertype", mUserType);
 
             if (mUserType.equals("1")) { // for driver
                 intent1.putExtra("carnumber", mCarNumber);
                 intent1.putExtra("cartype", mCarType);
                 intent1.putExtra("cash", mCash);
+                startActivity(intent1);
             }
-            startActivity(intent1);
-        } else {
+            else {
+                String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
+                final ArrayAdapter<String> mCarAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, car_str);
+                final Spinner mCarSpinner = new Spinner(EVActivity.this);
+                mCarSpinner.setAdapter(mCarAdapter);
+                int  position;
+
+                mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
+                        position = mCarSpinner.getSelectedItemPosition();
+                        if (position == 0) {
+                            mCarType = "선택안함";
+                        } else if (position == 4) {
+                            mCarType = "상";
+                        } else if ((position == 1) || (position == 6)) {
+                            mCarType = "콤보";
+                        } else {
+                            mCarType= "차데모";
+                        }
+                    }
+                    public void onNothingSelected(AdapterView<?>  parent) {
+                    }
+                });
+
+                AlertDialog alert = new AlertDialog.Builder(EVActivity.this)
+                        .setTitle("CHARGE CASH")
+                        .setMessage("충전할 캐시를 입력하세요")
+                        .setView(mCarSpinner)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                intent1.putExtra("cartype",mCarType);
+                                startActivity(intent1);
+                            }
+                        }).show();
+            }
+
+        }
+        // 내 주소로 검색하기
+        else {
             Intent intent2 = new Intent(EVActivity.this, SelectRegionActivity.class);
             intent2.putExtra("usertype", mUserType);
 

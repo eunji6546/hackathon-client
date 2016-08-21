@@ -55,16 +55,24 @@ public class MyCashActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mUserType = intent.getExtras().getString("usertype");
-
-        if (mUserType.equals("1")) {// for driver
-            mCarType = intent.getExtras().getString("cartype");
-            mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = intent.getExtras().getString("cash");
-            mText2.setText("Car Number : " + mCarNumber);
-            mText3.setText("Cash : " + mCash + " won");
-        }
-
+        mCarType = intent.getExtras().getString("cartype");
+        mCarNumber = intent.getExtras().getString("carnumber");
+        mCash = intent.getExtras().getString("cash");
+        mText2.setText("Car Number : " + mCarNumber);
+        mText3.setText("Cash : " + mCash + " won");
     }
+
+
+    // pay button click event
+    public void mClick1(View view) {
+        Intent intent = new Intent(MyCashActivity.this,PayActivity.class);
+        intent.putExtra("usertype",mUserType);
+        intent.putExtra("cartype",mCarType);
+        intent.putExtra("carnumber",mCarNumber);
+        intent.putExtra("cash",mCash);
+        startActivity(intent);
+    }
+
 
     // charge button click event
     public void mClick2(View view) {
@@ -122,12 +130,6 @@ public class MyCashActivity extends AppCompatActivity {
             mText3 = (TextView) findViewById(R.id.text3);
             mText3.setText("Cash : " + mSumString + " won");
         }
-    }
-
-
-
-    // pay button click event
-    public void mClick1(View view) {
     }
 
     public void mClickHome(View view) {
