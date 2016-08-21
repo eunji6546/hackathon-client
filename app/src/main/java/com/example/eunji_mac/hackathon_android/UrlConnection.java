@@ -147,7 +147,25 @@ public class UrlConnection {
 
     public static void Reportnow(String lat, String lon) throws IOException {
         Put(lat + "+" + lon + "+", "/report/");
+        return ;
     }
+
+    public static boolean Getalert(String lat, String lon) throws IOException {
+        try {
+            JSONObject mJsonObj = new JSONObject(Get(lat + "+" + lon + "+", "/get/report/"));
+            String mExist = mJsonObj.getString("result");
+            if (mExist.equals("true")) {
+                Log.v("existence :" , "true");
+                return true;
+            }
+            Log.v("existence :" , "true");
+            return false;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static ArrayList<String> GetSupply(String province, String town, String type) throws IOException {
 
         ArrayList<String> Addrlist = new ArrayList();
@@ -165,7 +183,8 @@ public class UrlConnection {
 
         return Addrlist;
     }
-    public static ArrayList<String> GetDropByStation(String lat1, String lat2, String lng1, String lng2, String type) throws IOException {
+    public static ArrayList<String> GetDropByStation(String lat1, String lat2, String lng1,
+                                                     String lng2, String type) throws IOException {
 
         ArrayList<String> Addrlist = new ArrayList();
 
