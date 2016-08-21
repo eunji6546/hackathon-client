@@ -45,8 +45,8 @@ public class TCalculator {
         tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
             @Override
             public void onFindPathDataAll(Document document) {
-                Log.e("Cal","CALCULATING");
-                String result = "";
+                Log.e("Cal", "CALCULATING");
+                String result = "HI=";
                 XMLDOMParser parser = new XMLDOMParser();
                 Document doc = document;
                 // Get elements by name employee
@@ -59,6 +59,7 @@ public class TCalculator {
                     result += "&" + parser.getValue(e, NODE_TIME);
 
                 }
+            }
         });
         return result;
     }

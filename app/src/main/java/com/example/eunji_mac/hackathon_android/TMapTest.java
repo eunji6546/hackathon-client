@@ -67,6 +67,8 @@ public class TMapTest extends Activity {
         setContentView(R.layout.activity_tmap_test);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
+        relativeLayout.setMinimumWidth(10);
+        relativeLayout.setMinimumHeight(10);
         //mContext = this;
 
         mMapView = new TMapView(this);

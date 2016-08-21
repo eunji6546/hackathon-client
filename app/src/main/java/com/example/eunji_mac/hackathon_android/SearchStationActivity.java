@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapPoint;
+import com.skp.Tmap.TMapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,11 +114,49 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_search_station);
-        TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
-        TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
+        FrameLayout framelayout = (FrameLayout) findViewById(R.id.MapView);
+        TMapView tMapView = new TMapView(this);
+        framelayout.addView(tMapView);
 
-        TCalculator tCalculator = new TCalculator(startpoint,endpoint);
-        Log.e("SDADSFDAFDdfsAA", tCalculator.calculate());
+        tMapView.setSKPMapApiKey("d6e4f98c-755e-3a31-aa8d-8b2dc176be1a");
+
+        TMapData tMapData = new TMapData();
+        //TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
+        //TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
+
+        final String NODE_ROOT = "kml";
+        final String NODE_DISTANCE = "tmap:totalDistance";
+        final String NODE_TIME = "tmap:totalTime";
+        final String NODE_FARE = "tmap:totalFare";
+        final String NODE_TAXIFARE = "tmap:taxiFare";
+
+        Log.e("SS","SSSSSSS");
+        tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
+            @Override
+            public void onFindPathDataAll(Document document) {
+
+                Log.e("SSSS","SSSSTTSSSS");
+                XMLDOMParser parser = new XMLDOMParser();
+                Document doc = document;
+                // Get elements by name employee
+                NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    Element e = (Element) nodeList.item(i);
+                    Log.e("AAAAA",parser.getValue(e, NODE_DISTANCE));
+                    Log.e("BBBB",parser.getValue(e, NODE_TIME));
+                    Log.e("CCCC",parser.getValue(e, NODE_FARE));
+                    Log.e("BBBB",parser.getValue(e, NODE_TAXIFARE));
+
+                }
+
+            }
+        });
+        Log.e("SS","SSSSSSSS");
+
+
+        //TCalculator tCalculator = new TCalculator();
+        //Log.e("SDADSFDAFDdfsAA", tCalculator.calculate(startpoint,endpoint));
 
         // 지도 객체 가져옴 (fragment로)
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -177,32 +217,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                     tCalculator.calculate(startpoint, endpoint);
                     //Log.e("AAAAAAAA", tCalculator.calculate());
 
-                    /*
-                    TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude,markers.get(i).getPosition().longitude);
 
-                    tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
-                    @Override
-                    public void onFindPathDataAll(Document document) {
-                        Log.e("Call","DAS");
-
-                        XMLDOMParser parser = new XMLDOMParser();
-                        Document doc = document;
-                        // Get elements by name employee
-                        NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
-                        Log.e("NODE",String.valueOf(nodeList.getLength()));
-
-                        for (int i = 0; i < nodeList.getLength(); i++) {
-
-                            Element e = (Element) nodeList.item(i);
-                            distances.add(Integer.parseInt(parser.getValue(e, NODE_DISTANCE)));
-                            seconds.add(Integer.parseInt(parser.getValue(e,NODE_TIME)));
-
-                        }
-
-
-                    }
-                });
-                */
 
                 }
 
@@ -218,8 +233,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 Log.e("markers",String.valueOf(markers.size()));
                 Log.e("distances",String.valueOf(distances.size()));
                 Log.e("seconds",String.valueOf(seconds.size()));
-//                Log.e("items",String.valueOf(items.size()));
-
+//
                 // 주유소 리스트뷰 갱신
                 mAdapter.clear();
                 try {
@@ -308,7 +322,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 e.printStackTrace();
             }
 
-items = mStation;
+            items = mStation;
             return mStation;
         }
 

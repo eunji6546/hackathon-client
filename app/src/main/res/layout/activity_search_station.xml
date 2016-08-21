@@ -51,6 +51,10 @@
             android:layout_gravity="center" />
 
     </FrameLayout>
+    <FrameLayout
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:id="@+id/MapView"></FrameLayout>
 
     <RelativeLayout
         android:layout_margin="10dp"
