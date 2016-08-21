@@ -7,11 +7,15 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,9 +28,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.skp.Tmap.TMapData;
+import com.skp.Tmap.TMapPoint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -34,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class SearchStationActivity extends FragmentActivity implements OnMapReadyCallback,android.location.LocationListener {
 
@@ -82,11 +93,30 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
     private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
 
 
+    // Strings for parsing xml Document
+    final String NODE_ROOT = "kml";
+    final String NODE_DISTANCE = "tmap:totalDistance";
+    final String NODE_TIME = "tmap:totalTime";
+    final String NODE_FARE = "tmap:totalFare";
+    final String NODE_TAXIFARE = "tmap:taxiFare";
+
+    ArrayList<Integer> distances;
+    ArrayList<Integer> seconds;
+    ArrayList<String> items;
+
+    android.os.Handler handler;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_station);
 
+        setContentView(R.layout.activity_search_station);
+        TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
+        TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
+
+        TCalculator tCalculator = new TCalculator(startpoint,endpoint);
+        Log.e("SDADSFDAFDdfsAA", tCalculator.calculate());
 
         // 지도 객체 가져옴 (fragment로)
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -118,6 +148,103 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         sdf.setTimeZone(TimeZone.getDefault());
         String currentDateandTime = sdf.format(new Date());
 
+        location = getLocation();
+        Log.e("LLLLLOCA",location.toString());
+
+         handler = new android.os.Handler(){
+
+            public void handleMessage(Message message){
+
+                distances = new ArrayList<>(markers.size());
+                seconds = new ArrayList<>(markers.size());
+
+                //TMapPoint startpoint = new TMapPoint(lat,lon);
+
+                // 각 주유소마다 경유 시 소요 시간, 거리 계산
+                for (int i=0; i<markers.size(); i++){
+                    TMapData tMapData = new TMapData();
+                    Log.e("Call","ssssS");
+                    Log.e("LAT",String.valueOf(markers.get(i).getPosition().latitude));
+                    Log.e("LAT", String.valueOf(markers.get(i).getPosition().longitude));
+                    //Log.e("STR",startpoint.toString());
+
+                    //TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude,markers.get(i).getPosition().longitude);
+
+                    TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
+                    TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
+
+                    TCalculator tCalculator = new TCalculator();
+                    tCalculator.calculate(startpoint, endpoint);
+                    //Log.e("AAAAAAAA", tCalculator.calculate());
+
+                    /*
+                    TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude,markers.get(i).getPosition().longitude);
+
+                    tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
+                    @Override
+                    public void onFindPathDataAll(Document document) {
+                        Log.e("Call","DAS");
+
+                        XMLDOMParser parser = new XMLDOMParser();
+                        Document doc = document;
+                        // Get elements by name employee
+                        NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+                        Log.e("NODE",String.valueOf(nodeList.getLength()));
+
+                        for (int i = 0; i < nodeList.getLength(); i++) {
+
+                            Element e = (Element) nodeList.item(i);
+                            distances.add(Integer.parseInt(parser.getValue(e, NODE_DISTANCE)));
+                            seconds.add(Integer.parseInt(parser.getValue(e,NODE_TIME)));
+
+                        }
+
+
+                    }
+                });
+                */
+
+                }
+
+
+
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        return false;
+                    }
+                });
+
+                Log.e("markers",String.valueOf(markers.size()));
+                Log.e("distances",String.valueOf(distances.size()));
+                Log.e("seconds",String.valueOf(seconds.size()));
+//                Log.e("items",String.valueOf(items.size()));
+
+                // 주유소 리스트뷰 갱신
+                mAdapter.clear();
+                try {
+                    for (int i=0;i<items.size();i++) {
+                        JSONObject jo = new JSONObject(items.get(i));
+                        location = getLocation();
+
+                        //distance between station and my location[Km]
+                        Calculate_Distance mDistance = new Calculate_Distance();
+                        double distance =
+                                mDistance.distance(
+                                        location.getLatitude(),
+                                        location.getLongitude(),
+                                        Double.parseDouble(jo.getString("map").split(",")[0]),
+                                        Double.parseDouble(jo.getString("map").split(",")[1]),"K");
+
+                       // mAdapter.addItem(jo.getString("address"),seconds.get(i)/60,distances.get(i));
+
+                    }
+                    mAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         ShowSearchedStation searchedStation = new ShowSearchedStation();
         searchedStation.execute(mCity,mTown,mStationType);
 
@@ -172,11 +299,16 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                     LatLng latLng = new LatLng(Double.parseDouble(poss[0]),Double.parseDouble(poss[1]));
                     mPosition.add(latLng);
                 }
+
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+items = mStation;
             return mStation;
         }
 
@@ -184,13 +316,13 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             주유소 정보 listview에 띄우기
          */
         protected void onPostExecute(ArrayList<String> items) {
-
             // 찍혀져있던 마커 지우기
             for (int i=0;i<markers.size();i++){
                 markers.get(i).remove();
             }
             // 새로운 검색 결과에 대한 마커 찍기
             for (int i=0; i<mPosition.size(); i++){
+
                 Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mPosition.get(i)).title(titles[i]));
 
                 oneMarker.showInfoWindow();
@@ -205,41 +337,11 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 builder.include(marker.getPosition());
             }
             LatLngBounds bounds = builder.build();
-            int padding = 10; // offset from edges of the map in pixels
+            int padding = 40; // offset from edges of the map in pixels
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             googleMap.animateCamera(cu);
+            handler.sendEmptyMessage(0);
 
-
-            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    return false;
-                }
-            });
-
-            // 주유소 리스트뷰 갱신
-            mAdapter.clear();
-            try {
-                for (int i=0;i<items.size();i++) {
-                    JSONObject jo = new JSONObject(items.get(i));
-                    location = getLocation();
-
-                    //distance between station and my location[Km]
-                    Calculate_Distance mDistance = new Calculate_Distance();
-                    double distance =
-                            mDistance.distance(
-                                    location.getLatitude(),
-                                    location.getLongitude(),
-                                    Double.parseDouble(jo.getString("map").split(",")[0]),
-                                    Double.parseDouble(jo.getString("map").split(",")[1]),"K");
-
-                    mAdapter.addItem(jo.getString("address"),100,distance);
-
-                }
-                mAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
         }
     }
@@ -350,7 +452,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         //remove current marker
         my.remove();
 
-        my = googleMap.addMarker( new MarkerOptions().title("Me").position(new LatLng(location.getLatitude(),location.getLongitude())));
+        my = googleMap.addMarker( new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
     }
 
