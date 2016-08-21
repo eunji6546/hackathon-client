@@ -86,8 +86,8 @@ public class MyCashActivity extends AppCompatActivity {
                         dialog.dismiss();
                         String[] params = new String[3];
                         String mChargeCash = cashInput.getText().toString();
-                        Double mSum = Double.parseDouble(mChargeCash) + Double.parseDouble(mCash);
-                        String mSumString = Double.toString(mSum);
+                        int mSum = Integer.parseInt(mChargeCash) + Integer.parseInt(mCash);
+                        String mSumString = String.valueOf(mSum);
                         params[0] = mCarNumber;
                         params[1] = mCarType;
                         params[2] = mSumString;
