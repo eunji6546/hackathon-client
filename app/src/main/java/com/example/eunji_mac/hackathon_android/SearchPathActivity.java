@@ -3,11 +3,7 @@ package com.example.eunji_mac.hackathon_android;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-<<<<<<< HEAD
-=======
 import android.graphics.Typeface;
-import android.os.AsyncTask;
->>>>>>> 901457cfcdf6848aae5586d8b9770b91326dcd9b
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -31,6 +24,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+
 
 public class SearchPathActivity extends AppCompatActivity {
     String mUserType; // 1 for driver, 0 for walker
@@ -265,93 +259,4 @@ public class SearchPathActivity extends AppCompatActivity {
             final Place place = places.get(0);
         }
     };
-<<<<<<< HEAD
-=======
-
-    private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
-        /* 위도&경도 범위, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
-        ArrayList<String> mStation;
-        ArrayList<LatLng> mPosition = new ArrayList<LatLng>();
-
-        @Override
-        protected ArrayList<String> doInBackground(String... strings) {
-            UrlConnection urlconn = new UrlConnection();
-
-            try {
-                mStation = urlconn.GetDropByStation(strings[0], strings[1], strings[2], strings[3], strings[4]);
-                for (int i = 0; i < mStation.size(); i++) {
-                    JSONObject jo = new JSONObject(mStation.get(i));
-                    String pos = jo.getString("map");
-                    String[] poss = pos.split(",");
-                    LatLng latLng = new LatLng(Double.parseDouble(poss[0]), Double.parseDouble(poss[1]));
-                    mPosition.add(latLng);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return mStation;
-        }
-
-        /*
-             주유소 정보 listview에 띄우기
-        */
-        protected void onPostExecute(ArrayList<String> items) {
-            // 주유소 리스트뷰 갱신
-            /*mAdapter.clear();
-            try {
-                for (int i=0;i<items.size();i++) {
-                    JSONObject jo = new JSONObject(items.get(i));
-                    location = getLocation();
-
-                    //distance between station and my location[Km]
-                    Calculate_Distance mDistance = new Calculate_Distance();
-                    double distance =
-                            mDistance.distance(
-                                    location.getLatitude(),
-                                    location.getLongitude(),
-                                    Double.parseDouble(jo.getString("map").split(",")[0]),
-                                    Double.parseDouble(jo.getString("map").split(",")[1]),"K");
-
-                    mAdapter.addItem(jo.getString("address"),100,distance);
-
-                }
-                mAdapter.notifyDataSetChanged();
-                e.printStackTrace();
-            }*/
-
-        }
-    }
-
-    // 출발지 찾기 클릭
-    public void mClick1(View v) {
-        try {
-            builder = new PlacePicker.IntentBuilder();
-            Intent intent = builder.build(SearchPathActivity.this);
-            // Start the Intent by requesting a result, identified by a request code.
-            startActivityForResult(intent, PLACE_PICKER_START_FLAG);
-
-        } catch (GooglePlayServicesRepairableException e) {
-            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    // 도착지 찾기 클릭
-    public void mClick2(View v) {
-        try {
-            builder = new PlacePicker.IntentBuilder();
-            Intent intent = builder.build(SearchPathActivity.this);
-            // Start the Intent by requesting a result, identified by a request code.
-            startActivityForResult(intent, PLACE_PICKER_GOAL_FLAG);
-
-        } catch (GooglePlayServicesRepairableException e) {
-            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
-        }
-    }
->>>>>>> 901457cfcdf6848aae5586d8b9770b91326dcd9b
 }
