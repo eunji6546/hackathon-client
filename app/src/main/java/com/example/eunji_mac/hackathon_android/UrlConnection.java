@@ -161,6 +161,22 @@ public class UrlConnection {
         Log.e("@@@@@@@@@@@@@@@",Addrlist.toString());
         return Addrlist;
     }
+    public static ArrayList<String> GetDropByStation(String lat1, String lat2, String lng1, String lng2, String type) throws IOException {
 
+        ArrayList<String> Addrlist = new ArrayList();
+
+        try {
+            JSONArray mJsonArr = new JSONArray(Get(lat1 + "+" + lat2 + "+" + lng1 + "+" +lng2 + "+" + type, "/get/station/"));
+
+            for (int i=0; i < mJsonArr.length(); i++) {
+                JSONObject mJsonObj = mJsonArr.getJSONObject(i);
+                Addrlist.add(mJsonObj.toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return Addrlist;
+    }
 
 }

@@ -136,6 +136,25 @@ public class SelectRegionActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
+        });//차 종류 선택시 이벤트 (충전소 종류 식별자)
+        mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    mStationType = "선택안함";
+                } else if (position == 4) {
+                    mStationType = "상";
+                } else if ((position == 1) || (position == 6)) {
+                    mStationType = "콤보";
+                } else {
+                    mStationType = "차데모";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
     }
 

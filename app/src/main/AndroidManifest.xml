@@ -54,7 +54,8 @@
             android:name=".TMapTest"
             android:label="TMAPTEST"
             android:theme="@style/AppTheme" />
-        <activity android:name=".EVActivity"></activity>
+        <activity android:name=".EVActivity" />
+        <activity android:name=".PathGuideActivity"></activity>
     </application>
 
 </manifest>
