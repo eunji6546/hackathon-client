@@ -6,12 +6,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -29,8 +32,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
     boolean isGetLocation = false;
 
     Location location;
-    double lat; // 위도
-    double lon; // 경도
+    double lat, lon;
 
     // 최소 GPS 정보 업데이트 거리 10미터
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
@@ -42,6 +44,9 @@ public class AlertActivity extends AppCompatActivity implements android.location
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert);
+
+//        final MediaPlayer mp = MediaPlayer.create(this, R.raw.alarm);
+//        mp.start();
 
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
@@ -67,23 +72,27 @@ public class AlertActivity extends AppCompatActivity implements android.location
                 "위도 : "+location.getLatitude() + "\n" +
                 "경도 : "+location.getLongitude());
 
-        mText3.setText("Auto-Detection");
+        String[] params = new String[2];
+
+        params[0] = Double.toString(location.getLatitude());
+        params[1] = Double.toString(location.getLongitude());
+
+        ShowEmergency mEmergency = new ShowEmergency();
+        mEmergency.execute(params);
+
     }
 
     // report 버튼 클릭 시
     public void mClick1(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UrlConnection urlconn = new UrlConnection();
-                    urlconn.Reportnow(
-                            Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        Log.v("Location is posted : ", "true");
+
+        String[] params = new String[2];
+
+        params[0] = Double.toString(location.getLatitude());
+        params[1] = Double.toString(location.getLongitude());
+
+        PostEmergency mEmergency = new PostEmergency();
+        mEmergency.execute(params);
     }
 
     public void mClickHome(View view) {}
@@ -156,7 +165,19 @@ public class AlertActivity extends AppCompatActivity implements android.location
     @Override
     public void onLocationChanged(Location location) {
         TextView mText2 = (TextView) findViewById(R.id.text2);
-        mText2.setText("Lat:"+location.getLatitude()+","+"Lon:"+location.getLongitude());
+        mText2.setText("Your Location \n" +
+                "위도 : "+location.getLatitude() + "\n" +
+                "경도 : "+location.getLongitude());
+
+        Log.v("Location is changed : ", "true");
+
+        String[] params = new String[2];
+
+        params[0] = Double.toString(location.getLatitude());
+        params[1] = Double.toString(location.getLongitude());
+
+        ShowEmergency mEmergency = new ShowEmergency();
+        mEmergency.execute(params);
     }
 
     @Override
@@ -167,4 +188,56 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
     @Override
     public void onProviderDisabled(String s) {}
+
+    private class ShowEmergency extends AsyncTask< String[], Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String[]... params) {
+            try {
+                UrlConnection urlconn = new UrlConnection();
+                Log.v("current latitude : ", params[0][0]);
+                Log.v("current longitude", params[0][1]);
+                return urlconn.Getalert(params[0][0], params[0][1]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean existence) {
+            TextView mText4 = (TextView) findViewById(R.id.text4);
+
+            if (existence) {
+                mText4.setText("Status  :  Caution!!");
+            } else {
+                mText4.setText("Status  :  Normal");
+            }
+        }
+    }
+
+    private class PostEmergency extends AsyncTask< String[], Void, Void> {
+
+        @Override
+        protected Void doInBackground(String[]... params) {
+            try {
+                UrlConnection urlconn = new UrlConnection();
+                Log.v("current latitude : ", params[0][0]);
+                Log.v("current longitude", params[0][1]);
+                urlconn.Reportnow(params[0][0], params[0][1]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(Void params) {
+            TextView mText4 = (TextView) findViewById(R.id.text4);
+            Toast.makeText(AlertActivity.this, "보고해주셔서 감사합니다", Toast.LENGTH_SHORT).show();
+            if ((mText4.getText().toString()).equals("Status  :  Normal"))
+                mText4.setText("Status  :  Caution!!");
+            else
+                mText4.setText("Status  :  Normal");
+        }
+    }
 }
