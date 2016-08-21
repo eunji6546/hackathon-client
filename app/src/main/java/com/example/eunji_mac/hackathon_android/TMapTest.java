@@ -38,7 +38,9 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.skp.Tmap.TMapData;
@@ -47,52 +49,12 @@ import com.skp.Tmap.TMapPolyLine;
 
 import com.skp.Tmap.TMapTapi;
 
-public class TMapTest extends Activity {
-/*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tmap_test);
+import javax.xml.parsers.ParserConfigurationException;
 
-        //new TMapRequest().execute("36.369617", "127.363993", "36.361400", "127.371651", "30");
-    }
-   */
+public class TMapTest extends Activity {
+
 
     private TMapView mMapView = null;
-
-    private Context mContext;
-    private ArrayList<Bitmap> mOverlayList;
-    //private ImageOverlay mOverlay;
-
-    public static String mApiKey; // 발급받은 appKey
-    public static String mBizAppID; // 발급받은 BizAppID (TMapTapi로 TMap앱 연동을 할 때 BizAppID 꼭 필요)
-
-    private int m_nCurrentZoomLevel = 0;
-    private double m_Latitude = 0;
-    private double m_Longitude = 0;
-    private boolean m_bShowMapIcon = false;
-
-    private boolean m_bTrafficeMode = false;
-    private boolean m_bSightVisible = false;
-    private boolean m_bTrackingMode = false;
-
-    private boolean m_bOverlayMode = false;
-
-    ArrayList<String> mArrayID;
-
-    ArrayList<String> mArrayCircleID;
-    private static int mCircleID;
-
-    ArrayList<String> mArrayLineID;
-    private static int mLineID;
-
-    ArrayList<String> mArrayPolygonID;
-    private static int mPolygonID;
-
-    ArrayList<String> mArrayMarkerID;
-    private static int mMarkerID;
-
-    TMapGpsManager gps = null;
 
 
     /**
@@ -105,6 +67,8 @@ public class TMapTest extends Activity {
         setContentView(R.layout.activity_tmap_test);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
+        relativeLayout.setMinimumWidth(10);
+        relativeLayout.setMinimumHeight(10);
         //mContext = this;
 
         mMapView = new TMapView(this);
@@ -139,7 +103,7 @@ public class TMapTest extends Activity {
         마커 전부 제거
         mMapView.removeAllMarkerItem();
 
-         */
+
 
         TMapPolyLine tMapPolyLine = new TMapPolyLine();
         mMapView.addTMapPath(tMapPolyLine);
@@ -152,7 +116,7 @@ public class TMapTest extends Activity {
         mMapView.setPathRotate(true);
 
         mMapView.setMapType(TMapView.POSITION_DEFAULT);//or NAVI
-
+*/
         // 마커들을 다 보이게하기 : 4.1.65
 
         TMapData tMapData = new TMapData();
@@ -160,34 +124,59 @@ public class TMapTest extends Activity {
         TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
 
 
-         final String NODE_ROOT = "kml";
+        final String NODE_ROOT = "kml";
         final String NODE_DISTANCE = "tmap:totalDistance";
-         final String NODE_TIME = "tmap:totalTime";
+        final String NODE_TIME = "tmap:totalTime";
         final String NODE_FARE = "tmap:totalFare";
         final String NODE_TAXIFARE = "tmap:taxiFare";
 
-            tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
-                @Override
-                public void onFindPathDataAll(Document document) {
+        tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
+            @Override
+            public void onFindPathDataAll(Document document) {
 
-                    XMLDOMParser parser = new XMLDOMParser();
-                    Document doc = document;
-                        // Get elements by name employee
-                        NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+                XMLDOMParser parser = new XMLDOMParser();
+                Document doc = document;
+                // Get elements by name employee
+                NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
 
-                        for (int i = 0; i < nodeList.getLength(); i++) {
-                            Element e = (Element) nodeList.item(i);
-                            Log.e("AAAAA",parser.getValue(e, NODE_DISTANCE));
-                            Log.e("BBBB",parser.getValue(e, NODE_TIME));
-                            Log.e("CCCC",parser.getValue(e, NODE_FARE));
-                            Log.e("BBBB",parser.getValue(e, NODE_TAXIFARE));
-
-                        }
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    Element e = (Element) nodeList.item(i);
+                    Log.e("AAAAA",parser.getValue(e, NODE_DISTANCE));
+                    Log.e("BBBB",parser.getValue(e, NODE_TIME));
+                    Log.e("CCCC",parser.getValue(e, NODE_FARE));
+                    Log.e("BBBB",parser.getValue(e, NODE_TAXIFARE));
 
                 }
-            });
 
-           // Log.e("DOCUMENT",doc.toString());
+            }
+        });
+/*
+        try {
+            Document docu = tMapData.findPathDataAll(startpoint, endpoint);
+
+            XMLDOMParser parser = new XMLDOMParser();
+
+            // Get elements by name employee
+            NodeList nodeList = docu.getElementsByTagName(NODE_ROOT);
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Element e = (Element) nodeList.item(i);
+                Log.e("##AAAAA",parser.getValue(e, NODE_DISTANCE));
+                Log.e("##BBBB",parser.getValue(e, NODE_TIME));
+                Log.e("##CCCC",parser.getValue(e, NODE_FARE));
+                Log.e("##BBBB",parser.getValue(e, NODE_TAXIFARE));
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+*/
+        // Log.e("DOCUMENT",doc.toString());
 
         TMapTapi tMapTapi = new TMapTapi(this);
 
@@ -199,8 +188,9 @@ public class TMapTest extends Activity {
         }
 
 
+        /*
         TMapData tmapdata = new TMapData();
-        tmapdata.findAllPOI("SKT타워", 100, new TMapData.FindAllPOIListenerCallback() {
+        tmapdata.findAllPOI("한국", 100, new TMapData.FindAllPOIListenerCallback() {
             @Override
             public void onFindAllPOI(ArrayList<TMapPOIItem> arrayList) {
                 for(int i=0; i<arrayList.size(); i++){
@@ -213,7 +203,7 @@ public class TMapTest extends Activity {
         });
         Log.e("F","FINISH");
 
-
+*/
     }
 
 }

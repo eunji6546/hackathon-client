@@ -333,7 +333,6 @@ public class SearchPathActivity extends AppCompatActivity {
 
                 }
                 mAdapter.notifyDataSetChanged();
-            } catch (JSONException e) {
                 e.printStackTrace();
             }*/
 

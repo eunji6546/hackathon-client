@@ -45,7 +45,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
-        TextView mText2 = (TextView) findViewById(R.id.text2);
+        mText2 = (TextView) findViewById(R.id.text2);
         TextView mText3 = (TextView) findViewById(R.id.text3);
         TextView mText4 = (TextView) findViewById(R.id.text4);
         TextView mText5 = (TextView) findViewById(R.id.text5);
@@ -64,7 +64,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         //최초 gps값 받아오기
         location = getLocation();
-        mText2.setText("Lat:"+location.getLatitude()+" , "+"Lon:"+location.getLatitude());
+        mText2.setText("Lat:"+location.getLatitude()+" , "+"Lon:"+location.getLongitude());
     }
 
     public void mClick1(View view) {}
@@ -160,8 +160,8 @@ public class AlertActivity extends AppCompatActivity implements android.location
     }
     @Override
     public void onLocationChanged(Location location) {
-        mText2.setText("Lat:"+location.getLatitude()+","+"Lon:"+location.getLatitude());
-
+        mText2 = (TextView) findViewById(R.id.text2);
+        mText2.setText("Lat:"+location.getLatitude()+","+"Lon:"+location.getLongitude());
     }
 
     @Override

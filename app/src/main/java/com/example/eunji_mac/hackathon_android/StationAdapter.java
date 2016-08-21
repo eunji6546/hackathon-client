@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,11 +14,11 @@ import java.util.ArrayList;
 /**
  * Created by Jisoo Lee (jisu0123@kaist.ac.kr)
  */
-public class CarSharingAdapter extends ArrayAdapter {
+public class StationAdapter extends ArrayAdapter {
 
     private ArrayList<String> items;
 
-    public CarSharingAdapter(Context context, int resourceid, ArrayList<String> objects) {
+    public StationAdapter(Context context, int resourceid, ArrayList<String> objects) {
         super(context, resourceid, objects);
         this.items = objects;
     }
@@ -29,7 +28,7 @@ public class CarSharingAdapter extends ArrayAdapter {
 
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.items, null);
+            v = vi.inflate(R.layout.stationitems, null);
         }
 
         TextView mText1 = (TextView) v.findViewById(R.id.itemtext);

@@ -53,8 +53,8 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_margin="40dp"
-        android:layout_width="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal">
@@ -66,23 +66,22 @@
             android:layout_height="wrap_content"
             android:text="지역 선택"
             android:textSize="20dp"
-            android:textColor="#1FF486"
+            android:textColor="#E1EDB9"
             android:layout_gravity="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
 
             <Spinner
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/city"></Spinner>
 
             <Spinner
                 android:layout_marginLeft="20dp"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/town"></Spinner>
@@ -96,12 +95,13 @@
             android:layout_height="wrap_content"
             android:text="차종 선택"
             android:textSize="20dp"
-            android:textColor="#1FF486"
+            android:textColor="#E1EDB9"
             android:layout_gravity="center" />
 
             <Spinner
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:id="@+id/vehicle">
             </Spinner>
 
@@ -112,7 +112,7 @@
             android:layout_gravity="center_horizontal"
             android:onClick="mClick1"
             android:id="@+id/text4"
-            android:background="#1FF486"
+            android:background="#E1EDB9"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
