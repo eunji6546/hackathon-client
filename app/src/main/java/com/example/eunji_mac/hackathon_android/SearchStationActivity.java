@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -48,24 +50,20 @@ import java.util.TimeZone;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-public class SearchStationActivity extends FragmentActivity implements OnMapReadyCallback,android.location.LocationListener {
+public class SearchStationActivity extends FragmentActivity implements
+        OnMapReadyCallback,android.location.LocationListener {
 
     //Get userinfo by intent
     String mUserType; // 1 for driver, 0 for walker
-    String mCarType;
-    String mCarNumber;
-    String mCash;
+    String mCarType, mCarNumber, mCash;
 
     //user가 선택한 지역
-    String mCity;
-    String mTown;
-    String mStationType;
-
-    ListViewAdapter mAdapter;
+    String mCity, mTown, mStationType;
 
     // For GoogleMap
     // Marker titles, 충전소 순서대로 타이틀 붙여야함
-    public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H",
+            "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public GoogleMap googleMap;
     public List<Marker> markers = new ArrayList<Marker>();
 
@@ -84,8 +82,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
     boolean isGetLocation = false;
 
     Location location;
-    double lat; // 위도
-    double lon; // 경도
+    double lat, lon; // 위도 + 경도
     int i = 0;
 
     // 최소 GPS 정보 업데이트 거리 10미터
@@ -108,6 +105,8 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
     android.os.Handler handler;
 
+    public TMapView tMapView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,48 +114,11 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
         setContentView(R.layout.activity_search_station);
         FrameLayout framelayout = (FrameLayout) findViewById(R.id.MapView);
-        TMapView tMapView = new TMapView(this);
+        tMapView = new TMapView(this);
         framelayout.addView(tMapView);
 
         tMapView.setSKPMapApiKey("d6e4f98c-755e-3a31-aa8d-8b2dc176be1a");
 
-        TMapData tMapData = new TMapData();
-        //TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
-        //TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
-
-        final String NODE_ROOT = "kml";
-        final String NODE_DISTANCE = "tmap:totalDistance";
-        final String NODE_TIME = "tmap:totalTime";
-        final String NODE_FARE = "tmap:totalFare";
-        final String NODE_TAXIFARE = "tmap:taxiFare";
-
-        Log.e("SS","SSSSSSS");
-        tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
-            @Override
-            public void onFindPathDataAll(Document document) {
-
-                Log.e("SSSS","SSSSTTSSSS");
-                XMLDOMParser parser = new XMLDOMParser();
-                Document doc = document;
-                // Get elements by name employee
-                NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
-
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    Element e = (Element) nodeList.item(i);
-                    Log.e("AAAAA",parser.getValue(e, NODE_DISTANCE));
-                    Log.e("BBBB",parser.getValue(e, NODE_TIME));
-                    Log.e("CCCC",parser.getValue(e, NODE_FARE));
-                    Log.e("BBBB",parser.getValue(e, NODE_TAXIFARE));
-
-                }
-
-            }
-        });
-        Log.e("SS","SSSSSSSS");
-
-
-        //TCalculator tCalculator = new TCalculator();
-        //Log.e("SDADSFDAFDdfsAA", tCalculator.calculate(startpoint,endpoint));
 
         // 지도 객체 가져옴 (fragment로)
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -177,12 +139,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         mTown = intent.getStringExtra("TOWN");
         mStationType = intent.getStringExtra("STATION_TYPE");
 
-        //listview 생성
-        ListView mListview ;
-        mAdapter = new ListViewAdapter() ;
-        mListview = (ListView) findViewById(R.id.stationlistview1);
-        mListview.setAdapter(mAdapter);
-
         //현재 시간 및 날짜 받아오기
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         sdf.setTimeZone(TimeZone.getDefault());
@@ -191,77 +147,17 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         location = getLocation();
         Log.e("LLLLLOCA",location.toString());
 
-         handler = new android.os.Handler(){
-
-            public void handleMessage(Message message){
-
-                distances = new ArrayList<>(markers.size());
-                seconds = new ArrayList<>(markers.size());
-
-                //TMapPoint startpoint = new TMapPoint(lat,lon);
-
-                // 각 주유소마다 경유 시 소요 시간, 거리 계산
-                for (int i=0; i<markers.size(); i++){
-                    TMapData tMapData = new TMapData();
-                    Log.e("Call","ssssS");
-                    Log.e("LAT",String.valueOf(markers.get(i).getPosition().latitude));
-                    Log.e("LAT", String.valueOf(markers.get(i).getPosition().longitude));
-                    //Log.e("STR",startpoint.toString());
-
-                    //TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude,markers.get(i).getPosition().longitude);
-
-                    TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
-                    TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
-
-                    TCalculator tCalculator = new TCalculator();
-                    tCalculator.calculate(startpoint, endpoint);
-                    //Log.e("AAAAAAAA", tCalculator.calculate());
-
-
-
-                }
-
-
-
-                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        return false;
-                    }
-                });
-
-                Log.e("markers",String.valueOf(markers.size()));
-                Log.e("distances",String.valueOf(distances.size()));
-                Log.e("seconds",String.valueOf(seconds.size()));
-//
-                // 주유소 리스트뷰 갱신
-                mAdapter.clear();
-                try {
-                    for (int i=0;i<items.size();i++) {
-                        JSONObject jo = new JSONObject(items.get(i));
-                        location = getLocation();
-
-                        //distance between station and my location[Km]
-                        Calculate_Distance mDistance = new Calculate_Distance();
-                        double distance =
-                                mDistance.distance(
-                                        location.getLatitude(),
-                                        location.getLongitude(),
-                                        Double.parseDouble(jo.getString("map").split(",")[0]),
-                                        Double.parseDouble(jo.getString("map").split(",")[1]),"K");
-
-                       // mAdapter.addItem(jo.getString("address"),seconds.get(i)/60,distances.get(i));
-
-                    }
-                    mAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
         ShowSearchedStation searchedStation = new ShowSearchedStation();
         searchedStation.execute(mCity,mTown,mStationType);
 
+        // UX 변경
+        TextView mTitle = (TextView) findViewById(R.id.title);
+        TextView mText1 = (TextView) findViewById(R.id.text1);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
+
+        mTitle.setTypeface(tf);
+        mText1.setTypeface(tf);
     }
 
     @Override
@@ -276,15 +172,20 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
 
         // 현재 위치 받아오기
         location = getLocation();
-        my = googleMap.addMarker(new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
+        my = googleMap.addMarker(new MarkerOptions().title("ME").
+                position(new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),10));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
+                (new LatLng(location.getLatitude(),location.getLongitude()),10));
 
 
         // Location Manager 선언
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         // Permission Checking
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this,"Fine location denied",Toast.LENGTH_LONG).show();
             return;
         }
@@ -299,6 +200,7 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
         /* 지역, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
         ArrayList<String> mStation;
         ArrayList<LatLng> mPosition = new ArrayList<LatLng>();
+        ArrayList<String> mItems = new ArrayList<String>();
 
         @Override
         protected ArrayList<String> doInBackground(String... strings) {
@@ -313,8 +215,6 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                     LatLng latLng = new LatLng(Double.parseDouble(poss[0]),Double.parseDouble(poss[1]));
                     mPosition.add(latLng);
                 }
-
-
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -337,7 +237,8 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             // 새로운 검색 결과에 대한 마커 찍기
             for (int i=0; i<mPosition.size(); i++){
 
-                Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mPosition.get(i)).title(titles[i]));
+                Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(
+                        mPosition.get(i)).title(titles[i]));
 
                 oneMarker.showInfoWindow();
 
@@ -354,9 +255,85 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
             int padding = 40; // offset from edges of the map in pixels
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             googleMap.animateCamera(cu);
-            handler.sendEmptyMessage(0);
+
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    return false;
+                }
+            });
+
+            try {
+                mItems.clear();
+                final String[] time = {null}; //초
+                final String[] dist = {null}; //분
+
+                for (int i=0;i<items.size();i++) {
+                    final JSONObject jo = new JSONObject(items.get(i));
+
+                    // 현재 위치 -> startPoint
+                    location = getLocation();
+
+                    /*
+                    //distance between station and my location[Km]
+                    Calculate_Distance mDistance = new Calculate_Distance();
+                    double distance =
+                            mDistance.distance(
+                                    location.getLatitude(),
+                                    location.getLongitude(),
+                                    Double.parseDouble(jo.getString("map").split(",")[0]),
+                                    Double.parseDouble(jo.getString("map").split(",")[1]),"K");
+
+                    */
+
+                    TMapData tMapData = new TMapData();
+                    TMapPoint startpoint = new TMapPoint(location.getLatitude(),location.getLongitude());
+                    TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude, markers.get(i).getPosition().longitude);
+
+                    Log.e("START",startpoint.toString());
+                    Log.e("END",endpoint.toString());
+
+                    final int finalI = i;
+
+                    tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
+                        @Override
+                        public void onFindPathDataAll(Document document) {
+
+                            Log.e("SSSS","SSSSTTSSSS");
+                            XMLDOMParser parser = new XMLDOMParser();
+                            Document doc = document;
+                            // Get elements by name employee
+                            NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+
+                            for (int i = 0; i < nodeList.getLength(); i++) {
+                                Element e = (Element) nodeList.item(i);
+                                dist[0] = parser.getValue(e, NODE_DISTANCE);
+                                time[0] = parser.getValue(e, NODE_TIME);
+
+                            }
+                            try {
+                                Log.e("TIME",time[0]);
+                                mItems.add(" [" + titles[finalI] + "] " + jo.getString("address") +
+                                        "\n 예상소요시간 : " + String.valueOf ( Double.parseDouble(time[0])/60) + "분"+
+                                        "\n 거리 : " + dist[0] + " m+ none");
+                                Log.e("DI",dist[0]);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
 
 
+
+                }
+
+                StationAdapter adapter = new StationAdapter(getBaseContext(), R.layout.stationlistview_item, mItems);
+                ListView myListView = (ListView) findViewById(R.id.stationlist);
+                myListView.setAdapter(adapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -381,7 +358,9 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
                 this.isGetLocation = true;
                 // 네트워크 정보로 부터 위치값 가져오기
                 if (isNetworkEnabled) {
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         return new Location("-1");
                     }
 
@@ -432,8 +411,9 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
     public void stopUsingGPS() {
         /* GPS 종료 */
         if (locationManager != null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return ;
             }
             locationManager.removeUpdates(this);
@@ -462,16 +442,14 @@ public class SearchStationActivity extends FragmentActivity implements OnMapRead
     /* 위치가 바뀌었을 때 동작하는 함수 */
     @Override
     public void onLocationChanged(Location location) {
-
         //remove current marker
         my.remove();
 
-        my = googleMap.addMarker( new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
+        my = googleMap.addMarker( new MarkerOptions().title("ME").position(
+                new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
     }
 
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-
-    }
 }

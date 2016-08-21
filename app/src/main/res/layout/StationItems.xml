@@ -20,7 +20,7 @@
         android:padding="10dp"
         android:id="@+id/itemtext"
         android:text="item"
-        android:textColor="#E1EDB9"
+        android:textColor="#ffffff"
         android:layout_weight="2" />
 
 </RelativeLayout>

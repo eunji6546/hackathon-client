@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="Search Station?"
             android:textSize="20dp"
-            android:textColor="#1FF486"
+            android:textColor="#E1EDB9"
             android:layout_gravity="center" />
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="내 위치로 검색"
-                android:textColor="#1FF486"
+                android:textColor="#E1EDB9"
                 android:id="@+id/text2"
                 android:layout_gravity="center_horizontal" />
 
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="주소로 검색"
-                android:textColor="#1FF486"
+                android:textColor="#E1EDB9"
                 android:id="@+id/text3"
                 android:layout_gravity="center_horizontal" />
         </RadioGroup>
@@ -96,7 +96,7 @@
             android:layout_gravity="center_horizontal"
             android:onClick="mClick1"
             android:id="@+id/text4"
-            android:background="#1FF486"
+            android:background="#E1EDB9"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,16 +113,15 @@
         android:layout_height="wrap_content"
         android:text="We Can Build Our Station!"
         android:textSize="20dp"
-        android:textColor="#1FF486"
+        android:textColor="#E1EDB9"
         android:layout_gravity="center" />
-
 
     <TextView
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:onClick="mClick2"
         android:id="@+id/text6"
-        android:background="#1FF486"
+        android:background="#E1EDB9"
         android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,13 +79,18 @@ public class AccountActivity extends AppCompatActivity {
 
     //save my info
     public void mClick1(View view) {
+        final String mCarNumString = mCarNum.getText().toString();
+        if (mCarNumString.length() != 7) {
+            Toast.makeText(AccountActivity.this, "잘못된 차량번호입니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     UrlConnection urlconn = new UrlConnection();
                     String mCash =
-                            urlconn.Save(mCarNum.getText().toString(), mStationType, Double.toString(0.0));
+                            urlconn.Save(mCarNumString, mStationType, Double.toString(0.0));
 
                     Intent intent = new Intent(AccountActivity.this, MenuActivity.class);
                     intent.putExtra("usertype", "1"); // for driver

@@ -33,7 +33,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:layout_marginLeft="20dp"
@@ -57,10 +57,12 @@
         android:id="@+id/MapView"></FrameLayout>
 
     <RelativeLayout
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7">
+        android:layout_weight="0.2">
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -74,12 +76,11 @@
 
     <ListView
         android:layout_margin="10dp"
-        android:id="@+id/stationlistview1"
+        android:id="@+id/stationlist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
-        android:layout_marginTop="10dp"
-        android:background="#F2F2F2">
+        android:layout_marginTop="10dp">
     </ListView>
 
 </LinearLayout>
