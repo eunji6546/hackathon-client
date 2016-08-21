@@ -1,5 +1,6 @@
 package com.example.eunji_mac.hackathon_android;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +18,12 @@ import com.skp.Tmap.TMapView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class PathGuideActivity extends AppCompatActivity {
 
@@ -30,9 +35,16 @@ public class PathGuideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_path_guide);
 
-        RelativeLayout relativeLayout = new RelativeLayout(this);
-        //mContext = this;
+        // 출발점과 도착점을 받아옴
+        Intent intent = getIntent();
+        String startX = intent.getStringExtra("START_LAT");
+        String startY = intent.getStringExtra("START_LNG");
+        String endX = intent.getStringExtra("GOAL_LAT");
+        String endY = intent.getStringExtra("GOAL_LNG");
 
+
+        // 맵 뷰 상태 설정
+        RelativeLayout relativeLayout = new RelativeLayout(this);
         mMapView = new TMapView(this);
         mMapView.setSKPMapApiKey("d6e4f98c-755e-3a31-aa8d-8b2dc176be1a");
         mMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
@@ -46,11 +58,6 @@ public class PathGuideActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.map_pin_red);
         mMapView.setIcon(bitmap);
         mMapView.setSightVisible(true);
-
-
-        relativeLayout.addView(mMapView);
-        setContentView(relativeLayout);
-
 
 
         /*
@@ -67,10 +74,10 @@ public class PathGuideActivity extends AppCompatActivity {
 
          */
 
-        TMapPolyLine tMapPolyLine = new TMapPolyLine();
-        tMapPolyLine.addLinePoint(new TMapPoint(37.538958, 127.028073));
-        tMapPolyLine.addLinePoint(new TMapPoint(36.369608, 127.364014));
-        mMapView.addTMapPath(tMapPolyLine);
+        //TMapPolyLine tMapPolyLine = new TMapPolyLine();
+        //tMapPolyLine.addLinePoint(new TMapPoint(37.538958, 127.028073));
+        //tMapPolyLine.addLinePoint(new TMapPoint(36.369608, 127.364014));
+
         // mMapView.removeTMapPath
 
         Bitmap start = BitmapFactory.decodeResource(this.getResources(), R.drawable.poi_star);
@@ -81,6 +88,24 @@ public class PathGuideActivity extends AppCompatActivity {
 
         mMapView.setMapType(TMapView.POSITION_DEFAULT);//or NAVI
 
+        TMapData tMapData = new TMapData();
+
+        TMapPoint startpoint = new TMapPoint(Double.parseDouble(startX), Double.parseDouble(startY));
+        TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
+        tMapData.findPathData(startpoint, endpoint, new TMapData.FindPathDataListenerCallback() {
+            @Override
+            public void onFindPathData(TMapPolyLine tMapPolyLine) {
+                // 경로를 맵 위에 표시해준다
+                mMapView.addTMapPath(tMapPolyLine);
+            }
+        });
+
+
+        relativeLayout.addView(mMapView);
+        setContentView(relativeLayout);
+
+
+        /*
         // 마커들을 다 보이게하기 : 4.1.65
 
         TMapData tMapData = new TMapData();
@@ -141,6 +166,6 @@ public class PathGuideActivity extends AppCompatActivity {
         });
         Log.e("F", "FINISH");
 
-
+*/
     }
 }

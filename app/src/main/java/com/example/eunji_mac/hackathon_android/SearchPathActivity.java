@@ -140,11 +140,13 @@ public class SearchPathActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tmap 으로 찾아주기~!! 'mStartLatLag'는 출발지 위도 경도 && 'mGoalLatLag'는 도착지 위도 경도
-                Intent intent = new Intent(SearchPathActivity.this, PathGuideActivity.class);/*
-                intent.putExtra("START_LAT",mStartLatLag.latitude);
-                intent.putExtra("START_LNG",mStartLatLag.longitude);
-                intent.putExtra("GOALLAT",mGoalLatLag.latitude);
-                intent.putExtra("GOAL_LNG",mGoalLatLag.longitude);*/
+                Intent intent = new Intent(SearchPathActivity.this, PathGuideActivity.class);
+
+                intent.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
+                intent.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
+                intent.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
+                intent.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
+
                 startActivity(intent);
 
 

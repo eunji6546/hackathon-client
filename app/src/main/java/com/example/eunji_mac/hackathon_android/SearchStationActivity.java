@@ -294,6 +294,32 @@ public class SearchStationActivity extends FragmentActivity implements
                     Log.e("END",endpoint.toString());
 
                     final int finalI = i;
+                    tMapData.findPathDataAll(
+                            new TMapPoint(38.426191,128.395598),
+                            new TMapPoint(34.392851,126.170677),
+                            new TMapData.FindPathDataAllListenerCallback() {
+                        @Override
+                        public void onFindPathDataAll(Document document) {
+
+                            Log.e("SSSS","SSSSTTSSSS");
+                            XMLDOMParser parser = new XMLDOMParser();
+                            Document doc = document;
+                            // Get elements by name employee
+                            NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+
+                            for (int i = 0; i < nodeList.getLength(); i++) {
+                                Element e = (Element) nodeList.item(i);
+                                dist[0] = parser.getValue(e, NODE_DISTANCE);
+                                time[0] = parser.getValue(e, NODE_TIME);
+
+                            }
+
+                                Log.e("TIME",time[0]);
+                                Log.e("DI",dist[0]);
+
+
+                        }
+                    });
 
                     tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
                         @Override
