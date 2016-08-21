@@ -3,11 +3,8 @@ package com.example.eunji_mac.hackathon_android;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-<<<<<<< HEAD
-=======
 import android.graphics.Typeface;
 import android.os.AsyncTask;
->>>>>>> 901457cfcdf6848aae5586d8b9770b91326dcd9b
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +28,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SearchPathActivity extends AppCompatActivity {
     String mUserType; // 1 for driver, 0 for walker
@@ -56,7 +59,8 @@ public class SearchPathActivity extends AppCompatActivity {
     private Button directPathBtn;
     private Button dropByStationBtn;
 
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+    private static final LatLngBounds BOUNDS_GREATER_SYDNEY =
+            new LatLngBounds(new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
     protected GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -93,7 +97,7 @@ public class SearchPathActivity extends AppCompatActivity {
 
 
         /*
-            최단시간 결로 검색학기 버튼 클릭 이벤트
+            최단시간 경로
          */
         directPathBtn = (Button) findViewById(R.id.directPathBtn);
         directPathBtn.setOnClickListener(new View.OnClickListener() {
@@ -265,8 +269,7 @@ public class SearchPathActivity extends AppCompatActivity {
             final Place place = places.get(0);
         }
     };
-<<<<<<< HEAD
-=======
+
 
     private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
         /* 위도&경도 범위, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
@@ -353,5 +356,4 @@ public class SearchPathActivity extends AppCompatActivity {
             Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
         }
     }
->>>>>>> 901457cfcdf6848aae5586d8b9770b91326dcd9b
 }
