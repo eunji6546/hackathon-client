@@ -9,6 +9,28 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.eunji_mac.hackathon_android.PathGuideActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/mDistance"
+            android:text="A1"
+            android:textColor="#CCCCCC"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/mTime"
+            android:text="A2"
+            android:textColor="#CCCCCC"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="700dp"
+            android:id="@+id/mMapView"></FrameLayout>
 
-    <include layout="@layout/content_tmap_test" />
+    </LinearLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>
