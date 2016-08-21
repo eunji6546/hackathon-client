@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E2D72"
+    android:padding="20dip"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/frontText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:textSize="70dp"
+        android:gravity="center_horizontal"
+        android:text="HYUNDAI BOT"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Korea Advanced Institute of \n Science and Technology"
+        android:textSize="15dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal|bottom" />
+
+
+</FrameLayout>

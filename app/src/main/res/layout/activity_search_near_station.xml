@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.eunji_mac.hackathon_android.SearchNearStationActivity">
+
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="반경 범위"/>
+
+        <Button
+            android:id="@+id/near5Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5km"/>
+        <Button
+            android:id="@+id/near10Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10km"/>
+        <Button
+            android:id="@+id/near50Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="50km"/>
+        <Button
+            android:id="@+id/near100Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="100km"/>
+        <Button
+            android:id="@+id/near200Btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="200km"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/stationNearListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+</LinearLayout>

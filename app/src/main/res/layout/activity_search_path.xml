@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1E2D72">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="HYUNDAI BOT"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="#ffffff"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp">
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/map"/>
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Route Search"
+            android:textSize="20dp"
+            android:textColor="#96C8D1"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <LinearLayout
+
+        android:layout_marginTop="40dp"
+        android:padding = "10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/myStartLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="출발지 : 아래 버튼을 클릭해주세요."/>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:onClick="mClick1"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#666666"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight ="10dp"
+                android:background="@drawable/google"/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지도에서 출발지 찾기"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_margin ="10dp"
+        android:layout_gravity="center"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:background="@drawable/arrow"/>
+
+    <LinearLayout
+        android:padding = "10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/myGoalLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="도착지 : 아래 버튼을 클릭해주세요."/>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:onClick="mClick2"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#666666"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight ="10dp"
+                android:background="@drawable/google"/>
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지도에서 도착지 찾기"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding = "10dp"
+        android:layout_marginTop="40dp">
+
+        <Button
+            android:id="@+id/directPathBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_horizontal"
+            android:background="#96C8D1"
+            android:text="최단 시간 경로 검색"
+            android:textColor="#1E2D72"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/dropByPathBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:background="#96C8D1"
+            android:text="충전소 경유 경로 검색"
+            android:textColor="#1E2D72"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
