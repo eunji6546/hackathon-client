@@ -80,15 +80,11 @@ public class TMapTest extends Activity {
 
         mMapView.setCompassMode(true);
         mMapView.setTrackingMode(true);
-        mMapView.setLocationPoint(126.985022,37.566474);
+        //mMapView.setLocationPoint(126.985022,37.566474);
+        mMapView.setLocationPoint(127.350827,36.367394);
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.map_pin_red);
         mMapView.setIcon(bitmap);
         mMapView.setSightVisible(true);
-
-
-        relativeLayout.addView(mMapView);
-        setContentView(relativeLayout);
-
 
 
         /*
@@ -119,6 +115,7 @@ public class TMapTest extends Activity {
 */
         // 마커들을 다 보이게하기 : 4.1.65
 
+
         TMapData tMapData = new TMapData();
         TMapPoint startpoint = new TMapPoint(37.538958,127.028073);
         TMapPoint endpoint = new TMapPoint(36.369608, 127.364014);
@@ -130,6 +127,7 @@ public class TMapTest extends Activity {
         final String NODE_FARE = "tmap:totalFare";
         final String NODE_TAXIFARE = "tmap:taxiFare";
 
+        Log.e("**","***********");
         tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
             @Override
             public void onFindPathDataAll(Document document) {
@@ -150,6 +148,11 @@ public class TMapTest extends Activity {
 
             }
         });
+        Log.e("&&","&&&&&&&&&&");
+
+        relativeLayout.addView(mMapView);
+        setContentView(relativeLayout);
+
 /*
         try {
             Document docu = tMapData.findPathDataAll(startpoint, endpoint);
