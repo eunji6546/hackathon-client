@@ -13,21 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:id="@+id/mDistance"
-            android:text="A1"
-            android:textColor="#CCCCCC"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:id="@+id/mTime"
-            android:text="A2"
-            android:textColor="#CCCCCC"/>
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="700dp"
+            android:layout_height="match_parent"
             android:id="@+id/mMapView"></FrameLayout>
 
     </LinearLayout>
