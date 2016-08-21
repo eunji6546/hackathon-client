@@ -163,11 +163,11 @@ public class SelectRegionActivity extends AppCompatActivity {
         Intent intent = new Intent(SelectRegionActivity.this, SearchStationActivity.class);
 
         if ((mcityPosition==0)||(mTownSpinner.getSelectedItem().toString().equals("---구,군 선택---"))) {
-            Toast.makeText(SelectRegionActivity.this,"지역을 선택해 주세요.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SelectRegionActivity.this,"지역을 선택하세요",Toast.LENGTH_SHORT).show();
         }
 
         else if (mStationType.equals("선택안함")) {
-            Toast.makeText(SelectRegionActivity.this,"차량을 선택헤 주세요.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SelectRegionActivity.this,"차량을 선택하세요",Toast.LENGTH_SHORT).show();
         }
 
         else {

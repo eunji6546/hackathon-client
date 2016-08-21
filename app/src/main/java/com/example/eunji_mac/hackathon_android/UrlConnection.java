@@ -123,6 +123,7 @@ public class UrlConnection {
         return mCarCash;
     }
 
+
     public static String GetHosting() throws IOException {
         return Get("","/get/carsharing");
     }
@@ -143,6 +144,10 @@ public class UrlConnection {
         }
         return Townlist;
     }
+
+    public static void Reportnow(String lat, String lon) throws IOException {
+        Put(lat + "+" + lon + "+", "/report/");
+    }
     public static ArrayList<String> GetSupply(String province, String town, String type) throws IOException {
 
         ArrayList<String> Addrlist = new ArrayList();
@@ -158,7 +163,6 @@ public class UrlConnection {
             e.printStackTrace();
         }
 
-        Log.e("@@@@@@@@@@@@@@@",Addrlist.toString());
         return Addrlist;
     }
     public static ArrayList<String> GetDropByStation(String lat1, String lat2, String lng1, String lng2, String type) throws IOException {
