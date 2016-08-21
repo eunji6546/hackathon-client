@@ -110,9 +110,7 @@ public class PayActivity extends FragmentActivity implements
         location = getLocation();
 
         SearchStationForPay mStation = new SearchStationForPay();
-        //mStation.execute(Double.toString(lat-0.0437),Double.toString(lat+0.0437),Double.toString(lon-0.0522),Double.toString(lon+0.0522),mCarType);
         mStation.execute(Double.toString(lat-0.3),Double.toString(lat+0.3),Double.toString(lon-0.3),Double.toString(lon+0.3),mCarType);
-        Log.e("mCarType",mCarType);
     }
 
     @Override
@@ -132,8 +130,7 @@ public class PayActivity extends FragmentActivity implements
         my.showInfoWindow();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
                 (new LatLng(location.getLatitude(),location.getLongitude()),10));
-
-
+        googleMap.animateCamera( CameraUpdateFactory.zoomTo( 15.0f ) );
         // Location Manager 선언
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -185,7 +182,6 @@ public class PayActivity extends FragmentActivity implements
                     Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng));
 
                     oneMarker.showInfoWindow();
-
                     markers.add(oneMarker);
                 }catch (JSONException e) {
                     e.printStackTrace();
