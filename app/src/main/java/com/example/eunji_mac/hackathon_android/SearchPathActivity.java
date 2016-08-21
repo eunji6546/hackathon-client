@@ -3,6 +3,7 @@ package com.example.eunji_mac.hackathon_android;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,9 +37,7 @@ import java.util.ArrayList;
 
 public class SearchPathActivity extends AppCompatActivity {
     String mUserType; // 1 for driver, 0 for walker
-    String mCarType;
-    String mCarNumber;
-    String mCash;
+    String mCarType, mCarNumber, mCash;
     int mFlags = 0;
 
 
@@ -69,6 +68,14 @@ public class SearchPathActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_path);
 
+        TextView mTitle = (TextView) findViewById(R.id.title);
+        TextView mText1 = (TextView) findViewById(R.id.text1);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
+
+        mTitle.setTypeface(tf);
+        mText1.setTypeface(tf);
+
         Intent intent = getIntent();
         mUserType = intent.getExtras().getString("usertype");
 
@@ -77,6 +84,7 @@ public class SearchPathActivity extends AppCompatActivity {
             mCarNumber = intent.getExtras().getString("carnumber");
             mCash = intent.getExtras().getString("cash");
         }
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .build();
@@ -86,51 +94,7 @@ public class SearchPathActivity extends AppCompatActivity {
         myGoalLocation = (TextView) findViewById(R.id.myGoalLocation);
         mPlacesAdapter = new PlacesAutoCompleteAdapter(this, android.R.layout.simple_list_item_1, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
 
-        /*
-            출발지 입력 설정
-        */
-        //myStartLocation.setOnItemClickListener(mAutocompleteClickListener);
-        //myStartLocation.setAdapter(mPlacesAdapter);
-        Button myStartLocationBtn = (Button) findViewById(R.id.myStartLocationBtn);
-        myStartLocationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    builder = new PlacePicker.IntentBuilder();
-                    Intent intent = builder.build(SearchPathActivity.this);
-                    // Start the Intent by requesting a result, identified by a request code.
-                    startActivityForResult(intent, PLACE_PICKER_START_FLAG);
 
-                } catch (GooglePlayServicesRepairableException e) {
-                    GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        /*
-            도착지 입력 설정
-        */
-        // myGoalLocation.setOnItemClickListener(mAutocompleteClickListener);
-        //myGoalLocation.setAdapter(mPlacesAdapter);
-        Button myGoalLocationBtn = (Button) findViewById(R.id.myGoalLocationBtn);
-        myGoalLocationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    builder = new PlacePicker.IntentBuilder();
-                    Intent intent = builder.build(SearchPathActivity.this);
-                    // Start the Intent by requesting a result, identified by a request code.
-                    startActivityForResult(intent, PLACE_PICKER_GOAL_FLAG);
-
-                } catch (GooglePlayServicesRepairableException e) {
-                    GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
         /*
             최단시간 결로 검색학기 버튼 클릭 이벤트
@@ -341,4 +305,33 @@ public class SearchPathActivity extends AppCompatActivity {
         }
     }
 
+    // 출발지 찾기 클릭
+    public void mClick1(View v) {
+        try {
+            builder = new PlacePicker.IntentBuilder();
+            Intent intent = builder.build(SearchPathActivity.this);
+            // Start the Intent by requesting a result, identified by a request code.
+            startActivityForResult(intent, PLACE_PICKER_START_FLAG);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // 도착지 찾기 클릭
+    public void mClick2(View v) {
+        try {
+            builder = new PlacePicker.IntentBuilder();
+            Intent intent = builder.build(SearchPathActivity.this);
+            // Start the Intent by requesting a result, identified by a request code.
+            startActivityForResult(intent, PLACE_PICKER_GOAL_FLAG);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), SearchPathActivity.this, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Toast.makeText(SearchPathActivity.this, "Google Play Services is not available.", Toast.LENGTH_LONG).show();
+        }
+    }
 }
