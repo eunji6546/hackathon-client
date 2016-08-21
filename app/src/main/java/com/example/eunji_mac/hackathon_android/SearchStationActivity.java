@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.wearable.Node;
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapView;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -49,6 +51,8 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class SearchStationActivity extends FragmentActivity implements
         OnMapReadyCallback,android.location.LocationListener {
@@ -62,8 +66,6 @@ public class SearchStationActivity extends FragmentActivity implements
 
     // For GoogleMap
     // Marker titles, 충전소 순서대로 타이틀 붙여야함
-    public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H",
-            "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     public GoogleMap googleMap;
     public List<Marker> markers = new ArrayList<Marker>();
 
@@ -91,6 +93,9 @@ public class SearchStationActivity extends FragmentActivity implements
     // 최소 GPS 정보 업데이트 시간 밀리세컨이므로 5초
     private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
 
+    public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H",
+            "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+            "U", "V", "W", "X", "Y", "Z"};
 
     // Strings for parsing xml Document
     final String NODE_ROOT = "kml";
@@ -196,11 +201,47 @@ public class SearchStationActivity extends FragmentActivity implements
 
     }
 
+    public void MarkerUpdate(ArrayList<LatLng> mPosition) {
+        for (int i = 0; i < markers.size(); i++){
+            markers.get(i).remove();
+        }
+        // 새로운 검색 결과에 대한 마커 찍기
+        for (int i=0; i< mPosition.size(); i++){
+
+            Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(
+                    mPosition.get(i)).title(titles[i]));
+
+            oneMarker.showInfoWindow();
+
+            markers.add(oneMarker);
+        }
+
+        // 모든 마커를 다 보여줄 수 있도록 카메라 업데이트
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markers) {
+            builder.include(marker.getPosition());
+        }
+
+        LatLngBounds bounds = builder.build();
+        int padding = 40; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        googleMap.animateCamera(cu);
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return false;
+            }
+        });
+    }
+
     private class ShowSearchedStation extends AsyncTask<String, Void, ArrayList<String>> {
         /* 지역, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
         ArrayList<String> mStation;
         ArrayList<LatLng> mPosition = new ArrayList<LatLng>();
-        ArrayList<String> mItems = new ArrayList<String>();
+        //ArrayList<String> mItems = new ArrayList();
+
 
         @Override
         protected ArrayList<String> doInBackground(String... strings) {
@@ -208,11 +249,11 @@ public class SearchStationActivity extends FragmentActivity implements
 
             try {
                 mStation = urlconn.GetSupply(strings[0],strings[1],strings[2]);
-                for (int i=0;i<mStation.size();i++) {
+                for (int i=0; i<mStation.size(); i++) {
                     JSONObject jo= new JSONObject(mStation.get(i));
-                    String pos = jo.getString("map");
-                    String[] poss = pos.split(",");
-                    LatLng latLng = new LatLng(Double.parseDouble(poss[0]),Double.parseDouble(poss[1]));
+                    String lat = jo.getString("lat");
+                    String lon = jo.getString("lon");
+                    LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
                     mPosition.add(latLng);
                 }
 
@@ -230,138 +271,97 @@ public class SearchStationActivity extends FragmentActivity implements
             주유소 정보 listview에 띄우기
          */
         protected void onPostExecute(ArrayList<String> items) {
-            // 찍혀져있던 마커 지우기
-            for (int i=0;i<markers.size();i++){
-                markers.get(i).remove();
-            }
-            // 새로운 검색 결과에 대한 마커 찍기
-            for (int i=0; i<mPosition.size(); i++){
 
-                Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(
-                        mPosition.get(i)).title(titles[i]));
+            MarkerUpdate(mPosition);
+            ArrayList<String> mItems = new ArrayList();
 
-                oneMarker.showInfoWindow();
-
-                markers.add(oneMarker);
-            }
-
-            // 모든 마커를 다 보여줄 수 있도록 카메라 업데이트
-
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (Marker marker : markers) {
-                builder.include(marker.getPosition());
-            }
-            LatLngBounds bounds = builder.build();
-            int padding = 40; // offset from edges of the map in pixels
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-            googleMap.animateCamera(cu);
-
-            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    return false;
-                }
-            });
-
-            try {
-                mItems.clear();
-                final String[] time = {null}; //초
-                final String[] dist = {null}; //분
-
-                for (int i=0;i<items.size();i++) {
-                    final JSONObject jo = new JSONObject(items.get(i));
-
-                    // 현재 위치 -> startPoint
-                    location = getLocation();
-
-                    /*
-                    //distance between station and my location[Km]
-                    Calculate_Distance mDistance = new Calculate_Distance();
-                    double distance =
-                            mDistance.distance(
-                                    location.getLatitude(),
-                                    location.getLongitude(),
-                                    Double.parseDouble(jo.getString("map").split(",")[0]),
-                                    Double.parseDouble(jo.getString("map").split(",")[1]),"K");
-
-                    */
-
-                    TMapData tMapData = new TMapData();
-                    TMapPoint startpoint = new TMapPoint(location.getLatitude(),location.getLongitude());
-                    TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude, markers.get(i).getPosition().longitude);
-
-                    Log.e("START",startpoint.toString());
-                    Log.e("END",endpoint.toString());
-
-                    final int finalI = i;
-                    tMapData.findPathDataAll(
-                            new TMapPoint(38.426191,128.395598),
-                            new TMapPoint(34.392851,126.170677),
-                            new TMapData.FindPathDataAllListenerCallback() {
-                        @Override
-                        public void onFindPathDataAll(Document document) {
-
-                            Log.e("SSSS","SSSSTTSSSS");
-                            XMLDOMParser parser = new XMLDOMParser();
-                            Document doc = document;
-                            // Get elements by name employee
-                            NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
-
-                            for (int i = 0; i < nodeList.getLength(); i++) {
-                                Element e = (Element) nodeList.item(i);
-                                dist[0] = parser.getValue(e, NODE_DISTANCE);
-                                time[0] = parser.getValue(e, NODE_TIME);
-
-                            }
-
-                                Log.e("TIME",time[0]);
-                                Log.e("DI",dist[0]);
-
-
-                        }
-                    });
-
-                    tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
-                        @Override
-                        public void onFindPathDataAll(Document document) {
-
-                            Log.e("SSSS","SSSSTTSSSS");
-                            XMLDOMParser parser = new XMLDOMParser();
-                            Document doc = document;
-                            // Get elements by name employee
-                            NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
-
-                            for (int i = 0; i < nodeList.getLength(); i++) {
-                                Element e = (Element) nodeList.item(i);
-                                dist[0] = parser.getValue(e, NODE_DISTANCE);
-                                time[0] = parser.getValue(e, NODE_TIME);
-
-                            }
+                Log.v("items_0", items.get(0));
+                Log.v("items_1", items.get(1));
+                for (int i = 0; i<items.size(); i++) {
+                    try {
+                        JSONObject jo = new JSONObject(items.get(i));
+                        String mAddr = jo.getString("address");
+                        // 현재 위치 -> startPoint
+                        location = getLocation();
+                        TMapData tMapData = new TMapData();
+                        TMapPoint startpoint = new TMapPoint(location.getLatitude(), location.getLongitude());
+                        TMapPoint endpoint = new TMapPoint(markers.get(i).getPosition().latitude,
+                                markers.get(i).getPosition().longitude);
+                        try {
                             try {
-                                Log.e("TIME",time[0]);
-                                mItems.add(" [" + titles[finalI] + "] " + jo.getString("address") +
-                                        "\n 예상소요시간 : " + String.valueOf ( Double.parseDouble(time[0])/60) + "분"+
-                                        "\n 거리 : " + dist[0] + " m+ none");
-                                Log.e("DI",dist[0]);
-                            } catch (JSONException e) {
+                                try {
+                                    Document doc = tMapData.findPathDataAll(startpoint, endpoint);
+                                    NodeList nodeList = doc.getElementsByTagName(NODE_ROOT);
+                                    XMLDOMParser parser = new XMLDOMParser();
+
+                                    for (int j = 0; j < nodeList.getLength(); j++) {
+                                        Element e = (Element) nodeList.item(j);
+                                        String mDistance = parser.getValue(e, NODE_DISTANCE);
+                                        String mTime = parser.getValue(e, NODE_TIME);
+
+                                        mItems.add(" [" + titles[mIdx] + "] " + mAddr +
+                                                "\n 예상소요시간 : " + String.valueOf(Double.parseDouble(mTime) / 60) + "분" +
+                                                "\n 거리 : " + mDistance + " m + none");
+                                        Log.v("jsonobject_getAddress", mAddr);
+                                        Log.v("mItems.size", String.valueOf(mItems.size()));
+                                    }
+                                } catch (ParserConfigurationException e) {
+                                    e.printStackTrace();
+                                }
+                            } catch (SAXException e) {
                                 e.printStackTrace();
                             }
-
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    });
-
-
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                StationAdapter adapter = new StationAdapter(getBaseContext(), R.layout.stationlistview_item, mItems);
+                Log.v("new mItems.size", String.valueOf(mItems.size()));
+                CarSharingAdapter adapter = new CarSharingAdapter(getBaseContext(),R.layout.items, mItems);
                 ListView myListView = (ListView) findViewById(R.id.stationlist);
                 myListView.setAdapter(adapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
-    }
+
+//    private class ShowStationList extends AsyncTask<Document, Void, NodeList> {
+//
+//        XMLDOMParser parser = new XMLDOMParser();
+//        ArrayList<String> mItems = new ArrayList();
+//        public String[] titles = {"A", "B", "C", "D", "E", "F", "G", "H",
+//                "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+//                "U", "V", "W", "X", "Y", "Z"};
+//
+//        @Override
+//        protected NodeList doInBackground(Document... doc) {
+//
+//            XMLDOMParser parser = new XMLDOMParser();
+//            NodeList nodeList = doc[0].getElementsByTagName(NODE_ROOT);
+//
+//            return nodeList;
+//        }
+//
+//        protected void onPostExecute(NodeList nodeList) {
+//
+//            for (int i = 0; i < nodeList.getLength(); i++) {
+//                Element e = (Element) nodeList.item(i);
+//                String mDistance = parser.getValue(e, NODE_DISTANCE);
+//                String mTime = parser.getValue(e, NODE_TIME);
+//                try {
+//                    mItems.add(" [" + titles[i] + "] " + jo.getString("address") +
+//                            "\n 예상소요시간 : " + String.valueOf(Double.parseDouble(mTime) / 60) + "분" +
+//                            "\n 거리 : " + dist[0] + " m + none");
+//                    Log.e("Distance In AsyncTask", dist[0]);
+//                } catch (JSONException e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//
+//            StationAdapter adapter = new StationAdapter(getBaseContext(), R.layout.stationitems, mItems);
+//            ListView myListView = (ListView) findViewById(R.id.stationlist);
+//            myListView.setAdapter(adapter);
+//        }
+//    }
 
 
     public Location getLocation() {
@@ -450,9 +450,6 @@ public class SearchStationActivity extends FragmentActivity implements
         return this.isGetLocation;
     }
 
-
-
-
     public void onProviderDisabled(String provider) {
 
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -468,9 +465,7 @@ public class SearchStationActivity extends FragmentActivity implements
     /* 위치가 바뀌었을 때 동작하는 함수 */
     @Override
     public void onLocationChanged(Location location) {
-        //remove current marker
         my.remove();
-
         my = googleMap.addMarker( new MarkerOptions().title("ME").position(
                 new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
