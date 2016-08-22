@@ -127,11 +127,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Cash : 0 won"
+                    android:text="My Cash"
                     android:textColor="#ffffff"
+                    android:textAlignment="center"
                     android:textSize="16sp"
                     android:layout_below="@+id/image3"
                     android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/text8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="- won"
+                    android:textColor="#EA8676"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:layout_below="@+id/image3"
+                    android:layout_centerHorizontal="true" />
+                />
+
+
             </RelativeLayout>
 
             <RelativeLayout
