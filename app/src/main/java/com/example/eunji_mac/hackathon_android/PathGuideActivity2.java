@@ -264,7 +264,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
         // 출발점에 대한 100km반경 제공
         TMapCircle tcircle = new TMapCircle();
-        tcircle.setCenterPoint(startpoint);
+        tcircle.setCenterPoint(selectedpoint);
         tcircle.setRadius(100000f);
         tcircle.setAreaColor(Color.BLUE);
         tcircle.setRadiusVisible(true);
@@ -335,6 +335,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                         TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
                         tMapMarkerItem.setCalloutTitle(String.format("%d개의 주유소 경유시", number));
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+pDist+"\n"+"시간(sec)"+pTime+"\r"+"요금(원)"+pFare);
+                        tMapMarkerItem.setAutoCalloutVisible(true);
                         Log.e("directt","DONE");
 
                         // tempstartpoint 를 선택했던 경유지로 갱신
