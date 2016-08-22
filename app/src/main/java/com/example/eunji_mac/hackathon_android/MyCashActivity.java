@@ -116,7 +116,6 @@ public class MyCashActivity extends AppCompatActivity {
             mText3.setText("Cash : " + mSumString + " won");
         }
     }
-
     public void mClickHome(View view) {
 
     }

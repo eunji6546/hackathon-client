@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.Account;
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapMarkerItem;
 import com.skp.Tmap.TMapPoint;
@@ -100,16 +101,8 @@ public class SearchNearStationActivity extends FragmentActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFragment.getMapAsync(SearchNearStationActivity.this);
 
-        // userinfo 받기
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-        mCarType = intent.getStringExtra("cartype");
 
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getStringExtra("cartype");
-            mCarNumber = intent.getStringExtra("carnumber");
-            mCash = intent.getStringExtra("cash");
-        }
+        mCarType = AccountActivity.mCarType;
 
         location = getLocation();
 
@@ -135,7 +128,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
         my.showInfoWindow();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
                 (new LatLng(location.getLatitude(),location.getLongitude()),10));
-
+        googleMap.animateCamera( CameraUpdateFactory.zoomTo( 10.0f ) );
 
         // Location Manager 선언
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -302,8 +295,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
         //remove current marker
         my.remove();
 
-        my = googleMap.addMarker( new MarkerOptions().title("ME").position(
-                new LatLng(location.getLatitude(),location.getLongitude())));
+        my = googleMap.addMarker( new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
     }
 

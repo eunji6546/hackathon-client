@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:background="#1E2D72">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:onClick="mClickHome"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/home"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="HYUNDAI BOT"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="#ffffff"/>
+
+</RelativeLayout>
+
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp">
+
+    <ImageView
+        android:layout_marginLeft="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ev"/>
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search Station"
+        android:textSize="20dp"
+        android:textColor="#1FF486"
+        android:layout_gravity="center" />
+
+</FrameLayout>
+
+<LinearLayout
+    android:layout_margin="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="지역 선택"
+        android:textSize="20dp"
+        android:textColor="#E1EDB9"
+        android:layout_gravity="center" />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/city"></Spinner>
+
+    <Spinner
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/town"></Spinner>
+
+</LinearLayout>
+
+<TextView
+    android:layout_marginTop="30dp"
+    android:layout_gravity="center_horizontal"
+    android:onClick="mClick1"
+    android:id="@+id/text4"
+    android:background="#E1EDB9"
+    android:padding="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#1E2D72"
+    android:text="충전소 설치 신청하기"
+    android:elevation="30dp"/>
+
+</LinearLayout>
