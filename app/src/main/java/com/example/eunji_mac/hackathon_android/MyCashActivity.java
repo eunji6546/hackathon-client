@@ -13,23 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MyCashActivity extends AppCompatActivity {
-
-    String mUserType;
-    String mCarType;
-    String mCarNumber;
-    String mCash;
 
     TextView mText3;
 
@@ -53,23 +39,15 @@ public class MyCashActivity extends AppCompatActivity {
         mText4.setTypeface(tf);
         mText5.setTypeface(tf);
 
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-        mCarType = intent.getExtras().getString("cartype");
-        mCarNumber = intent.getExtras().getString("carnumber");
-        mCash = intent.getExtras().getString("cash");
-        mText2.setText("Car Number : " + mCarNumber);
-        mText3.setText("Cash : " + mCash + " won");
+        mText2.setText("Car Number\n" + AccountActivity.mCarNumber);
+        mText3.setText("Cash\n" + AccountActivity.mCarCash + " won");
+
     }
 
 
     // pay button click event
     public void mClick1(View view) {
         Intent intent = new Intent(MyCashActivity.this,PayActivity.class);
-        intent.putExtra("usertype",mUserType);
-        intent.putExtra("cartype",mCarType);
-        intent.putExtra("carnumber",mCarNumber);
-        intent.putExtra("cash",mCash);
         startActivity(intent);
     }
 
@@ -94,11 +72,18 @@ public class MyCashActivity extends AppCompatActivity {
                         dialog.dismiss();
                         String[] params = new String[3];
                         String mChargeCash = cashInput.getText().toString();
-                        int mSum = Integer.parseInt(mChargeCash) + Integer.parseInt(mCash);
-                        String mSumString = String.valueOf(mSum);
-                        params[0] = mCarNumber;
-                        params[1] = mCarType;
-                        params[2] = mSumString;
+                        int mSumString =
+                                Integer.parseInt(mChargeCash) + Integer.parseInt(AccountActivity.mCarCash);
+
+                        Log.v("Car Cash is updated", AccountActivity.mCarCash);
+
+                        AccountActivity.mCarCash = String.valueOf(mSumString);
+
+                        params[0] = AccountActivity.mCarNumber;
+                        params[1] = AccountActivity.mCarType;
+                        params[2] = AccountActivity.mCarCash;
+                        Log.v("Cash is send", params[2]);
+
                         ShowNewMoney mGetMoney = new ShowNewMoney();
                         mGetMoney.execute(params);
                     }
@@ -132,13 +117,8 @@ public class MyCashActivity extends AppCompatActivity {
         }
     }
 
-<<<<<<< Updated upstream
-=======
-    // pay button click event
-    public void mClick1(View view) {
-    }
 
->>>>>>> Stashed changes
+
     public void mClickHome(View view) {
 
     }

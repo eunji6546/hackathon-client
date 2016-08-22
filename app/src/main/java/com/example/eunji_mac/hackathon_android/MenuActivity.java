@@ -42,17 +42,9 @@ public class MenuActivity extends AppCompatActivity {
         mText6.setTypeface(tf);
         mText7.setTypeface(tf);
 
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getExtras().getString("cartype");
-            mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = (intent.getExtras()).getString("cash");
-            mText3.setText("Cash : " + mCash + " won");
-            Log.v("mCash", mCash);
-            mText7.setText(mCarNumber);
-        }
+        mText7.setText(AccountActivity.mCarNumber);
+        Log.v("From userNumber", String.valueOf(AccountActivity.mCarNumber));
+        Log.v("From userType", String.valueOf(AccountActivity.mUserType));
 
     }
 
@@ -63,68 +55,29 @@ public class MenuActivity extends AppCompatActivity {
     public void mClick2(View view) {
 
         Intent intent2 = new Intent(this,SearchPathActivity.class);
-        intent2.putExtra("usertype", mUserType);
-
-        if (mUserType.equals("1")) { // for driver
-            intent2.putExtra("carnumber", mCarNumber);
-            intent2.putExtra("cartype", mCarType);
-            intent2.putExtra("cash", mCash);
-        }
-
         startActivity(intent2);
 
     }
     public void mClick3(View view) {
         Intent intent3 = new Intent(this,MyCashActivity.class);
-        intent3.putExtra("usertype", mUserType);
-        if (mUserType.equals("0")) // for non-driver
+        if (AccountActivity.mUserType == 0)
             Toast.makeText(MenuActivity.this,"차량등록 후 이용가능합니다", Toast.LENGTH_SHORT).show();
-        else { // for driver
-            intent3.putExtra("carnumber", mCarNumber);
-            intent3.putExtra("cartype", mCarType);
-            intent3.putExtra("cash", mCash);
+        else {
             startActivity(intent3);
         }
     }
     public void mClick4(View view) {
         Intent intent4 = new Intent(this,EVActivity.class);
-
-        intent4.putExtra("usertype", mUserType);
-
-        if (mUserType.equals("1")) { // for driver
-            intent4.putExtra("carnumber", mCarNumber);
-            intent4.putExtra("cartype", mCarType);
-            intent4.putExtra("cash", mCash);
-        }
-
         startActivity(intent4);
     }
 
     public void mClick5(View view){
         Intent intent5 = new Intent(this,AlertActivity.class);
-
-        intent5.putExtra("usertype", mUserType);
-
-        if (mUserType.equals("1")) { // for driver
-            intent5.putExtra("carnumber", mCarNumber);
-            intent5.putExtra("cartype", mCarType);
-            intent5.putExtra("cash", mCash);
-        }
-
         startActivity(intent5);
     }
 
     public void mClick6(View view) {
         Intent intent6 = new Intent(this,CarPoolActivity.class);
-
-        intent6.putExtra("usertype", mUserType);
-
-        if (mUserType.equals("1")) { // for driver
-            intent6.putExtra("carnumber", mCarNumber);
-            intent6.putExtra("cartype", mCarType);
-            intent6.putExtra("cash", mCash);
-        }
-
         startActivity(intent6);
     }
 
