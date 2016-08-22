@@ -63,7 +63,13 @@
         <activity android:name=".PayActivity" />
         <activity android:name=".RequestStationActivity" />
         <activity android:name=".ReservationStation" />
+        <activity
+            android:name=".EVManagerViewActivity"
+            android:label="@string/title_activity_evmanager_view"
+            android:theme="@style/AppTheme">
+        </activity>
         <activity android:name=".HostingActivity"></activity>
+
     </application>
 
 </manifest>
