@@ -284,7 +284,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
     public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = this.getAssets().open("Log1");
+            InputStream is = this.getAssets().open("Log1.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
