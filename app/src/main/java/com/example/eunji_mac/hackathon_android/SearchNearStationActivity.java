@@ -91,7 +91,6 @@ public class SearchNearStationActivity extends FragmentActivity implements
     // 최소 GPS 정보 업데이트 시간 밀리세컨이므로 5초
     private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
 
-    private BookingCustomDialog mCustomDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,35 +117,6 @@ public class SearchNearStationActivity extends FragmentActivity implements
         googleMap = map;
         pickMyLocation(googleMap);
 
-        // marker click event
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Log.e("!!!!!!",marker.getPosition().toString());
-                /* 서버에게 충전소 예약 현황 받기
-                * { "Availabliltyw" : 1(사용 중인 충전기 수), "total plugger" : 2(전체 충전기 수),"Booked_Condition" : {[9,9.5, ... 35], [11,11.5]}}
-                */
-                UrlConnection urlconn = new UrlConnection();
-                //JSONObject jo = (JSONObject) urlconn.GetStationInfo(marker.getPosition());
-                JSONObject jo = new JSONObject();
-                try {
-                    jo.put("Availability",1);
-                    jo.put("total plugger",2);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.e("######",jo.toString());
-
-                /* 충전소 예약창 만들기 */
-                mCustomDialog = new BookingCustomDialog(SearchNearStationActivity.this,
-                        "hahaha",
-                        leftClickListener,
-                        rightClickListener);
-                mCustomDialog.show();
-
-                return false;
-            }
-        });
 
     }
     private View.OnClickListener leftClickListener = new View.OnClickListener() {
