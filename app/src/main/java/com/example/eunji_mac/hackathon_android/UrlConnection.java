@@ -218,26 +218,59 @@ public class UrlConnection {
 
         return Addrlist;
     }
-    public static Object GetStationInfo(LatLng stationLatlng) {
-        JSONObject jo = null;
-        try {
-            // 총 2개의 충전기 중 하나가 사용 중인 경우 & 각 충전소의 예약 현황
-            // return Value : { "Availabliltyw" : 1(사용 중인 충전기 수), "total plugger" : 2(전체 충전기 수),"Booked_Condition" : {[9,9.5, ... 35], [11,11.5]}}
-            jo = new JSONObject(Get(stationLatlng.toString(),"/get/stationreservation/"));
 
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static ArrayList<String> GetReportBadnessStation (String stationLat, String stationLng) {
+
+        ArrayList<String> Addrlist = new ArrayList();
+
+        try {
+            JSONArray mJsonArr = new JSONArray(Get(stationLat+"+"+stationLng,"/request/"));
+
+            for (int i=0; i < mJsonArr.length(); i++) {
+                JSONObject mJsonObj = mJsonArr.getJSONObject(i);
+                Addrlist.add(mJsonObj.toString());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        return jo;
-    }
-    public static void PostBookingStation(LatLng stationLatlng, ArrayList<Double> time) {
-        try {
-            // argument Example >> stationLatlng : Latlng, time : [9,9.5]}
-            Post(stationLatlng.toString(),"/put/reservatestation/");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return Addrlist;
+    }
+    public static void PostRequestBuildStation (String stationLat, String stationLng) {
+        try {
+            Put(stationLat+"+"+stationLng,"/request/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void PostReportBadnessStation (String stationLat, String stationLng) {
+        try {
+            Put(stationLat+"+"+stationLng,"/badstation/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<String> GetReportBadnessStation () {
+
+        ArrayList<String> Addrlist = new ArrayList();
+
+        try {
+            JSONArray mJsonArr = new JSONArray(Get("","/get/badstation/"));
+
+            for (int i=0; i < mJsonArr.length(); i++) {
+                JSONObject mJsonObj = mJsonArr.getJSONObject(i);
+                Addrlist.add(mJsonObj.toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.e("++++++++++",Addrlist.toString());
+        return Addrlist;
     }
 }

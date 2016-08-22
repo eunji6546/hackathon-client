@@ -70,7 +70,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
     public void mClick4(View view) {
-        Intent intent4 = new Intent(this,EVActivity.class);
+        Intent intent4 = new Intent(this,EVStationActivity.class);
         startActivity(intent4);
     }
 
