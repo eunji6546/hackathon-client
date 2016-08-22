@@ -25,6 +25,12 @@ public class AccountActivity extends AppCompatActivity {
     String mStationType = "";
     EditText mCarNum;
 
+    static String mCarNumber;
+    static String mCarCash;
+    static String mCarType;
+    static int mUserType;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,15 +95,13 @@ public class AccountActivity extends AppCompatActivity {
             public void run() {
                 try {
                     UrlConnection urlconn = new UrlConnection();
-                    String mCash =
-                            urlconn.Save(mCarNumString, mStationType, "0");
+                    mCarNumber = mCarNumString;
+                    Log.v("Account Activity", mCarNumber);
+                    mCarCash = urlconn.Save(mCarNumString, mStationType, "0");
+                    mCarType = mStationType;
+                    mUserType = 1;
 
                     Intent intent = new Intent(AccountActivity.this, MenuActivity.class);
-                    intent.putExtra("usertype", "1"); // for driver
-                    intent.putExtra("carnumber", mCarNum.getText().toString());
-                    intent.putExtra("cartype", mStationType);
-                    intent.putExtra("cash", mCash); // for car driver
-
                     startActivity(intent);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -108,8 +112,8 @@ public class AccountActivity extends AppCompatActivity {
 
     // no car
     public void mClick2(View view) { //
+        mUserType = 0;
         Intent intent = new Intent(AccountActivity.this, MenuActivity.class);
-        intent.putExtra("usertype", "0"); // for walker
         startActivity(intent);
     }
 

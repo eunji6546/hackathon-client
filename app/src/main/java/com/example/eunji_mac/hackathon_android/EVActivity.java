@@ -49,16 +49,6 @@ public class EVActivity extends AppCompatActivity {
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
         mText7.setTypeface(tf);
-
-        // userinfo 받기
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getExtras().getString("cartype");
-            mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = intent.getExtras().getString("cash");
-        }
     }
 
     // 검색 시작 클릭 이벤트
