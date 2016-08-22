@@ -272,7 +272,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
         tcircle.setRadiusVisible(true);
 
         mMapView.addTMapCircle("circle",tcircle);
-
         // 경유하는 경로 구하기
 
         // 걸리는 시간과 거리 계산
