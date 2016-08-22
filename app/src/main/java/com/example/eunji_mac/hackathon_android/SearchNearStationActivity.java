@@ -129,7 +129,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
                 UrlConnection urlconn = new UrlConnection();
                 JSONObject jo = (JSONObject) urlconn.GetStationInfo(marker.getPosition());
                 Log.e("######",jo.toString());
-                
+
 
                 return false;
             }
