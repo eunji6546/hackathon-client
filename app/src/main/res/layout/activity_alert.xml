@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Your Location"
-        android:textSize="15dp"
+        android:textSize="20dp"
         android:textColor="#E16F14"
         android:layout_gravity="center" />
 

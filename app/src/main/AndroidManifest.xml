@@ -63,8 +63,9 @@
         <activity android:name=".PayActivity" />
         <activity android:name=".RequestStationActivity" />
         <activity android:name=".ReservationStation" />
-        <activity android:name=".HostingActivity" />
         <activity android:name=".EVStationActivity"></activity>
+        <activity android:name=".HostingActivity"></activity>
+        <activity android:name=".TMapActivity"></activity>
     </application>
 
 </manifest>
