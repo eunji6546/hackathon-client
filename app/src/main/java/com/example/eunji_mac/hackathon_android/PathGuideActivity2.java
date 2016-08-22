@@ -160,25 +160,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                 TMapPoint center = tMapInfo.getTMapPoint();
                 noticepoint = center;
 
-                // center에 소요 시간과 거리에 관한 풍선을 만들 것임, 일단
-                // 이름을 "notice"로 하고 찍어두기
-
-                TMapMarkerItem tItem = new TMapMarkerItem();
-                tItem.setTMapPoint(center);
-                tItem.setName("notice");
-                tItem.setVisible(TMapMarkerItem.VISIBLE);
-
-                Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.common_google_signin_btn_icon_dark);
-                tItem.setIcon(bitmap);
-                tItem.setCanShowCallout(true);
-                tItem.setCalloutTitle(String.format("%d개의 주유소 경유시", number));
-                tItem.setAutoCalloutVisible(true);
-
-                // 핀모양으로 된 마커를 사용할 경우 마커 중심을 하단 핀 끝으로 설정.
-                tItem.setPosition(0.5f,1.0f);
-                // 마커의 중심점을 하단, 중앙으로 설정
-                mMapView.addMarkerItem("notice",tItem);
-
                 mMapView.setLocationPoint(center.getLongitude(),center.getLatitude());
                 mMapView.setCenterPoint(center.getLongitude(),center.getLatitude());
                 mMapView.setZoomLevel(tMapInfo.getTMapZoomLevel());
@@ -206,6 +187,22 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                             directFare = parser.getValue(e,NODE_FARE);
 
                         }
+                        mTotalDist =directDistance;
+                        mTotalfee = directFare;
+                        mTotalTime = directTime;
+
+                        new Thread() {
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mTimeView.setText(ConvertSec2Min(mTotalTime));
+                                        mDistanceView.setText(ConvertKM2M(mTotalDist));
+                                        mFeeView.setText(mTotalfee);
+                                    }
+                                });
+                            }
+                        }.start();
 
                         /*TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+directDistance+"\n"+"시간(sec)"+directTime+"\r"+"요금(원)"+directFare);
@@ -363,27 +360,11 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                         pTime = pTime + Integer.parseInt(directTime);
                         pFare = pFare + Integer.parseInt(directFare);
 
-                        // notice 에 띄워주기
-
-                        /*TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
-                        TMapPoint temp;
-                        temp = noticepoint;
-                        tMapMarkerItem.setName("notice");
-                        tMapMarkerItem.setVisible(TMapMarkerItem.VISIBLE);
-                        tMapMarkerItem.setTMapPoint(temp);
-                        tMapMarkerItem.setCalloutTitle(String.format("%d개의 주유소 경유시", number));
-                        tMapMarkerItem.setCalloutSubTitle("거리(m):"+pDist+"\n"+"시간(sec)"+pTime+"\r"+"요금(원)"+pFare);
-                        tMapMarkerItem.setCanShowCallout(true);
-                        tMapMarkerItem.setAutoCalloutVisible(true);
-*/
 
                         mTotalDist = pDist.toString();
                         mTotalfee = pFare.toString();
                         mTotalTime = pTime.toString();
 
-
-                       // Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.common_google_signin_btn_icon_dark);
-                       // tItem.setIcon(bitmap);
 
 
                         // tempstartpoint 를 선택했던 경유지로 갱신
@@ -399,8 +380,8 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        mTimeView.setText(mTotalTime);
-                                                        mDistanceView.setText(mTotalDist);
+                                                        mTimeView.setText(ConvertSec2Min(mTotalTime));
+                                                        mDistanceView.setText(ConvertKM2M(mTotalDist));
                                                         mFeeView.setText(mTotalfee);
                                                     }
                                                 });
@@ -530,5 +511,14 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
             }
         }
+    }
+
+    public String ConvertKM2M (String m) {
+        Double tempmeter = Double.parseDouble(m);
+        return String.valueOf((tempmeter*0.001));
+    }
+    public String ConvertSec2Min (String sec) {
+        Integer temp = Integer.parseInt(sec);
+        return String.valueOf((temp/60));
     }
 }
