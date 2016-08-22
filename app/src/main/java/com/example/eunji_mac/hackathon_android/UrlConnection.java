@@ -51,7 +51,7 @@ public class UrlConnection {
         URL url = new URL(serverURL + addedURL + URLEncoder.encode(str, "UTF-8"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        Log.v("sent URL(GET)", serverURL + addedURL + str);
+        Log.v("sent URL(PUT)", serverURL + addedURL + str);
 
         if (conn != null) {
             conn.setConnectTimeout(10000);
@@ -157,6 +157,13 @@ public class UrlConnection {
     public static void Reportnow(String lat, String lon) throws IOException {
         Put(lat + "+" + lon + "+", "/report/");
         return ;
+    }
+
+    public static void AddHosting(String mStart, String mEnd, String mDateString,
+                                  String mFareString, String mAvString) throws IOException {
+        Put(mStart + "+" + mEnd + "+" + mFareString + "+" +
+                "0+" + mAvString + "+" + mDateString, "/update/host/");
+        return;
     }
 
     public static boolean Getalert(String lat, String lon) throws IOException {

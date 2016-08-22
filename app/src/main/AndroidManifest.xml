@@ -68,6 +68,8 @@
             android:label="@string/title_activity_evmanager_view"
             android:theme="@style/AppTheme">
         </activity>
+        <activity android:name=".HostingActivity"></activity>
+
     </application>
 
 </manifest>

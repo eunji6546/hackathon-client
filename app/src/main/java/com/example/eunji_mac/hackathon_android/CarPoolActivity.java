@@ -1,10 +1,12 @@
 package com.example.eunji_mac.hackathon_android;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -80,5 +82,16 @@ public class CarPoolActivity extends AppCompatActivity {
             ListView myListView = (ListView) findViewById(R.id.listView);
             myListView.setAdapter(adapter);
         }
+    }
+
+    // start hosting activity
+    public void mClick1(View view) {
+        Intent intent = new Intent(CarPoolActivity.this, HostingActivity.class);
+        startActivity(intent);
+    };
+
+    protected void onResume() {
+        super.onResume();
+        new ShowListView().execute();
     }
 }
