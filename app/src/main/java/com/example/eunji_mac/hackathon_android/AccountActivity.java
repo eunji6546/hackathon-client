@@ -54,6 +54,8 @@ public class AccountActivity extends AppCompatActivity {
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
 
+
+
         String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
 
         ArrayAdapter<String> mCarAdapter =
