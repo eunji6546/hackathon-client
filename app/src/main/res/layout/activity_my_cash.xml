@@ -60,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Car Number"
+        android:textAlignment="center"
         android:textSize="20dp"
         android:textColor="#D4EE5E"
         android:layout_gravity="center" />
@@ -71,6 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Cash"
+        android:textAlignment="center"
         android:textSize="20dp"
         android:textColor="#D4EE5E"
         android:layout_gravity="center" />

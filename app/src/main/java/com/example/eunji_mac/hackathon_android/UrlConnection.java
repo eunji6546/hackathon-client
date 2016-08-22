@@ -154,11 +154,12 @@ public class UrlConnection {
         try {
             JSONObject mJsonObj = new JSONObject(Get(lat + "+" + lon + "+", "/get/report/"));
             String mExist = mJsonObj.getString("result");
+            Log.v("mExist", mExist);
             if (mExist.equals("true")) {
                 Log.v("existence :" , "true");
                 return true;
             }
-            Log.v("existence :" , "true");
+            Log.v("existence :" , "false");
             return false;
         } catch (JSONException e) {
             e.printStackTrace();
