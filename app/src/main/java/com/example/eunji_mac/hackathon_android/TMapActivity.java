@@ -46,6 +46,7 @@ public class TMapActivity extends AppCompatActivity {
 
         //mMapView.setCompassMode(true);
         mMapView.setTrackingMode(true);
+        mMapView.setZoomLevel(4);
         //mMapView.setLocationPoint(126.985022,37.566474);
         //mMapView.setLocationPoint(127.350827,36.367394);
 
