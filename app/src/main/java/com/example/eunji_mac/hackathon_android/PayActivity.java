@@ -396,6 +396,8 @@ public class PayActivity extends FragmentActivity implements
                 Log.v("first element", params[0]);
                 Log.v("second element", params[1]);
                 Log.v("third element", params[2]);
+                AccountActivity.mCarCash = params[2];
+
                 urlconn.Save(AccountActivity.mCarNumber, AccountActivity.mCarType, params[2]);
 
             } catch (IOException e) {
