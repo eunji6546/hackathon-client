@@ -18,6 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -90,7 +91,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
     // 최소 GPS 정보 업데이트 시간 밀리세컨이므로 5초
     private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
 
-
+    private BookingCustomDialog mCustomDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,18 +126,44 @@ public class SearchNearStationActivity extends FragmentActivity implements
                 /* 서버에게 충전소 예약 현황 받기
                 * { "Availabliltyw" : 1(사용 중인 충전기 수), "total plugger" : 2(전체 충전기 수),"Booked_Condition" : {[9,9.5, ... 35], [11,11.5]}}
                 */
-
                 UrlConnection urlconn = new UrlConnection();
-                JSONObject jo = (JSONObject) urlconn.GetStationInfo(marker.getPosition());
+                //JSONObject jo = (JSONObject) urlconn.GetStationInfo(marker.getPosition());
+                JSONObject jo = new JSONObject();
+                try {
+                    jo.put("Availability",1);
+                    jo.put("total plugger",2);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Log.e("######",jo.toString());
 
+                /* 충전소 예약창 만들기 */
+                mCustomDialog = new BookingCustomDialog(SearchNearStationActivity.this,
+                        "hahaha",
+                        leftClickListener,
+                        rightClickListener);
+                mCustomDialog.show();
 
                 return false;
             }
         });
 
     }
+    private View.OnClickListener leftClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(), "왼쪽버튼 Click!!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
 
+    private View.OnClickListener rightClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(), "오른쪽버튼 Click!!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
     public void pickMyLocation(GoogleMap map){
 
         // 현재 위치 받아오기
