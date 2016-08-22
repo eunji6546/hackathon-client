@@ -66,10 +66,12 @@
         <activity
             android:name=".EVManagerViewActivity"
             android:label="@string/title_activity_evmanager_view"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".HostingActivity"></activity>
-
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".HostingActivity" />
+        <activity
+            android:name=".TMapActivity"
+            android:label="@string/title_activity_tmap"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

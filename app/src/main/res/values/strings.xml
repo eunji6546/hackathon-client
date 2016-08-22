@@ -65,6 +65,7 @@
     <string name="bicyclefacility">자전거시설물</string>
     <string name="title_activity_just_test">JustTest</string>
     <string name="title_activity_evmanager_view">EVManagerViewActivity</string>
+    <string name="title_activity_tmap">TMapActivity</string>
 
 
 </resources>

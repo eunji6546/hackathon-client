@@ -191,7 +191,7 @@ public class TMapTest extends Activity {
         }
 
 
-        /*
+
         TMapData tmapdata = new TMapData();
         tmapdata.findAllPOI("한국", 100, new TMapData.FindAllPOIListenerCallback() {
             @Override
@@ -206,7 +206,7 @@ public class TMapTest extends Activity {
         });
         Log.e("F","FINISH");
 
-*/
+
     }
 
 }
