@@ -135,7 +135,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
         my.showInfoWindow();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
                 (new LatLng(location.getLatitude(),location.getLongitude()),10));
-
+        googleMap.animateCamera( CameraUpdateFactory.zoomTo( 10.0f ) );
 
         // Location Manager 선언
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -302,8 +302,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
         //remove current marker
         my.remove();
 
-        my = googleMap.addMarker( new MarkerOptions().title("ME").position(
-                new LatLng(location.getLatitude(),location.getLongitude())));
+        my = googleMap.addMarker( new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
     }
 

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.skp.Tmap.TMapCircle;
@@ -66,6 +67,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
         mMapView.setIconVisibility(true);
         mMapView.setMapType(TMapView.MAPTYPE_STANDARD);
         mMapView.setTrackingMode(true);
+
         //mMapView.setMarkerRotate(true);
         //mMapView.setPathRotate(true);
 

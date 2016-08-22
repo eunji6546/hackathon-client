@@ -61,6 +61,7 @@ public class EVActivity extends AppCompatActivity {
         }
     }
 
+    // 검색 시작 클릭 이벤트
     public void mClick1(View view) {
         option1 = (RadioButton) findViewById(R.id.text2);
         option2 = (RadioButton) findViewById(R.id.text3);
@@ -102,7 +103,7 @@ public class EVActivity extends AppCompatActivity {
 
                 AlertDialog alert = new AlertDialog.Builder(EVActivity.this)
                         .setTitle("CHARGE CASH")
-                        .setMessage("충전할 캐시를 입력하세요")
+                        .setMessage("충전할 차종을 선택하여 주세요.")
                         .setView(mCarSpinner)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -126,6 +127,35 @@ public class EVActivity extends AppCompatActivity {
             }
             startActivity(intent2);
         }
+
+    }
+
+    //충전소 신청 클릭 이벡트
+    public void mClick2(View view) {
+        Intent intent = new Intent(EVActivity.this, RequestStationActivity.class);
+        intent.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent.putExtra("carnumber", mCarNumber);
+            intent.putExtra("cartype", mCarType);
+            intent.putExtra("cash", mCash);
+        }
+        startActivity(intent);
+
+    }
+
+
+    //충전소 예약 클릭 이벡트
+    public void mClick3(View view) {
+        Intent intent = new Intent(EVActivity.this, ReservationStation.class);
+        intent.putExtra("usertype", mUserType);
+
+        if (mUserType.equals("1")) { // for driver
+            intent.putExtra("carnumber", mCarNumber);
+            intent.putExtra("cartype", mCarType);
+            intent.putExtra("cash", mCash);
+        }
+        startActivity(intent);
 
     }
 }

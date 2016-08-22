@@ -129,4 +129,26 @@
         android:text="충전소 신청 바로가기"
         android:elevation="30dp"/>
 
+    <TextView
+        android:id="@+id/text8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You Can Reservation Station!"
+        android:textSize="20dp"
+        android:textColor="#E1EDB9"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="mClick3"
+        android:id="@+id/text9"
+        android:background="#E1EDB9"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#1E2D72"
+        android:text="충전소 신청 바로가기"
+        android:elevation="30dp"/>
+
 </LinearLayout>
