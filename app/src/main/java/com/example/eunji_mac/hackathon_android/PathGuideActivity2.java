@@ -1,5 +1,7 @@
 package com.example.eunji_mac.hackathon_android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +11,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -43,6 +46,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
     TMapPoint startpoint;
     TMapPoint tempstartpoint;
     TMapPoint endpoint;
+    TMapPoint noticepoint;
     ArrayList<String> items;
     Bitmap bitmap = null;
     String directDistance, directTime, directFare;
@@ -139,6 +143,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                 arrayList.add(endpoint);
                 TMapInfo tMapInfo = mMapView.getDisplayTMapInfo(arrayList);
                 TMapPoint center = tMapInfo.getTMapPoint();
+                noticepoint = center;
 
                 // center에 소요 시간과 거리에 관한 풍선을 만들 것임, 일단
                 // 이름을 "notice"로 하고 찍어두기
@@ -217,9 +222,34 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
     @Override
     public boolean onPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
         if(arrayList.size()>0){
-            TMapMarkerItem tMapMarkerItem = arrayList.get(0);
+
+            if(arrayList.get(0).getTMapPoint().getLatitude() == noticepoint.getLatitude()
+                    && arrayList.get(0).getTMapPoint().getLongitude() == noticepoint.getLongitude()){
+                // notice point 일때는 클릭이벤트 놉
+                return false;
+            }
+
+            final TMapMarkerItem tMapMarkerItem = arrayList.get(0);
             Log.e("CLICK",tMapMarkerItem.getID()+tMapMarkerItem.getTMapPoint().toString());
-            selection(tMapMarkerItem);
+
+            // 여기서 경로로 추가할껀지 물어보는 !!
+
+            AlertDialog alert = new AlertDialog.Builder(PathGuideActivity2.this)
+                    .setTitle("경유지로 추가하시겠습니까?")
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            selection(tMapMarkerItem);
+                            dialog.dismiss();
+                        }
+                    }).show();
+
         }
 
 
@@ -332,10 +362,14 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
                         // notice 에 띄워주기
 
-                        TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
+                        TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
+                        tMapMarkerItem.setTMapPoint(noticepoint);
                         tMapMarkerItem.setCalloutTitle(String.format("%d개의 주유소 경유시", number));
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+pDist+"\n"+"시간(sec)"+pTime+"\r"+"요금(원)"+pFare);
+                        tMapMarkerItem.setCanShowCallout(true);
                         tMapMarkerItem.setAutoCalloutVisible(true);
+                        mMapView.addMarkerItem("notice",tMapMarkerItem);
+
                         Log.e("directt","DONE");
 
                         // tempstartpoint 를 선택했던 경유지로 갱신
