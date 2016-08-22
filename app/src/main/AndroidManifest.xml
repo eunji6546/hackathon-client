@@ -62,7 +62,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PayActivity" />
         <activity android:name=".RequestStationActivity" />
-        <activity android:name=".ReservationStation"></activity>
+        <activity android:name=".ReservationStation" />
+        <activity android:name=".HostingActivity"></activity>
     </application>
 
 </manifest>

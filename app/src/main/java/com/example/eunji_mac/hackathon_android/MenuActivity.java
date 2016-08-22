@@ -81,7 +81,11 @@ public class MenuActivity extends AppCompatActivity {
 
     public void mClick6(View view) {
         Intent intent6 = new Intent(this,CarPoolActivity.class);
-        startActivity(intent6);
+        if (AccountActivity.mUserType == 0)
+            Toast.makeText(MenuActivity.this,"차량등록 후 이용가능합니다", Toast.LENGTH_SHORT).show();
+        else {
+            startActivity(intent6);
+        }
     }
 
     protected void onResume() {

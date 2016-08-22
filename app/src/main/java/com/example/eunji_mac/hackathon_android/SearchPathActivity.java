@@ -76,7 +76,8 @@ public class SearchPathActivity extends AppCompatActivity {
         builder = new PlacePicker.IntentBuilder();
         myStartLocation = (TextView) findViewById(R.id.myStartLocation);
         myGoalLocation = (TextView) findViewById(R.id.myGoalLocation);
-        mPlacesAdapter = new PlacesAutoCompleteAdapter(this, android.R.layout.simple_list_item_1, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
+        mPlacesAdapter = new PlacesAutoCompleteAdapter(this,
+                android.R.layout.simple_list_item_1, mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
 
 
 
