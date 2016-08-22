@@ -110,7 +110,7 @@ public class SearchPathActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /*
-                    출발지&도차지 입력 완성 여부 확인
+                    출발지&도착지 입력 완성 여부 확인
                 */
                 if (!(selectStartBool && selectGoalBool)) {
                     Toast.makeText(SearchPathActivity.this, "출발지와 목적지를 바르게 입력하세요", Toast.LENGTH_SHORT).show();
@@ -119,74 +119,63 @@ public class SearchPathActivity extends AppCompatActivity {
                 /*
                     운전자가 자신의 차량 정보를 입력하지 않은 경우 입력하도록 한다.
                  */
-                else if (AccountActivity.mUserType == 1) {
-                    if (mFlags == 0) {
-                        String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
-                        ArrayAdapter<String> mCarAdapter = new ArrayAdapter<String>(SearchPathActivity.this, android.R.layout.simple_spinner_dropdown_item, car_str);
-                        final Spinner mCarSpinner = new Spinner(SearchPathActivity.this);
-                        mCarSpinner.setAdapter(mCarAdapter);
-                        //차 종류 선택시 이벤트 (충전소 종류 식별자)
-                        mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                if (position == 0) {
-                                    mCarType = "선택안함";
-                                } else if (position == 4) {
-                                    mCarType = "상";
-                                } else if ((position == 1) || (position == 6)) {
-                                    mCarType = "콤보";
-                                } else {
-                                    mCarType = "차데모";
-                                }
-                            }
+                else if (AccountActivity.mUserType == 0) {
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> adapterView) {
+                    String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
+                    ArrayAdapter<String> mCarAdapter = new ArrayAdapter<String>(SearchPathActivity.this, android.R.layout.simple_spinner_dropdown_item, car_str);
+                    final Spinner mCarSpinner = new Spinner(SearchPathActivity.this);
+                    mCarSpinner.setAdapter(mCarAdapter);
+                    //차 종류 선택시 이벤트 (충전소 종류 식별자)
+                    mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if (position == 0) {
                                 mCarType = "선택안함";
+                            } else if (position == 4) {
+                                mCarType = "상";
+                            } else if ((position == 1) || (position == 6)) {
+                                mCarType = "콤보";
+                            } else {
+                                mCarType = "차데모";
                             }
-                        });
+                        }
 
-                        AlertDialog alert = new AlertDialog.Builder(SearchPathActivity.this)
-                                .setTitle("SELECT YOUR CAR")
-                                .setMessage("충전소 검색을 위해 차종류를 입력하셔야 합니다.")
-                                .setView(mCarSpinner)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (mCarType.equals("선택안함")) {
-                                            Toast.makeText(SearchPathActivity.this, "차 종류를 입력해 주세요", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            mFlags = 1;
-                                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+                            mCarType = "선택안함";
+                        }
+                    });
+
+                    AlertDialog alert = new AlertDialog.Builder(SearchPathActivity.this)
+                            .setTitle("SELECT YOUR CAR")
+                            .setMessage("충전소 검색을 위해 차종류를 입력하셔야 합니다.")
+                            .setView(mCarSpinner)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (mCarType.equals("선택안함")) {
+                                        Toast.makeText(SearchPathActivity.this, "차 종류를 입력해 주세요", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Intent intent2 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
+
+                                        intent2.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
+                                        intent2.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
+                                        intent2.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
+                                        intent2.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
+
+                                        startActivity(intent2);
                                     }
-                                }).show();
-
-                        /*Intent intent2 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
-
-                        intent2.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
-                        intent2.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
-                        intent2.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
-                        intent2.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
-
-                        startActivity(intent2);*/
-                    }
-
-                    else {
-                        Log.e("~~~~~~~~~~~~","222222222222");
-                        Intent intent2 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
-
-                        intent2.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
-                        intent2.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
-                        intent2.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));
-                        intent2.putExtra("GOAL_LNG",String.valueOf(mGoalLatLag.longitude));
-
-                        startActivity(intent2);
-                    }
+                                }
+                            }).show();
 
                 }
+
+                /* 로그인 한 사용자일때, 차량은 어카운트에서 가져옴 */
                 else {
+
                     Intent intent3 = new Intent(SearchPathActivity.this, PathGuideActivity2.class);
 
+                    intent3.putExtra("CAR_TYPE",AccountActivity.mCarType);
                     intent3.putExtra("START_LAT",String.valueOf(mStartLatLag.latitude));
                     intent3.putExtra("START_LNG",String.valueOf(mStartLatLag.longitude));
                     intent3.putExtra("GOAL_LAT",String.valueOf(mGoalLatLag.latitude));

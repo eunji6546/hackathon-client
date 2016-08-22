@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -89,6 +90,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
         // 출발점과 도착점을 받아옴
         Intent intent = getIntent();
+        String mCarType = intent.getStringExtra("CAR_TYPE");
         String startX = intent.getStringExtra("START_LAT");
         String startY = intent.getStringExtra("START_LNG");
         String endX = intent.getStringExtra("GOAL_LAT");
@@ -200,6 +202,9 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
                         TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+directDistance+"\n"+"시간(sec)"+directTime+"\r"+"요금(원)"+directFare);
+
+                        Toast.makeText(PathGuideActivity2.this, "거리 이내에 충전소가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+
                         Log.e("directt","DONE");
 
                     }
@@ -221,6 +226,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
     @Override
     public boolean onPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
+
         if(arrayList.size()>0){
 
             if(arrayList.get(0).getTMapPoint().getLatitude() == noticepoint.getLatitude()
@@ -253,7 +259,7 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
         }
 
 
-        return false;
+        return true;
     }
 
     @Override
@@ -363,12 +369,24 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                         // notice 에 띄워주기
 
                         TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
-                        tMapMarkerItem.setTMapPoint(noticepoint);
+                        TMapPoint temp;
+                        temp = noticepoint;
+                        tMapMarkerItem.setName("notice");
+                        tMapMarkerItem.setVisible(TMapMarkerItem.VISIBLE);
+                        tMapMarkerItem.setTMapPoint(temp);
                         tMapMarkerItem.setCalloutTitle(String.format("%d개의 주유소 경유시", number));
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+pDist+"\n"+"시간(sec)"+pTime+"\r"+"요금(원)"+pFare);
                         tMapMarkerItem.setCanShowCallout(true);
                         tMapMarkerItem.setAutoCalloutVisible(true);
+
                         mMapView.addMarkerItem("notice",tMapMarkerItem);
+
+
+
+                       // Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.common_google_signin_btn_icon_dark);
+                       // tItem.setIcon(bitmap);
+
+                        ///
 
                         Log.e("directt","DONE");
 

@@ -1,7 +1,9 @@
 package com.example.eunji_mac.hackathon_android;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -13,12 +15,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -227,7 +232,6 @@ public class PayActivity extends FragmentActivity implements
     public void onLocationChanged(Location location) {
         //remove current marker
         my.remove();
-
         my = googleMap.addMarker( new MarkerOptions().title("ME").position(
                 new LatLng(location.getLatitude(),location.getLongitude())));
         my.showInfoWindow();
@@ -267,7 +271,11 @@ public class PayActivity extends FragmentActivity implements
                     double lon = Double.parseDouble( jo.get("lon").toString());
                     double lat = Double.parseDouble(jo.get("lat").toString());
                     LatLng mLatlng = new LatLng(lat,lon);
-                    Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng));
+                    Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .alpha(0.7f)
+                    .title(""));
+
 
                     oneMarker.showInfoWindow();
 
@@ -275,7 +283,94 @@ public class PayActivity extends FragmentActivity implements
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(final Marker marker) {
+
+                        if (marker.getTitle().equals("ME")){
+                            return false;
+                        }else {
+                            marker.setTitle("Here!");
+
+
+                            final EditText cashInput = new EditText(PayActivity.this);
+                            cashInput.setHint("10000 (숫자만 입력하세요)");
+                            AlertDialog alert = new AlertDialog.Builder(PayActivity.this)
+                                    .setTitle("PAY CASH")
+                                    .setMessage(String.format("현재 보유 캐쉬 : %s원\n지불할 금액을 입력하세요", AccountActivity.mCarCash))
+                                    .setView(cashInput)
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // 서버에 지불한 금액 날리기
+                                            String[] params = new String[5];
+                                            String mChargeCash = "-"+cashInput.getText().toString();
+
+                                            int mSumString =
+                                                    Integer.parseInt(mChargeCash) + Integer.parseInt(AccountActivity.mCarCash);
+                                            if (mSumString<0){
+                                                // 진행 불가
+                                                Toast.makeText(PayActivity.this,
+                                                        String.format("%d 원의 캐쉬를 보유하고 있습니다.\n그 이하의 금액을 지불할 수 있습니다.",Integer.parseInt(AccountActivity.mCarCash))
+                                                        ,Toast.LENGTH_LONG).show();
+                                            }else{
+
+                                                Log.v("Car Cash is updated", AccountActivity.mCarCash);
+
+                                                AccountActivity.mCarCash = String.valueOf(mSumString);
+
+                                                params[0] = AccountActivity.mCarNumber;
+                                                params[1] = AccountActivity.mCarType;
+                                                params[2] = AccountActivity.mCarCash;
+                                                params[3] = String.valueOf(marker.getPosition().latitude);
+                                                params[4] = String.valueOf(marker.getPosition().longitude);
+
+                                                ShowNewMoney mGetMoney = new ShowNewMoney();
+                                                mGetMoney.execute(params);
+
+                                            }
+                                        }
+                                    }).show();
+                            return false;
+                        }
+
+                    }
+                });
             }
+        }
+    }
+    private class ShowNewMoney extends AsyncTask< String, Void, String> {
+
+        UrlConnection urlconn = new UrlConnection();
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Log.v("first element", params[0]);
+                Log.v("second element", params[1]);
+                Log.v("third element", params[2]);
+                urlconn.Pay(params[0], params[1], params[2], params[3], params[4]);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return params[2];
+
+        }
+
+        protected void onPostExecute(String mSumString) {
+
+            Toast.makeText(PayActivity.this, String.format("결제 성공! 남은 캐쉬는 %s 원입니다.", AccountActivity.mCarCash),Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(PayActivity.this, MenuActivity.class);
+            startActivity(intent);
         }
     }
 }

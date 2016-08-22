@@ -123,6 +123,13 @@ public class UrlConnection {
         return mCarCash;
     }
 
+    public static void Pay(String carnumber, String cartype, String cash, String lat, String lon) throws IOException {
+
+        String ret = Put(carnumber + "+" + cartype + "+" + cash + "+" + lat + "+" + lon , "/update/pay/");
+
+    }
+
+
 
     public static String GetHosting() throws IOException {
         return Get("","/get/carsharing");
