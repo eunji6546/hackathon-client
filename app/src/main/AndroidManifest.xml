@@ -62,7 +62,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PayActivity" />
         <activity android:name=".RequestStationActivity" />
-        <activity android:name=".ReservationStation"></activity>
+        <activity android:name=".ReservationStation" />
+        <activity
+            android:name=".EVManagerViewActivity"
+            android:label="@string/title_activity_evmanager_view"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

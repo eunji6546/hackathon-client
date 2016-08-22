@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "514162332264",
+    "project_id": "hyundaibot"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514162332264:android:9e076a1277cf393a",
+        "android_client_info": {
+          "package_name": "com.example.eunji_mac.hackathon_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514162332264-sn3a54ipupchofm8ru146tc1vm0d72lk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eunji_mac.hackathon_android",
+            "certificate_hash": "6E7A5E04DAC5C1895CFD6C1065467E17D138E842"
+          }
+        },
+        {
+          "client_id": "514162332264-sdu78fvk9guog8v5ci08otqe900m197v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSbHmANBA2MQWHrGTy4uVxJFt-sX31v2o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
