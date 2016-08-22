@@ -4,59 +4,37 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.HandlerThread;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.skp.Tmap.TMapData;
-import com.skp.Tmap.TMapMarkerItem;
-import com.skp.Tmap.TMapPoint;
-import com.skp.Tmap.TMapView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class PayActivity extends FragmentActivity implements
         OnMapReadyCallback,android.location.LocationListener {
 
     //Get userinfo by intent
-    String mUserType; // 1 for driver, 0 for walker
+    int mUserType; // 1 for driver, 0 for walker
     String mCarType, mCarNumber, mCash;
 
     // For GoogleMap
@@ -102,10 +80,10 @@ public class PayActivity extends FragmentActivity implements
 
         // userinfo 받기
         Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-        mCarType = intent.getStringExtra("cartype");
-        mCarNumber = intent.getStringExtra("carnumber");
-        mCash = intent.getStringExtra("cash");
+        mUserType = AccountActivity.mUserType;
+        mCarType = AccountActivity.mCarType;
+        mCarNumber = AccountActivity.mCarNumber;
+        mCash = AccountActivity.mCarCash;
 
         location = getLocation();
 
@@ -144,52 +122,7 @@ public class PayActivity extends FragmentActivity implements
 
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-
     }
-
-    private class ShowNearStation extends AsyncTask<String, Void, ArrayList<String>> {
-        /* 지역, 차종에 따른 검색 결과에 따른 충전소 보여주기 */
-        ArrayList<String> mStation;
-
-        @Override
-        protected ArrayList<String> doInBackground(String... strings) {
-            UrlConnection urlconn = new UrlConnection();
-
-            try {
-                mStation = urlconn.GetDropByStation(strings[0],strings[1],strings[2],strings[3],strings[4]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.e("mStation",mStation.toString());
-            return mStation;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<String> items) {
-
-            // 찍혀져있던 마커 지우기
-            for (int i=0;i<markers.size();i++){
-                markers.get(i).remove();
-            }
-            // 새로운 검색 결과에 대한 마커 찍기
-            for (int i=0;i<items.size();i++) {
-                JSONObject jo= null;
-                try {
-                    jo = new JSONObject(items.get(i));
-                    double lon = (double) jo.get("lon");
-                    double lat = (double) jo.get("lat");
-                    LatLng mLatlng = new LatLng(lat,lon);
-                    Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng));
-
-                    oneMarker.showInfoWindow();
-                    markers.add(oneMarker);
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 
     public Location getLocation() {
         /* 현재 위치를 받아오는 함수 */
@@ -331,8 +264,8 @@ public class PayActivity extends FragmentActivity implements
                 JSONObject jo= null;
                 try {
                     jo = new JSONObject(items.get(i));
-                    double lon = (double) jo.get("lon");
-                    double lat = (double) jo.get("lat");
+                    double lon = Double.parseDouble( jo.get("lon").toString());
+                    double lat = Double.parseDouble(jo.get("lat").toString());
                     LatLng mLatlng = new LatLng(lat,lon);
                     Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng));
 
