@@ -40,6 +40,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="충전기 고장 신고하기"/>
+        <Button
+            android:id="@+id/reqlist_reportBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="충전기 설치 요청 전체 확인"/>
     </LinearLayout>
 
 </LinearLayout>

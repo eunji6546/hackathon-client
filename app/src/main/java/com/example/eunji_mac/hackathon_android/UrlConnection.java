@@ -219,12 +219,12 @@ public class UrlConnection {
         return Addrlist;
     }
 
-    public static ArrayList<String> GetReportBadnessStation (String stationLat, String stationLng) {
+    public static ArrayList<String> GetRequestBuildStation () {
 
         ArrayList<String> Addrlist = new ArrayList();
 
         try {
-            JSONArray mJsonArr = new JSONArray(Get(stationLat+"+"+stationLng,"/request/"));
+            JSONArray mJsonArr = new JSONArray(Get("","/get/request/"));
 
             for (int i=0; i < mJsonArr.length(); i++) {
                 JSONObject mJsonObj = mJsonArr.getJSONObject(i);

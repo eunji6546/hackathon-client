@@ -150,6 +150,18 @@ public class EVStationActivity  extends FragmentActivity implements
             }
         });
 
+        // 충전소 설치 요청에 관한 맵에 마커로 전체적인 뷰 보여주기
+
+        Button reqViewBtn = (Button)findViewById(R.id.reqlist_reportBtn);
+        reqViewBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(EVStationActivity.this, "지도에 전체 설치 요청에 관한 수요를 표시합니다.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(EVStationActivity.this, WholeMapactivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -225,7 +237,7 @@ public class EVStationActivity  extends FragmentActivity implements
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     if (marker.getTitle().equals("+")) {
-                        Toast.makeText(EVStationActivity.this,"햔재 위치 입니다.(주유소만 클릭 가능합니다.)",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EVStationActivity.this,"현재 위치 입니다.(주유소만 클릭 가능합니다.)",Toast.LENGTH_SHORT).show();
                     }
                     else if (marker.getTitle().equals("")){
                         reportBadLocation = marker.getPosition();
@@ -406,10 +418,10 @@ public class EVStationActivity  extends FragmentActivity implements
     @Override
     public void onLocationChanged(Location location) {
         //remove current marker
-        my.remove();
+       /* my.remove();
 
         my = googleMap.addMarker( new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
-        my.showInfoWindow();
+        my.showInfoWindow();*/
     }
 
     public void onStatusChanged(String provider, int status, Bundle extras) {}

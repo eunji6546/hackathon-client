@@ -63,9 +63,13 @@
         <activity android:name=".PayActivity" />
         <activity android:name=".RequestStationActivity" />
         <activity android:name=".ReservationStation" />
-        <activity android:name=".EVStationActivity"></activity>
-        <activity android:name=".HostingActivity"></activity>
-        <activity android:name=".TMapActivity"></activity>
+        <activity android:name=".EVStationActivity" />
+        <activity android:name=".HostingActivity" />
+        <activity android:name=".TMapActivity" />
+        <activity
+            android:name=".WholeMapactivity"
+            android:label="@string/title_activity_whole_mapactivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
