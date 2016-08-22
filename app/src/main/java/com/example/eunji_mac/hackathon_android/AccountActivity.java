@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class AccountActivity extends AppCompatActivity {
     String mStationType = "";
     EditText mCarNum;
+    TextView mCarNum2;
 
     static String mCarNumber;
     static String mCarCash;
@@ -37,6 +38,7 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
 
         mCarNum = (EditText) findViewById(R.id.carnumber);
+        mCarNum2 = (TextView) findViewById(R.id.carnumberTextView);
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
         TextView mText2 = (TextView) findViewById(R.id.text2);
@@ -54,34 +56,46 @@ public class AccountActivity extends AppCompatActivity {
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
 
-
-
+        //차량
         String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
 
         ArrayAdapter<String> mCarAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, car_str);
 
+        // 차번호
         Spinner mCarSpinner = (Spinner) findViewById(R.id.vehicle);
-
+        TextView mCarType = (TextView) findViewById(R.id.myvehical);
         mCarSpinner.setAdapter(mCarAdapter);
 
-        mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 4) {
-                    mStationType = "상";
-                } else if ((position == 1) || (position == 6)) {
-                    mStationType = "콤보";
-                } else {
-                    mStationType = "차데모";
+        if (AccountActivity.mUserType==1) {
+            mCarNum2.setVisibility(TextView.VISIBLE);
+            mCarNum.setVisibility(EditText.INVISIBLE);
+            mCarNum2.setText(AccountActivity.mCarNumber);
+            mCarSpinner.setVisibility(Spinner.INVISIBLE);
+            mCarType.setVisibility(TextView.VISIBLE);
+            mText5.setVisibility(TextView.INVISIBLE);
+        }
+        else {
+
+
+            mCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 4) {
+                        mStationType = "상";
+                    } else if ((position == 1) || (position == 6)) {
+                        mStationType = "콤보";
+                    } else {
+                        mStationType = "차데모";
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
 

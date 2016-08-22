@@ -48,15 +48,29 @@
         android:textColor="#EA8676"
         android:layout_gravity="center" />
 
-    <EditText
-        android:id="@+id/carnumber"
-        android:maxLength="7"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:hint="12가3456"/>
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/carnumber"
+            android:maxLength="7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="12가3456"/>
+
+        <TextView
+            android:id="@+id/carnumberTextView"
+            android:maxLength="7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="니번호다 이놈아"
+            android:singleLine="true"
+            android:visibility="invisible"/>
+    </RelativeLayout>
 
 
     <TextView
@@ -70,13 +84,22 @@
         android:layout_gravity="center" />
 
 
-    <Spinner
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/vehicle">
-    </Spinner>
+        android:layout_gravity="center">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/vehicle">
+        </Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/myvehical"/>
+    </RelativeLayout>
 
     <TextView
         android:layout_gravity="center"
