@@ -30,8 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 public class SearchPathActivity extends AppCompatActivity {
-    String mUserType; // 1 for driver, 0 for walker
-    String mCarType, mCarNumber, mCash;
+
+    String mCarType;
     int mFlags = 0;
 
     private PlacePicker.IntentBuilder builder;
@@ -68,15 +68,6 @@ public class SearchPathActivity extends AppCompatActivity {
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
         mTitle.setTypeface(tf);
         mText1.setTypeface(tf);
-
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getExtras().getString("cartype");
-            mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = intent.getExtras().getString("cash");
-        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -128,7 +119,7 @@ public class SearchPathActivity extends AppCompatActivity {
                 /*
                     운전자가 자신의 차량 정보를 입력하지 않은 경우 입력하도록 한다.
                  */
-                else if (!mUserType.equals("1")) {
+                else if (AccountActivity.mUserType == 1) {
                     if (mFlags == 0) {
                         String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
                         ArrayAdapter<String> mCarAdapter = new ArrayAdapter<String>(SearchPathActivity.this, android.R.layout.simple_spinner_dropdown_item, car_str);

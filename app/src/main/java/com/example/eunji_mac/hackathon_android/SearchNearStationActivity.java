@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.Account;
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapMarkerItem;
 import com.skp.Tmap.TMapPoint;
@@ -100,16 +101,8 @@ public class SearchNearStationActivity extends FragmentActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map2);
         mapFragment.getMapAsync(SearchNearStationActivity.this);
 
-        // userinfo 받기
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-        mCarType = intent.getStringExtra("cartype");
 
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getStringExtra("cartype");
-            mCarNumber = intent.getStringExtra("carnumber");
-            mCash = intent.getStringExtra("cash");
-        }
+        mCarType = AccountActivity.mCarType;
 
         location = getLocation();
 
