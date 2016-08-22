@@ -48,29 +48,15 @@
         android:textColor="#EA8676"
         android:layout_gravity="center" />
 
-    <RelativeLayout
+
+    <EditText
+        android:id="@+id/carnumber"
+        android:layout_gravity="center_horizontal"
+        android:maxLength="7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal">
-
-        <EditText
-            android:id="@+id/carnumber"
-            android:maxLength="7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:hint="12가3456"/>
-
-        <TextView
-            android:id="@+id/carnumberTextView"
-            android:maxLength="7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="니번호다 이놈아"
-            android:singleLine="true"
-            android:visibility="invisible"/>
-    </RelativeLayout>
+        android:singleLine="true"
+        android:hint="12가3456"/>
 
 
     <TextView
@@ -84,24 +70,18 @@
         android:layout_gravity="center" />
 
 
-    <RelativeLayout
+
+
+    <Spinner
+        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/vehicle">
-        </Spinner>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/myvehical"/>
-    </RelativeLayout>
+        android:id="@+id/vehicle">
+    </Spinner>
 
     <TextView
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
         android:onClick="mClick1"
@@ -111,7 +91,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#1E2D72"
-        android:text="CONFIRM"/>
+        android:text="SIGN IN"/>
+
 
     <LinearLayout
         android:orientation="horizontal"

@@ -31,6 +31,7 @@ public class MenuActivity extends AppCompatActivity {
         TextView mText5 = (TextView) findViewById(R.id.text5);
         TextView mText6 = (TextView) findViewById(R.id.text6);
         TextView mText7 = (TextView) findViewById(R.id.text7);
+        TextView mText8 = (TextView) findViewById(R.id.text8);
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
 
         mTitle.setTypeface(tf);
@@ -41,8 +42,10 @@ public class MenuActivity extends AppCompatActivity {
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
         mText7.setTypeface(tf);
+        mText8.setTypeface(tf);
 
         mText7.setText(AccountActivity.mCarNumber);
+        mText8.setText(AccountActivity.mCarCash + " won");
         Log.v("From userNumber", String.valueOf(AccountActivity.mCarNumber));
         Log.v("From userType", String.valueOf(AccountActivity.mUserType));
 
@@ -79,6 +82,17 @@ public class MenuActivity extends AppCompatActivity {
     public void mClick6(View view) {
         Intent intent6 = new Intent(this,CarPoolActivity.class);
         startActivity(intent6);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        TextView mText7 = (TextView) findViewById(R.id.text7);
+        TextView mText8 = (TextView) findViewById(R.id.text8);
+
+        mText7.setText(AccountActivity.mCarNumber);
+        mText8.setText(AccountActivity.mCarCash + " won");
+
     }
 
 }
