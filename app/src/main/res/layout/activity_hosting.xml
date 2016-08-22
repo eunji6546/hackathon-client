@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1E2D72">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:onClick="mClickHome"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/home"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="HYUNDAI BOT"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"/>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/frame1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_marginLeft="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/carpool"/>
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Host Application Form"
+            android:textSize="20dp"
+            android:textColor="#C053A7"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="차량번호"
+        android:textSize="15dp"
+        android:textColor="#E1EDB9"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:textSize="14dp"
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E1EDB9"
+            android:text="1. 출발지를 입력하세요"/>
+
+        <EditText
+            android:id="@+id/start"
+            android:layout_gravity="center_horizontal"
+            android:maxLength="12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="서울역"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:textSize="14dp"
+            android:id="@+id/text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E1EDB9"
+            android:text="2. 도착지를 입력하세요"/>
+
+        <EditText
+            android:id="@+id/end"
+            android:layout_gravity="center_horizontal"
+            android:maxLength="12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:hint="대전역"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="3. 출발날짜 입력"
+        android:textSize="14dp"
+        android:textColor="#E1EDB9"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/date"
+        android:layout_gravity="center_horizontal"
+        android:maxLength="12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="08월23일18시00분"/>
+
+    <TextView
+        android:id="@+id/text6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="4. 요금 입력"
+        android:textSize="14dp"
+        android:textColor="#E1EDB9"
+        android:layout_gravity="center" />
+
+
+    <EditText
+        android:id="@+id/fare"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="50000(숫자만입력하세요)"/>
+
+    <TextView
+        android:id="@+id/text7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="5. 탑승가능인원 입력"
+        android:textSize="14dp"
+        android:textColor="#E1EDB9"
+        android:layout_gravity="center" />
+
+
+    <EditText
+        android:id="@+id/available"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:hint="2(숫자만입력하세요)"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:onClick="mClick3"
+        android:id="@+id/text8"
+        android:background="#E1EDB9"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#1E2D72"
+        android:text="APPLY"/>
+
+</LinearLayout>
+
