@@ -28,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -57,8 +58,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
         OnMapReadyCallback,android.location.LocationListener {
 
     //Get userinfo by intent
-    String mUserType; // 1 for driver, 0 for walker
-    String mCarType, mCarNumber, mCash;
+    String mCarType;
 
     // For GoogleMap
     // Marker titles, 충전소 순서대로 타이틀 붙여야함
@@ -117,6 +117,24 @@ public class SearchNearStationActivity extends FragmentActivity implements
         googleMap = map;
         pickMyLocation(googleMap);
 
+        // marker click event
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.e("!!!!!!",marker.getPosition().toString());
+                /* 서버에게 충전소 예약 현황 받기
+                * { "Availabliltyw" : 1(사용 중인 충전기 수), "total plugger" : 2(전체 충전기 수),"Booked_Condition" : {[9,9.5, ... 35], [11,11.5]}}
+                */
+
+                UrlConnection urlconn = new UrlConnection();
+                JSONObject jo = (JSONObject) urlconn.GetStationInfo(marker.getPosition());
+                Log.e("######",jo.toString());
+
+
+                return false;
+            }
+        });
+
     }
 
     public void pickMyLocation(GoogleMap map){
@@ -128,7 +146,7 @@ public class SearchNearStationActivity extends FragmentActivity implements
         my.showInfoWindow();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
                 (new LatLng(location.getLatitude(),location.getLongitude()),10));
-        googleMap.animateCamera( CameraUpdateFactory.zoomTo( 10.0f ) );
+        googleMap.animateCamera( CameraUpdateFactory.zoomTo( 13.0f ) );
 
         // Location Manager 선언
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -159,7 +177,6 @@ public class SearchNearStationActivity extends FragmentActivity implements
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.e("mStation",mStation.toString());
             return mStation;
         }
 
@@ -171,17 +188,21 @@ public class SearchNearStationActivity extends FragmentActivity implements
                 markers.get(i).remove();
             }
             // 새로운 검색 결과에 대한 마커 찍기
+            JSONObject jo= null;
             for (int i=0;i<items.size();i++) {
-                JSONObject jo= null;
                 try {
                     jo = new JSONObject(items.get(i));
-                    double lon = (double) jo.get("lon");
-                    double lat = (double) jo.get("lat");
+                    double lon = Double.parseDouble( jo.get("lon").toString());
+                    double lat = Double.parseDouble(jo.get("lat").toString());
                     LatLng mLatlng = new LatLng(lat,lon);
-                    Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng));
+
+
+                    Marker oneMarker = googleMap.addMarker(new MarkerOptions()
+                            .position(mLatlng)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                            .alpha(0.7f));
 
                     oneMarker.showInfoWindow();
-
                     markers.add(oneMarker);
                 }catch (JSONException e) {
                     e.printStackTrace();

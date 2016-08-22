@@ -2,6 +2,8 @@ package com.example.eunji_mac.hackathon_android;
 
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -209,5 +211,26 @@ public class UrlConnection {
 
         return Addrlist;
     }
+    public static Object GetStationInfo(LatLng stationLatlng) {
+        JSONObject jo = null;
+        try {
+            // 총 2개의 충전기 중 하나가 사용 중인 경우 & 각 충전소의 예약 현황
+            // return Value : { "Availabliltyw" : 1(사용 중인 충전기 수), "total plugger" : 2(전체 충전기 수),"Booked_Condition" : {[9,9.5, ... 35], [11,11.5]}}
+            jo = new JSONObject(Get(stationLatlng.toString(),"/get/stationreservation/"));
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo;
+    }
+    public static void PostBookingStation(LatLng stationLatlng, ArrayList<Double> time) {
+        try {
+            // argument Example >> stationLatlng : Latlng, time : [9,9.5]}
+            Post(stationLatlng.toString(),"/put/reservatestation/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

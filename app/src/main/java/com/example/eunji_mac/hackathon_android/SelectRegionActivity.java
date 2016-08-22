@@ -31,7 +31,7 @@ import java.util.TimeZone;
 public class SelectRegionActivity extends AppCompatActivity {
 
     //Get userinfo by intent
-    String mUserType; // 1 for driver, 0 for walker
+    int mUserType; // 1 for driver, 0 for walker
     String mCarType, mCarNumber, mCash;
 
     Spinner mCitySpinner, mTownSpinner;
@@ -65,13 +65,11 @@ public class SelectRegionActivity extends AppCompatActivity {
         mText3.setTypeface(tf);
 
         // userinfo 받기
-        Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getExtras().getString("cartype");
-            mCarNumber = intent.getExtras().getString("carnumber");
-            mCash = intent.getExtras().getString("cash");
+        mUserType = AccountActivity.mUserType;
+        if (mUserType==1) {
+            mCarType = AccountActivity.mCarType;
+            mCarNumber = AccountActivity.mCarNumber;
+            mCash = AccountActivity.mCarCash;
         }
 
         String[] car_str = getResources().getStringArray(R.array.carSpinnerArray);
@@ -166,16 +164,7 @@ public class SelectRegionActivity extends AppCompatActivity {
         }
 
         else {
-            intent.putExtra("CITY", cityList.get(mcityPosition - 1));
-            intent.putExtra("TOWN", mTownSpinner.getSelectedItem().toString());
-            intent.putExtra("STATION_TYPE", mStationType);
-            intent.putExtra("usertype", mUserType);
 
-            if (mUserType.equals("1")) { // for driver
-                intent.putExtra("carnumber", mCarNumber);
-                intent.putExtra("cartype", mCarType);
-                intent.putExtra("cash", mCash);
-            }
             startActivity(intent);
         }
     }

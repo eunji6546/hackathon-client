@@ -125,7 +125,20 @@
                 android:layout_gravity="center" />
 
         </FrameLayout>
+
+
     </LinearLayout>
+
+    <TextView
+        android:onClick="mClickUpdate"
+        android:id="@+id/text7"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#1E2D72"
+        android:textStyle="bold"
+        android:paddingLeft="25dp"
+        android:layout_gravity="center" />
 
 </LinearLayout>
 

@@ -20,8 +20,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AlertActivity extends AppCompatActivity implements android.location.LocationListener {
+
+    static Double mVirtualLat = 37.5256599;
+    static Double mVirtualLon = 126.8706461;
 
     // For GPS,  참고 http://techlovejump.com/android-gps-location-manager-tutorial/
     private LocationManager locationManager;
@@ -67,15 +71,20 @@ public class AlertActivity extends AppCompatActivity implements android.location
         mText6.setTypeface(tf);
 
         //최초 gps값 받아오기
-        location = getLocation();
+        //location = getLocation();
+//        mText2.setText("Your Location \n" +
+//                "위도 : "+location.getLatitude() + "\n" +
+//                "경도 : "+location.getLongitude());
+
+        // for display
         mText2.setText("Your Location \n" +
-                "위도 : "+location.getLatitude() + "\n" +
-                "경도 : "+location.getLongitude());
+               "위도 : "+ mVirtualLat + "\n" +
+                "경도 : "+ mVirtualLon );
 
         String[] params = new String[2];
 
-        params[0] = Double.toString(location.getLatitude());
-        params[1] = Double.toString(location.getLongitude());
+        params[0] = Double.toString(mVirtualLat);
+        params[1] = Double.toString(mVirtualLon);
 
         ShowEmergency mEmergency = new ShowEmergency();
         mEmergency.execute(params);
@@ -88,8 +97,8 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         String[] params = new String[2];
 
-        params[0] = Double.toString(location.getLatitude());
-        params[1] = Double.toString(location.getLongitude());
+        params[0] = Double.toString(mVirtualLat);
+        params[1] = Double.toString(mVirtualLon);
 
         PostEmergency mEmergency = new PostEmergency();
         mEmergency.execute(params);
@@ -164,20 +173,20 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView mText2 = (TextView) findViewById(R.id.text2);
-        mText2.setText("Your Location \n" +
-                "위도 : "+location.getLatitude() + "\n" +
-                "경도 : "+location.getLongitude());
-
-        Log.v("Location is changed : ", "true");
-
-        String[] params = new String[2];
-
-        params[0] = Double.toString(location.getLatitude());
-        params[1] = Double.toString(location.getLongitude());
-
-        ShowEmergency mEmergency = new ShowEmergency();
-        mEmergency.execute(params);
+//        TextView mText2 = (TextView) findViewById(R.id.text2);
+//        mText2.setText("Your Location \n" +
+//                "위도 : "+location.getLatitude() + "\n" +
+//                "경도 : "+location.getLongitude());
+//
+//        Log.v("Location is changed : ", "true");
+//
+//        String[] params = new String[2];
+//
+//        params[0] = Double.toString(location.getLatitude());
+//        params[1] = Double.toString(location.getLongitude());
+//
+//        ShowEmergency mEmergency = new ShowEmergency();
+//        mEmergency.execute(params);
     }
 
     @Override
@@ -239,5 +248,15 @@ public class AlertActivity extends AppCompatActivity implements android.location
             else
                 mText4.setText("Status  :  Normal");
         }
+    }
+
+    public void mClickUpdate(View v) {
+        Log.v("Update", "is Clicked");
+        String[] params = new String[2];
+        params[0] = Double.toString(mVirtualLat);
+        params[1] = Double.toString(mVirtualLon);
+
+        ShowEmergency mEmergency = new ShowEmergency();
+        mEmergency.execute(params);
     }
 }

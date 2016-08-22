@@ -54,7 +54,7 @@ public class SearchStationActivity extends FragmentActivity implements
         OnMapReadyCallback,android.location.LocationListener {
 
     //Get userinfo by intent
-    String mUserType; // 1 for driver, 0 for walker
+    int mUserType; // 1 for driver, 0 for walker
     String mCarType, mCarNumber, mCash;
 
     //user가 선택한 지역
@@ -125,15 +125,8 @@ public class SearchStationActivity extends FragmentActivity implements
         mapFragment.getMapAsync(SearchStationActivity.this);
 
         // userinfo 받기
+        mCarType = AccountActivity.mCarType;
         Intent intent = getIntent();
-        mUserType = intent.getExtras().getString("usertype");
-
-        if (mUserType.equals("1")) { // for driver
-            mCarType = intent.getStringExtra("cartype");
-            mCarNumber = intent.getStringExtra("carnumber");
-            mCash = intent.getStringExtra("cash");
-        }
-
         //지역 받기
         mCity = intent.getStringExtra("CITY");
         mTown = intent.getStringExtra("TOWN");

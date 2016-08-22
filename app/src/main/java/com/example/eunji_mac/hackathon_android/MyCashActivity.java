@@ -39,8 +39,10 @@ public class MyCashActivity extends AppCompatActivity {
         mText4.setTypeface(tf);
         mText5.setTypeface(tf);
 
+
         mText2.setText("Car Number\n" + AccountActivity.mCarNumber);
         mText3.setText("Cash : " + AccountActivity.mCarCash + " won");
+
 
     }
 
