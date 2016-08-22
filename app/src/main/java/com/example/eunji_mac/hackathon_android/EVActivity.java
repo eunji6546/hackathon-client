@@ -59,12 +59,8 @@ public class EVActivity extends AppCompatActivity {
         // 내 위치로 검색하기
         if (option1.isChecked()) {
             final Intent intent1 = new Intent(EVActivity.this, SearchNearStationActivity.class);
-            intent1.putExtra("usertype", mUserType);
 
-            if (mUserType.equals("1")) { // for driver
-                intent1.putExtra("carnumber", mCarNumber);
-                intent1.putExtra("cartype", mCarType);
-                intent1.putExtra("cash", mCash);
+            if (AccountActivity.mUserType == 1) { // for driver
                 startActivity(intent1);
             }
             else {
@@ -78,13 +74,13 @@ public class EVActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?>  parent, View view, int position, long id) {
                         position = mCarSpinner.getSelectedItemPosition();
                         if (position == 0) {
-                            mCarType = "선택안함";
+                            AccountActivity.mCarType = "선택안함";
                         } else if (position == 4) {
-                            mCarType = "상";
+                            AccountActivity.mCarType = "상";
                         } else if ((position == 1) || (position == 6)) {
-                            mCarType = "콤보";
+                            AccountActivity.mCarType = "콤보";
                         } else {
-                            mCarType= "차데모";
+                            AccountActivity.mCarType= "차데모";
                         }
                     }
                     public void onNothingSelected(AdapterView<?>  parent) {
@@ -98,7 +94,6 @@ public class EVActivity extends AppCompatActivity {
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                intent1.putExtra("cartype",mCarType);
                                 startActivity(intent1);
                             }
                         }).show();
@@ -108,13 +103,6 @@ public class EVActivity extends AppCompatActivity {
         // 내 주소로 검색하기
         else {
             Intent intent2 = new Intent(EVActivity.this, SelectRegionActivity.class);
-            intent2.putExtra("usertype", mUserType);
-
-            if (mUserType.equals("1")) { // for driver
-                intent2.putExtra("carnumber", mCarNumber);
-                intent2.putExtra("cartype", mCarType);
-                intent2.putExtra("cash", mCash);
-            }
             startActivity(intent2);
         }
 
