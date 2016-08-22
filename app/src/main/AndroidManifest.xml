@@ -57,9 +57,6 @@
         <activity android:name=".EVActivity" />
         <activity android:name=".PathGuideActivity" />
         <activity android:name=".PathGuideActivity2" />
-        <activity
-            android:name=".JustTest"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PayActivity" />
         <activity android:name=".RequestStationActivity" />
         <activity android:name=".ReservationStation" />

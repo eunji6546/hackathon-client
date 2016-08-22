@@ -10,20 +10,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <ImageView
-        android:onClick="mClickHome"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        android:src="@drawable/home"/>
-
     <TextView
         android:id="@+id/title"
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="HYUNDAI BOT"
+        android:text="@string/app_name"
         android:textSize="30dp"
         android:textStyle="bold"
         android:textColor="#ffffff"/>

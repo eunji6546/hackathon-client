@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
-
+//http://codetheory.in/google-place-api-autocomplete-service-in-android-application/ 참고
 class PlacesAutoCompleteAdapter extends ArrayAdapter<PlacesAutoCompleteAdapter.PlaceAutocomplete> implements Filterable {
 
     private static final String TAG = "PlaceAutocomplete";

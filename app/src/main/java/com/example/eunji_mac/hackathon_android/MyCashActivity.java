@@ -83,7 +83,7 @@ public class MyCashActivity extends AppCompatActivity {
 
                         params[0] = AccountActivity.mCarNumber;
                         params[1] = AccountActivity.mCarType;
-                        params[2] = AccountActivity.mCarCash;
+                        params[2] = mChargeCash;
                         Log.v("Cash is send", params[2]);
 
                         ShowNewMoney mGetMoney = new ShowNewMoney();
@@ -118,7 +118,11 @@ public class MyCashActivity extends AppCompatActivity {
             mText3.setText("Cash : " + mSumString + " won");
         }
     }
-    public void mClickHome(View view) {
+
+    protected void onResume() {
+        super.onResume();
+        TextView mText3 = (TextView) findViewById(R.id.text3);
+        mText3.setText("Cash : " + AccountActivity.mCarCash + " won");
 
     }
 

@@ -30,7 +30,7 @@ public class WholeMapactivity extends FragmentActivity implements
         OnMapReadyCallback {
 
     public GoogleMap mMap;
-
+    Marker my;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,16 +88,20 @@ public class WholeMapactivity extends FragmentActivity implements
             }
 
             @Override
-            protected void onPostExecute(ArrayList<LatLng> positions){
+            protected void onPostExecute(ArrayList<LatLng> positions) {
 
-                for (int i=0; i<positions.size(); i++){
-                    mMap.addMarker(new MarkerOptions().position(positions.get(i))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).alpha(0.5f));
+                Log.e("WHWH", positions.toString());
+                for (int i = 0; i < positions.size(); i++) {
+
+                    my = mMap.addMarker(new MarkerOptions().position(positions.get(i))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                            .alpha(0.5f));
+                    my.showInfoWindow();
+
                 }
 
             }
 
         }.execute();
-
     }
 }

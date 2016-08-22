@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.Account;
 import com.skp.Tmap.TMapData;
 import com.skp.Tmap.TMapInfo;
 import com.skp.Tmap.TMapMarkerItem;
@@ -308,9 +309,9 @@ public class PayActivity extends FragmentActivity implements
                         title = "slow";
                     }
                     Marker oneMarker = googleMap.addMarker(new MarkerOptions().position(mLatlng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                    .alpha(0.7f)
-                    .title(title));
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                            .alpha(0.7f)
+                            .title(title));
 
 
                     oneMarker.showInfoWindow();
@@ -346,12 +347,13 @@ public class PayActivity extends FragmentActivity implements
                                         public void onClick(DialogInterface dialog, int which) {
                                             // 서버에 지불한 금액 날리기
                                             String[] params = new String[7];
-                                            String mChargeCash = "-"+cashInput.getText().toString();
+                                            String mChargeCash = "-" + cashInput.getText().toString();
 
-                                            int mSumString =
-                                                     Integer.parseInt(AccountActivity.mCarCash)-Integer.parseInt(mChargeCash);
-                                            AccountActivity.mCarCash = String.valueOf(mSumString);
-                                            if (mSumString<0){
+                                            AccountActivity.mCarCash =
+                                                    String.valueOf(Integer.parseInt(AccountActivity.mCarCash)
+                                                            + Integer.parseInt(mChargeCash));
+
+                                            if (Integer.parseInt(mChargeCash) > 0){
                                                 // 진행 불가
                                                 Toast.makeText(PayActivity.this,
                                                         String.format("%d 원의 캐쉬를 보유하고 있습니다.\n그 이하의 금액을 지불할 수 있습니다.",Integer.parseInt(AccountActivity.mCarCash))
@@ -360,11 +362,9 @@ public class PayActivity extends FragmentActivity implements
 
                                                 Log.v("Car Cash is updated", AccountActivity.mCarCash);
 
-                                                AccountActivity.mCarCash = String.valueOf(mSumString);
-
                                                 params[0] = AccountActivity.mCarNumber;
                                                 params[1] = AccountActivity.mCarType;
-                                                params[2] = AccountActivity.mCarCash;
+                                                params[2] = mChargeCash;
                                                 params[3] = String.valueOf(marker.getPosition().latitude);
                                                 params[4] = String.valueOf(marker.getPosition().longitude);
 
@@ -385,27 +385,25 @@ public class PayActivity extends FragmentActivity implements
             }
         }
     }
-    private class ShowNewMoney extends AsyncTask< String, Void, String> {
+    private class ShowNewMoney extends AsyncTask< String[], Void, String> {
 
         UrlConnection urlconn = new UrlConnection();
 
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(String[]... params) {
             try {
-                Log.v("first element", params[0]);
-                Log.v("second element", params[1]);
-                Log.v("third element", params[2]);
-                AccountActivity.mCarCash = params[2];
-
-                urlconn.Save(AccountActivity.mCarNumber, AccountActivity.mCarType, params[2]);
+                Log.v("DOINBACK : ", params[0][0]);
+                Log.v("DOINBACK : ", params[0][1]);
+                Log.v("DOINBACK : ", params[0][2]);
+                urlconn.Save(params[0][0], params[0][1], params[0][2]);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             //    토탈금액 & 경도/위도 & slow or fast
-            return params[2]+"&"+params[5]+"&"+params[6];
+            return AccountActivity.mCarCash+"&"+params[0][5]+"&"+params[0][6];
 
         }
 
@@ -421,7 +419,8 @@ public class PayActivity extends FragmentActivity implements
                 mType = "급속";
             }
 
-            Toast.makeText(PayActivity.this, String.format("결제 성공! 남은 캐쉬는 %s 원입니다.", AccountActivity.mCarCash),Toast.LENGTH_LONG).show();
+            Toast.makeText(PayActivity.this, String.format("결제 성공! 남은 캐쉬는 %s 원입니다.",
+                    AccountActivity.mCarCash),Toast.LENGTH_LONG).show();
 
             final EditText Keyword = new EditText(PayActivity.this);
 
@@ -468,6 +467,9 @@ public class PayActivity extends FragmentActivity implements
                                         @Override
                                         public void onFindAroundNamePOI(ArrayList<TMapPOIItem> arrayList) {
 
+                                            if (arrayList==null) {
+                                                return;
+                                            }
                                             ArrayList<String> points = new ArrayList<String>(arrayList.size());
                                             ArrayList<TMapPoint> tpoints = new ArrayList<TMapPoint>(arrayList.size());
                                             ArrayList<String> names = new ArrayList<String>(arrayList.size());

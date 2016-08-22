@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -60,11 +61,23 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
     Integer pTime=0;
     Integer pFare=0;
 
+    TextView mDistanceView;
+    TextView mTimeView;
+    TextView mFeeView;
+
+
+    public static volatile String mTotalDist;
+    public static volatile String mTotalTime;
+    public static volatile String mTotalfee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_path_guide2);
+
+        mDistanceView = (TextView)findViewById(R.id.distance);
+        mTimeView = (TextView)findViewById(R.id.timerequired);
+        mFeeView = (TextView)findViewById(R.id.fee);
 
         // 맵 뷰 상태 설정
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mMapView);
@@ -176,7 +189,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                 final String NODE_TIME = "tmap:totalTime";
                 final String NODE_FARE = "tmap:totalFare";
 
-                Log.e("**","***********");
 
                 tMapData.findPathDataAll(startpoint, endpoint, new TMapData.FindPathDataAllListenerCallback() {
                     @Override
@@ -195,21 +207,13 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
                         }
 
-                        Log.e("direct",directDistance);
-                        Log.e("directt",directTime);
-                        //distanceView.setText("Distance(m) :"+directDistance);
-                        //timeView.setText("Time(sec) :"+directTime.toString());
-
-                        TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
+                        /*TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+directDistance+"\n"+"시간(sec)"+directTime+"\r"+"요금(원)"+directFare);
-
+*/
                         Toast.makeText(PathGuideActivity2.this, "거리 이내에 충전소가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
-
-                        Log.e("directt","DONE");
 
                     }
                 });
-                Log.e("&&","&&&&&&&&&&");
             }
         });
 
@@ -236,7 +240,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
             }
 
             final TMapMarkerItem tMapMarkerItem = arrayList.get(0);
-            Log.e("CLICK",tMapMarkerItem.getID()+tMapMarkerItem.getTMapPoint().toString());
 
             // 여기서 경로로 추가할껀지 물어보는 !!
 
@@ -331,13 +334,11 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                     directFare = parser.getValue(e,NODE_FARE);
                 }
 
-                Log.e("selection-dist:",directDistance);
-                Log.e("selection-time:",directTime);
-                Log.e("selection-fate:",directFare);
-
                 pDist = pDist+ Integer.parseInt(directDistance);
                 pTime = pTime + Integer.parseInt(directTime);
                 pFare = pFare + Integer.parseInt(directFare);
+
+
 
                 // second, 선택한 경유지 -> 도착지까지의 거리 시간 비용 계산, 더해주고
                 // notice 에 띄워주기
@@ -358,17 +359,13 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                             directFare = parser.getValue(e,NODE_FARE);
                         }
 
-                        Log.e("selection-dist:",directDistance);
-                        Log.e("selection-time:",directTime);
-                        Log.e("selection-fate:",directFare);
-
                         pDist = pDist+ Integer.parseInt(directDistance);
                         pTime = pTime + Integer.parseInt(directTime);
                         pFare = pFare + Integer.parseInt(directFare);
 
                         // notice 에 띄워주기
 
-                        TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
+                        /*TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
                         TMapPoint temp;
                         temp = noticepoint;
                         tMapMarkerItem.setName("notice");
@@ -378,17 +375,16 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+pDist+"\n"+"시간(sec)"+pTime+"\r"+"요금(원)"+pFare);
                         tMapMarkerItem.setCanShowCallout(true);
                         tMapMarkerItem.setAutoCalloutVisible(true);
+*/
 
-                        mMapView.addMarkerItem("notice",tMapMarkerItem);
-
+                        mTotalDist = pDist.toString();
+                        mTotalfee = pFare.toString();
+                        mTotalTime = pTime.toString();
 
 
                        // Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.common_google_signin_btn_icon_dark);
                        // tItem.setIcon(bitmap);
 
-                        ///
-
-                        Log.e("directt","DONE");
 
                         // tempstartpoint 를 선택했던 경유지로 갱신
                         tempstartpoint = selectedpoint;
@@ -398,8 +394,21 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                                     @Override
                                     public void onFindPathData(TMapPolyLine tMapPolyLine) {
 
-                                        // 경로 그어주기
+                                        new Thread() {
+                                            public void run() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        mTimeView.setText(mTotalTime);
+                                                        mDistanceView.setText(mTotalDist);
+                                                        mFeeView.setText(mTotalfee);
+                                                    }
+                                                });
+                                            }
+                                        }.start();
+
                                         mMapView.addTMapPath(tMapPolyLine);
+                                        // 경로 그어주기
 
                                     }
                                 });
@@ -424,9 +433,9 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
 
 
                 mMapView.addTMapPath(polyLine);
-                TMapMarkerItem notice = mMapView.getMarkerItemFromID("notice");
+                /*TMapMarkerItem notice = mMapView.getMarkerItemFromID("notice");
                 notice.setCalloutTitle(String.format("%d개의 주유소 경유시", number));
-
+*/
                 //걸리는 시간 계산
                 // first , 출발지 -> 경유지
                 tMapData.findPathDataAll(startpoint, passPointList.get(number-1), new TMapData.FindPathDataAllListenerCallback() {
@@ -445,14 +454,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                             directFare = parser.getValue(e,NODE_FARE);
 
                         }
-
-                        Log.e("direct",directDistance);
-                        Log.e("directt",directTime);
-                        //distanceView.setText("Distance(m) :"+directDistance);
-                        //timeView.setText("Time(sec) :"+directTime.toString());
-
-
-
 
                     }
                 });
@@ -487,7 +488,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
             for (int i=0;i<items.size();i++) {
                 JSONObject jo= null;
                 try {
-                    Log.e("EV", String.valueOf(i));
                     jo = new JSONObject(items.get(i));
 
                     //HERE
@@ -527,7 +527,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.e("EV", String.valueOf(i));
 
             }
         }

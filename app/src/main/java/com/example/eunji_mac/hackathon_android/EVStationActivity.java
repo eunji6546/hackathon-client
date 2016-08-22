@@ -146,9 +146,9 @@ public class EVStationActivity  extends FragmentActivity implements
                 }).start();
 
 
-                //stationNeedLocation
             }
         });
+
 
         // 충전소 설치 요청에 관한 맵에 마커로 전체적인 뷰 보여주기
 
@@ -191,6 +191,22 @@ public class EVStationActivity  extends FragmentActivity implements
 
         my.showInfoWindow();
 
+        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                stationNeedLocation=marker.getPosition();
+            }
+        });
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom
                 (new LatLng(location.getLatitude(),location.getLongitude()),10));
         googleMap.animateCamera( CameraUpdateFactory.zoomTo( 13.0f ) );
@@ -274,8 +290,6 @@ public class EVStationActivity  extends FragmentActivity implements
                     for (int j=0;j<mBadStation.size();j++) {
                         try {
                             jo2 = new JSONObject(mBadStation.get(j));
-                            Log.e("111111",jo2.getString("lon"));
-                            Log.e("222222",Double.toString(lon));
                             if ((jo2.getString("lon").equals(Double.toString(lon)))
                                     &&(jo2.getString("lat").equals(Double.toString(lat)))) {
                                 flags = false;
@@ -417,11 +431,6 @@ public class EVStationActivity  extends FragmentActivity implements
     /* 위치가 바뀌었을 때 동작하는 함수 */
     @Override
     public void onLocationChanged(Location location) {
-        //remove current marker
-       /* my.remove();
-
-        my = googleMap.addMarker( new MarkerOptions().title("ME").position(new LatLng(location.getLatitude(),location.getLongitude())));
-        my.showInfoWindow();*/
     }
 
     public void onStatusChanged(String provider, int status, Bundle extras) {}
