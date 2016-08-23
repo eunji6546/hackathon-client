@@ -84,6 +84,7 @@ public class SearchPathActivity extends AppCompatActivity {
         /*
             최단시간 경로
          */
+        /*
         directPathBtn = (Button) findViewById(R.id.directPathBtn);
         directPathBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +102,7 @@ public class SearchPathActivity extends AppCompatActivity {
 
             }
         });
-
+*/
 
         /*
             충전소 경유 경로 검색학기 버튼 클릭 이벤트

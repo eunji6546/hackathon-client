@@ -129,16 +129,6 @@
         android:padding = "10dp"
         android:layout_marginTop="40dp">
 
-        <Button
-            android:id="@+id/directPathBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_gravity="center_horizontal"
-            android:background="#96C8D1"
-            android:text="최단 시간 경로 검색"
-            android:textColor="#1E2D72"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/dropByPathBtn"
@@ -146,7 +136,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
             android:background="#96C8D1"
             android:text="충전소 경유 경로 검색"
             android:textColor="#1E2D72"

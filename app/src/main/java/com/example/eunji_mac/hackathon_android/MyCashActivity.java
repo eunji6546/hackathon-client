@@ -41,7 +41,7 @@ public class MyCashActivity extends AppCompatActivity {
 
 
         mText2.setText("Car Number\n" + AccountActivity.mCarNumber);
-        mText3.setText("Cash : " + AccountActivity.mCarCash + " won");
+        mText3.setText("Cash\n" + AccountActivity.mCarCash + " won");
 
 
     }
@@ -122,7 +122,7 @@ public class MyCashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         TextView mText3 = (TextView) findViewById(R.id.text3);
-        mText3.setText("Cash : " + AccountActivity.mCarCash + " won");
+        mText3.setText("Cash\n" + AccountActivity.mCarCash + " won");
 
     }
 

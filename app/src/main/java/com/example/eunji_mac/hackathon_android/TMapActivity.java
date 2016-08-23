@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,6 +28,9 @@ import java.util.ArrayList;
 public class TMapActivity extends AppCompatActivity {
 
     TMapView mMapView = null;
+
+    TextView keywordView;
+    String keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,51 @@ public class TMapActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ArrayList<String> mNames = intent.getStringArrayListExtra("mNameList");
         ArrayList<String> mPoints = intent.getStringArrayListExtra("mPointList");
-        String keyword = intent.getStringExtra("mKey");
+        keyword = intent.getStringExtra("mKey");
+       // String[] temps = intent.getStringExtra("mMyPoint").split("/");
+        String[] temps1 = intent.getStringExtra("mStation").split("/");
+
+        //TMapPoint myPos = new TMapPoint(Double.parseDouble(temps[0]),Double.parseDouble(temps[1]));
+        LatLng temp = PayActivity.my.getPosition();
+        TMapPoint myPos = new TMapPoint(temp.latitude,temp.longitude);
+        TMapPoint evPos = new TMapPoint(Double.parseDouble(temps1[0]),
+                Double.parseDouble(temps1[1]));
+
+        keywordView = (TextView)findViewById(R.id.mKeyword);
+        new Thread() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        keywordView.setText(String.format("Keyword : %s",keyword));
+                    }
+                });
+            }
+        }.start();
+
+
+        TMapMarkerItem myItem = new TMapMarkerItem();
+        Log.e("TMAP",myPos.toString());
+        myItem.setTMapPoint(myPos);
+        myItem.setCalloutTitle("내위치");
+        myItem.setAutoCalloutVisible(true);
+        Log.e("TMAP",myPos.toString());
+
+
+
+        myItem.setIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.poi_dot));
+        mMapView.addMarkerItem("내위치",myItem);
+
+
+        TMapMarkerItem evItem = new TMapMarkerItem();
+        evItem.setTMapPoint(evPos);
+        evItem.setCalloutTitle("주유소");
+        evItem.setAutoCalloutVisible(true);
+
+        Bitmap b =BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.flat_location_icon);
+        Bitmap resized = Bitmap.createScaledBitmap(b,128, 128, true);
+        evItem.setIcon(resized);
+        mMapView.addMarkerItem("주유소",evItem);
 
         ArrayList<TMapPoint> tPoints = new ArrayList<TMapPoint>(mNames.size());
 
@@ -79,7 +127,7 @@ public class TMapActivity extends AppCompatActivity {
 
         mMapView.setLocationPoint(center.getLongitude(),center.getLatitude());
         //mMapView.setCenterPoint(center.getLongitude(),center.getLatitude());
-        mMapView.setZoomLevel(tMapInfo.getTMapZoomLevel());
+        //mMapView.setZoomLevel(tMapInfo.getTMapZoomLevel());
         Log.e("g", String.valueOf(tMapInfo.getTMapZoomLevel()));
 
         for (int i =0; i<mNames.size(); i++){

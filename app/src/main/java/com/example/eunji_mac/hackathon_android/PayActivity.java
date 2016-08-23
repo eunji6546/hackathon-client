@@ -65,7 +65,7 @@ public class PayActivity extends FragmentActivity implements
     // For GPS,  참고 http://techlovejump.com/android-gps-location-manager-tutorial/
     private LocationManager locationManager;
     public LatLng myLocation;
-    Marker my;
+    static Marker my;
 
     // 현재 GPS 사용유무
     boolean isGPSEnabled = false;
@@ -122,6 +122,7 @@ public class PayActivity extends FragmentActivity implements
         mCash = AccountActivity.mCarCash;
 
         location = getLocation();
+
 
         SearchStationForPay mStation = new SearchStationForPay();
         mStation.execute(Double.toString(lat-0.3),Double.toString(lat+0.3),Double.toString(lon-0.3),Double.toString(lon+0.3),mCarType);
@@ -349,16 +350,17 @@ public class PayActivity extends FragmentActivity implements
                                             String[] params = new String[7];
                                             String mChargeCash = "-" + cashInput.getText().toString();
 
-                                            AccountActivity.mCarCash =
+                                            String mSum =
                                                     String.valueOf(Integer.parseInt(AccountActivity.mCarCash)
                                                             + Integer.parseInt(mChargeCash));
 
-                                            if (Integer.parseInt(mChargeCash) > 0){
+                                            if (Integer.parseInt(mSum) < 0){
                                                 // 진행 불가
                                                 Toast.makeText(PayActivity.this,
                                                         String.format("%d 원의 캐쉬를 보유하고 있습니다.\n그 이하의 금액을 지불할 수 있습니다.",Integer.parseInt(AccountActivity.mCarCash))
                                                         ,Toast.LENGTH_LONG).show();
                                             }else{
+                                                AccountActivity.mCarCash = mSum;
 
                                                 Log.v("Car Cash is updated", AccountActivity.mCarCash);
 
@@ -450,7 +452,7 @@ public class PayActivity extends FragmentActivity implements
                                 @Override
                                 protected Void doInBackground(Void... voids) {
                                     // 일단 급속이라고 가정
-                                    TMapPoint station = new TMapPoint(Double.parseDouble(lat),Double.parseDouble(lon));
+                                    final TMapPoint station = new TMapPoint(Double.parseDouble(lat),Double.parseDouble(lon));
                                     final TMapData tMapData = new TMapData();
                                     try {
                                         ArrayList<TMapPOIItem> POIItem = tMapData.findAroundNamePOI(station, "카페");
@@ -519,6 +521,8 @@ public class PayActivity extends FragmentActivity implements
                                             intent.putExtra("mPointList",points);
                                             intent.putExtra("mNameList",names);
                                             intent.putExtra("mKey",keyword);
+//                                            intent.putExtra("mMyPoint", my.getPosition().latitude+"/"+my.getPosition().longitude);
+                                            intent.putExtra("mStation",station.getLatitude()+"/"+station.getLongitude());
                                             startActivity(intent);
 
                                         }

@@ -11,8 +11,10 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.skp.Tmap.TMapPOIItem;
 import com.skp.Tmap.TMapPoint;
 import com.skp.Tmap.TMapPolyLine;
 import com.skp.Tmap.TMapPolyLineLayer;
+import com.skp.Tmap.TMapTapi;
 import com.skp.Tmap.TMapView;
 
 import org.json.JSONException;
@@ -61,9 +64,12 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
     Integer pTime=0;
     Integer pFare=0;
 
+    FrameLayout frameLayout;
+
     TextView mDistanceView;
     TextView mTimeView;
     TextView mFeeView;
+    ImageView mBtn;
 
 
     public static volatile String mTotalDist;
@@ -75,12 +81,30 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_path_guide2);
 
+        mBtn = (ImageView)findViewById(R.id.naviBtn);
+        mBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TMapTapi tmaptapi = new TMapTapi(PathGuideActivity2.this);
+                tmaptapi.setSKPMapAuthentication ("d6e4f98c-755e-3a31-aa8d-8b2dc176be1a");
+                Log.e("Path2","a");
+                //frameLayout.removeAllViews();;
+                tmaptapi.invokeRoute("T 타워", 126.984098f, 37.566385f);
+                tmaptapi.invokeSafeDrive();
+
+                Log.e("Path2","b");
+                if (tmaptapi.isTmapApplicationInstalled()) {
+                    Log.e("Path2","ok");
+                }
+
+            }
+        });
         mDistanceView = (TextView)findViewById(R.id.distance);
         mTimeView = (TextView)findViewById(R.id.timerequired);
         mFeeView = (TextView)findViewById(R.id.fee);
 
         // 맵 뷰 상태 설정
-        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mMapView);
+        frameLayout = (FrameLayout) findViewById(R.id.mMapView);
 
         mMapView = new TMapView(this);
 
