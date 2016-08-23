@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.apache.commons.math3.distribution.*;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -125,9 +124,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
         Bitmap start = BitmapFactory.decodeResource(this.getResources(), R.drawable.poi_star);
         Bitmap end = BitmapFactory.decodeResource(this.getResources(), R.drawable.poi_dot);
         mMapView.setTMapPathIcon(start, end);
-
-        //주행거리 반경 구하기
-        Log.e("~~~~~",loadJSONFromAsset());
 
 
 
@@ -551,30 +547,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
         Integer temp = Integer.parseInt(sec);
         return String.valueOf((temp/60));
     }
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = this.getAssets().open("Log1.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        Log.v("json", json);
-        return json;
 
-    }
-    public double zScoreToPercentile(double zScore)
-    {
-        double percentile = 0;
-
-        NormalDistribution dist = new NormalDistribution();
-        percentile = dist.cumulativeProbability(zScore) * 100;
-        return percentile;
-    }
 
 }
