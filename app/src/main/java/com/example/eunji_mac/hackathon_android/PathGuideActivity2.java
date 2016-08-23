@@ -233,7 +233,6 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                         /*TMapMarkerItem tMapMarkerItem = mMapView.getMarkerItemFromID("notice");
                         tMapMarkerItem.setCalloutSubTitle("거리(m):"+directDistance+"\n"+"시간(sec)"+directTime+"\r"+"요금(원)"+directFare);
 */
-                        Toast.makeText(PathGuideActivity2.this, "거리 이내에 충전소가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -486,12 +485,18 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            Log.e("mStation",mStation.toString());
             return mStation;
         }
 
         protected void onPostExecute(ArrayList<String> items) {
 
             /* 충전소 마커 추가 */
+
+            if ( items.size()==0 ){
+                Toast.makeText(PathGuideActivity2.this, "거리 이내에 충전소가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                return;
+            }
             for (int i=0;i<items.size();i++) {
                 JSONObject jo= null;
                 try {
@@ -505,14 +510,24 @@ public class PathGuideActivity2 extends AppCompatActivity implements TMapView.On
                     TMapMarkerItem tourMarkerItem = new TMapMarkerItem();
                     TMapPoint tpoint = new TMapPoint(lat,lon);
                     tourMarkerItem.setTMapPoint(tpoint);
-                    bitmap =BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.flat_location_icon);
+
+
+                    if (jo.getString("charge").equals("완속")) {
+                        bitmap =BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.pin_gray);
+                    }
+                    else {
+                        bitmap =BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.flat_location_icon);
+                    }
+
                     Bitmap resized = Bitmap.createScaledBitmap(bitmap,64, 64, true);
                     tourMarkerItem.setIcon(resized);
                     tourMarkerItem.setVisible(TMapMarkerItem.VISIBLE);
-
                     mMapView.addMarkerItem(String.valueOf(i),tourMarkerItem);
                     // 이 주유소에 대해서, 경로를 회색으로 그려줌
                     TMapData tMapData = new TMapData();
+
+                    //완속 충전가능한경우
+
 
                     /*
                     tMapData.findPathData(startpoint, tpoint, new TMapData.FindPathDataListenerCallback() {

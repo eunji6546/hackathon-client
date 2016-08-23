@@ -290,9 +290,13 @@ public class EVStationActivity  extends FragmentActivity implements
                     for (int j=0;j<mBadStation.size();j++) {
                         try {
                             jo2 = new JSONObject(mBadStation.get(j));
+                            Log.e("!!!",jo2.getString("lon"));
+                            Log.e("!!!",Double.toString(lon));
+
                             if ((jo2.getString("lon").equals(Double.toString(lon)))
                                     &&(jo2.getString("lat").equals(Double.toString(lat)))) {
                                 flags = false;
+                                Log.e("~~~!!","hahahahah");
                                 break;
                             }
                         } catch (JSONException e) {
