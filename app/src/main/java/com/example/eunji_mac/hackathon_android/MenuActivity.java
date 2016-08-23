@@ -75,17 +75,14 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void mClick5(View view){
-        Intent intent5 = new Intent(this,AlertActivity.class);
-        startActivity(intent5);
+//        Intent intent5 = new Intent(this,AlertActivity.class);
+//        startActivity(intent5);
     }
 
     public void mClick6(View view) {
         Intent intent6 = new Intent(this,CarPoolActivity.class);
-        if (AccountActivity.mUserType == 0)
-            Toast.makeText(MenuActivity.this,"차량등록 후 이용가능합니다", Toast.LENGTH_SHORT).show();
-        else {
-            startActivity(intent6);
-        }
+        startActivity(intent6);
+//        }
     }
 
     protected void onResume() {

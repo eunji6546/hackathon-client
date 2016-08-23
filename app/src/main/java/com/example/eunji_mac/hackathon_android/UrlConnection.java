@@ -162,8 +162,12 @@ public class UrlConnection {
     public static void AddHosting(String mStart, String mEnd, String mDateString,
                                   String mFareString, String mAvString) throws IOException {
         Put(mStart + "+" + mEnd + "+" + mFareString + "+" +
-                "0+" + mAvString + "+" + mDateString, "/update/host/");
+                "0+" + mAvString + "+" + mDateString, "/add/host/");
         return;
+    }
+
+    public static String UpdateHosting(String mId) throws IOException {
+        return Put(mId, "/update/host/");
     }
 
     public static boolean Getalert(String lat, String lon) throws IOException {

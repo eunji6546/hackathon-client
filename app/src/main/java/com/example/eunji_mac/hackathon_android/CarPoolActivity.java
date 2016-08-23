@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +66,7 @@ public class CarPoolActivity extends AppCompatActivity {
                                 "\n Fare. " + mFee + " won" +
                                 "\n Available. "+"[" + mPeople + "/" + mFull +"] + "
                                 + mId;
+                        Log.v("mId : " , mId);
                         items.add(item);
                     }
                 } catch (JSONException e) {
@@ -86,6 +88,10 @@ public class CarPoolActivity extends AppCompatActivity {
 
     // start hosting activity
     public void mClick1(View view) {
+        if (AccountActivity.mUserType == 0) {
+            Toast.makeText(CarPoolActivity.this, "차량등록 후 이용가능합니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(CarPoolActivity.this, HostingActivity.class);
         startActivity(intent);
     };

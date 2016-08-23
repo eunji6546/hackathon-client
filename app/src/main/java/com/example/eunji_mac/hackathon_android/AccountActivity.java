@@ -25,8 +25,8 @@ public class AccountActivity extends AppCompatActivity {
     String mStationType = "";
     EditText mCarNum;
 
-    static String mCarNumber;
-    static String mCarCash;
+    static String mCarNumber = "Non-driver";
+    static String mCarCash = "0";
     static String mCarType;
     static int mUserType = 0;
 
@@ -37,6 +37,9 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
 
         mCarNum = (EditText) findViewById(R.id.carnumber);
+
+//        mCarNum.setSelection(6);
+
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
         TextView mText2 = (TextView) findViewById(R.id.text2);

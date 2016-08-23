@@ -28,8 +28,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.io.IOException;
 
 public class HostingActivity extends AppCompatActivity {
-    private TextView mStart, mEnd; //입력창
-    private EditText mDate, mFare, mAvailable;
+    EditText mStart, mEnd, mDate, mFare, mAvailable;
     private String mDateString;
 
 
@@ -52,10 +51,18 @@ public class HostingActivity extends AppCompatActivity {
         TextView mText5 = (TextView) findViewById(R.id.text5);
         TextView mText6 = (TextView) findViewById(R.id.text6);
         TextView mText7 = (TextView) findViewById(R.id.text7);
+
         mStart = (EditText) findViewById(R.id.start);
+        //mStart.setSelection(3);
+
         mEnd = (EditText) findViewById(R.id.end);
+        //mEnd.setSelection(3);
+
         mDate = (EditText) findViewById(R.id.date);
+        //mDate.setSelection(12);
+
         mFare = (EditText) findViewById(R.id.fare);
+
         mAvailable = (EditText) findViewById(R.id.available);
 
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Stark.OTF");
