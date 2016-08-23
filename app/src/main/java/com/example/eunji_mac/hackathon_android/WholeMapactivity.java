@@ -43,8 +43,7 @@ public class WholeMapactivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(36.667900, 127.895345),7));
-        Log.e("WHOLE","inside");
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(36.667900, 127.895345),8));
         pickWholeMarkers();
     }
 
@@ -65,7 +64,6 @@ public class WholeMapactivity extends FragmentActivity implements
 
                     for (int i=0; i<response.size(); i++){
                         String oneRes = response.get(i);
-                        Log.e("WHOLE",oneRes);
                         JSONObject position = null;
                         try {
                             position = new JSONObject(oneRes);
@@ -89,8 +87,6 @@ public class WholeMapactivity extends FragmentActivity implements
 
             @Override
             protected void onPostExecute(ArrayList<LatLng> positions) {
-
-                Log.e("WHWH", positions.toString());
                 for (int i = 0; i < positions.size(); i++) {
 
                     my = mMap.addMarker(new MarkerOptions().position(positions.get(i))
