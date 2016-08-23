@@ -259,6 +259,7 @@ public class EVStationActivity  extends FragmentActivity implements
                         reportBadLocation = marker.getPosition();
                         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                         marker.setTitle("고장");
+                    }else if (marker.getTitle().equals("점검")){
                     }
                     else {
                         reportBadLocation = new LatLng(0,0);
