@@ -75,8 +75,8 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void mClick5(View view){
-//        Intent intent5 = new Intent(this,AlertActivity.class);
-//        startActivity(intent5);
+        Intent intent5 = new Intent(this,AlertActivity.class);
+        startActivity(intent5);
     }
 
     public void mClick6(View view) {

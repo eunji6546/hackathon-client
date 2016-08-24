@@ -33,16 +33,8 @@ import java.util.ArrayList;
 
 public class AlertActivity extends AppCompatActivity implements android.location.LocationListener {
 
-    static Double mVirtualLat = 37.5256599;
-    static Double mVirtualLon = 126.8706461;
 
-    static Double mVirtualLat0 = 37.5256598;
-    static Double mVirtualLon0 = 126.8706460;
-
-    static JSONArray mLog;
-    static int length;
-
-    // For GPS,  참고 http://techlovejump.com/android-gps-location-manager-tutorial/
+    // For GPS,  Reference From http://techlovejump.com/android-gps-location-manager-tutorial/
     private LocationManager locationManager;
 
     boolean isGPSEnabled = false;
@@ -69,9 +61,9 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         TextView mTitle = (TextView) findViewById(R.id.title);
         TextView mText1 = (TextView) findViewById(R.id.text1);
-        mText2 = (TextView) findViewById(R.id.text2);
+        TextView mText2 = (TextView) findViewById(R.id.text2);
         TextView mText3 = (TextView) findViewById(R.id.text3);
-        mText4 = (TextView) findViewById(R.id.text4);
+        TextView mText4 = (TextView) findViewById(R.id.text4);
         TextView mText5 = (TextView) findViewById(R.id.text5);
         TextView mText6 = (TextView) findViewById(R.id.text6);
 
@@ -85,34 +77,23 @@ public class AlertActivity extends AppCompatActivity implements android.location
         mText5.setTypeface(tf);
         mText6.setTypeface(tf);
 
-        long mTime = System.currentTimeMillis();
-        int idx = 0;
 
-        int length = getLength();
+        location = getLocation();
+        String mFstLat = Double.toString(location.getLatitude());
+        String mFstLon = Double.toString(location.getLongitude());
 
+        mText2.setText("Your Location \n" +
+                "위도 : "+ mFstLat + "\n" +
+                "경도 : "+ mFstLon);
 
-
-        //최초 gps값 받아오기
-        //location = getLocation();
-//        mText2.setText("Your Location \n" +
-//                "위도 : "+location.getLatitude() + "\n" +
-//                "경도 : "+location.getLongitude());
-
-        // for display
-//        mText2.setText("현재 시각 \n" + " 로그로 받아오기 \n\n" +
-//                "GPS Location \n" + "위도 : "+ mVirtualLat + "\n" + "경도 : "+ mVirtualLon +
-//                "\n\n Relative Location \n" + "X 좌표 : " + "로그로 받아오기 - X \n" +
-//        "Y 좌표 : " + "로그로 받아오기 - Y ");
 
         String[] params = new String[2];
 
-        params[0] = Double.toString(mVirtualLat0);
-        params[1] = Double.toString(mVirtualLon0);
+        params[0] = mFstLat;
+        params[1] = mFstLon;
 
         ShowEmergency mEmergency = new ShowEmergency();
         mEmergency.execute(params);
-
-        startTimerThread();
 
     }
 
@@ -122,14 +103,13 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         String[] params = new String[2];
 
-        params[0] = Double.toString(mVirtualLat);
-        params[1] = Double.toString(mVirtualLon);
+        params[0] = Double.toString(location.getLatitude());
+        params[1] = Double.toString(location.getLongitude());
 
         PostEmergency mEmergency = new PostEmergency();
         mEmergency.execute(params);
     }
 
-    public void mClickHome(View view) {}
 
 
     // 현재 위치 return
@@ -198,20 +178,19 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
     @Override
     public void onLocationChanged(Location location) {
-//        TextView mText2 = (TextView) findViewById(R.id.text2);
-//        mText2.setText("Your Location \n" +
-//                "위도 : "+location.getLatitude() + "\n" +
-//                "경도 : "+location.getLongitude());
-//
-//        Log.v("Location is changed : ", "true");
-//
-//        String[] params = new String[2];
-//
-//        params[0] = Double.toString(location.getLatitude());
-//        params[1] = Double.toString(location.getLongitude());
-//
-//        ShowEmergency mEmergency = new ShowEmergency();
-//        mEmergency.execute(params);
+        TextView mText2 = (TextView) findViewById(R.id.text2);
+        mText2.setText("Your Location \n" +
+                "위도 : "+location.getLatitude() + "\n" +
+                "경도 : "+location.getLongitude());
+
+        Log.v("Location is changed : ", "true");
+        String[] params = new String[2];
+
+        params[0] = Double.toString(location.getLatitude());
+        params[1] = Double.toString(location.getLongitude());
+
+        ShowEmergency mEmergency = new ShowEmergency();
+        mEmergency.execute(params);
     }
 
     @Override
@@ -243,6 +222,13 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
             if (existence) {
                 mText4.setText("Status  :  Caution!!");
+                new Thread()
+                {
+                    public void run() {
+                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.alarm);
+                        mp.start();
+                    }
+                }.start();
             } else {
                 mText4.setText("Status  :  Normal");
             }
@@ -267,7 +253,7 @@ public class AlertActivity extends AppCompatActivity implements android.location
 
         protected void onPostExecute(Void params) {
             TextView mText4 = (TextView) findViewById(R.id.text4);
-            Toast.makeText(AlertActivity.this, "보고해주셔서 감사합니다", Toast.LENGTH_LONG).show();
+            Toast.makeText(AlertActivity.this, "보고해주셔서 감사합니다", Toast.LENGTH_SHORT).show();
             if ((mText4.getText().toString()).equals("Status  :  Normal"))
                 mText4.setText("Status  :  Caution!!");
             else
@@ -275,124 +261,4 @@ public class AlertActivity extends AppCompatActivity implements android.location
         }
     }
 
-    public void mClickUpdate(View v) {
-        Log.v("Update", "is Clicked");
-        String[] params = new String[2];
-        params[0] = Double.toString(mVirtualLat0);
-        params[1] = Double.toString(mVirtualLon0);
-
-        ShowEmergency mEmergency = new ShowEmergency();
-        mEmergency.execute(params);
-    }
-
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = this.getAssets().open("Log1.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        Log.v("json", json);
-        return json;
-
-    }
-
-
-    public int getLength(){
-        try {
-            mLog = new JSONArray(loadJSONFromAsset());
-            return mLog.length();
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    private void startTimerThread() {
-        length = getLength();
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            private long startTime = System.currentTimeMillis();
-            public void run() {
-                for (int idx = 0; idx < length; idx++) {
-
-                    try {
-                        Thread.sleep(1000);
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    final int i = idx;
-                    handler.post(new Runnable(){
-                        public void run() {
-                            try {
-                                JSONObject mData = mLog.getJSONObject(i);
-                                String mDate = mData.getString("c_1");
-                                String mX = mData.getString("c_3");
-                                String mY = mData.getString("c_4");
-                                //String mRoad = mData.getString("c_16");
-
-                                if (mDate.equals("2016-04-20 16:55:03")) {
-                                    Toast.makeText(AlertActivity.this, "긴급상황이 감지되었습니다!!!!",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    TextView mText2 = (TextView) findViewById(R.id.text2);
-                                    mText2.setText("현재 시각 \n" + mDate + "\n\n" +
-                                            "도로 형태\n -- 고속도로\n\n" +
-                                            "GPS Location \n" + "위도 : "+ mVirtualLat0 + "\n" + "경도 : "+ mVirtualLon0 +
-                                            "\n\n Relative Location \n" + "X 좌표 : " + mX + " \n" +
-                                            "Y 좌표 : " + mY);
-
-                                    new Thread()
-                                    {
-                                        public void run() {
-                                            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.alarm);
-                                            mp.start();
-                                        }
-                                    }.start();
-
-
-                                    mText4.setText("Status : Caution!!!");
-                                }
-
-                                mText2.setText("현재 시각 \n" + mDate + "\n\n" +
-                                        "도로 형태\n -- 고속도로\n\n" +
-                                        "GPS Location \n" + "위도 : "+ mVirtualLat0 + "\n" + "경도 : "+ mVirtualLon0 +
-                                        "\n\n Relative Location \n" + "X 좌표 : " + mX + " \n" +
-                                        "Y 좌표 : " + mY);
-
-//                            if (mDate.equals("2016-04-20 16:54:00") || mDate.equals("2016-04-20 16:54:16") ||
-//                                    mDate.equals("2016-04-20 16:54:32") || mDate.equals("2016-04-20 16:54:48")) {
-//
-//
-//                                mText2.setText("현재 시각 \n" + mDate + "\n\n" +
-//                                        "도로 형태\n -- 고속도로\n\n" +
-//                                        "GPS Location \n" + "위도 : "+ mVirtualLat0 + "\n" + "경도 : "+ mVirtualLon0 +
-//                                        "\n\n Relative Location \n" + "X 좌표 : " + mX + " \n" +
-//                                        "Y 좌표 : " + mY);
-//
-//                                mText4.setText("Status : Caution!!!");
-//                            }
-//
-//                            mText2.setText("현재 시각 \n" + mDate + "\n\n" +
-//                                    "도로 형태\n -- 고속도로\n\n" +
-//                                    "GPS Location \n" + "위도 : "+ mVirtualLat0 + "\n" + "경도 : "+ mVirtualLon0 +
-//                                    "\n\n Relative Location \n" + "X 좌표 : " + mX + " \n" +
-//                                    "Y 좌표 : " + mY);
-                            }catch(JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
-        };
-        new Thread(runnable).start();
-    }
 }
